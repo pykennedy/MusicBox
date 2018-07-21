@@ -1,7 +1,9 @@
-package pyk.musicbox;
+package pyk.musicbox.controller.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import pyk.musicbox.R;
 
 public class MainActivity extends AppCompatActivity {
   
