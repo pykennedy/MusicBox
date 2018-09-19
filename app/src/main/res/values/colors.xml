@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="mcPrimary">#616161</color>
+    <color name="mcPrimaryLight">#8E8E8E</color>
+    <color name="mcPrimaryDark">#373737</color>
+
+    <color name="mcSecondary">#4DD0E1</color>
+    <color name="mcSecondaryLight">#88FFFF</color>
+    <color name="mcSecondayDark">#009FAF</color>
+
+    <color name="mcBlack87">#DE000000</color>
+    <color name="mcBlack60">#99000000</color>
+    <color name="mcBlack38">#61000000</color>
+    <color name="mcBlack26">#42000000</color>
+    <color name="mcBlack12">#1E000000</color>
+
+    <color name="mcWhite87">#DEFFFFFF</color>
+    <color name="mcWhite60">#99FFFFFF</color>
+    <color name="mcWhite38">#61FFFFFF</color>
+    <color name="mcWhite26">#42FFFFFF</color>
+    <color name="mcWhite12">#1EFFFFFF</color>
+
+    <color name="mcGrey50">#FAFAFA</color>
+    <color name="mcGrey100">#F5F5F5</color>
+    <color name="mcGrey200">#EEEEEE</color>
+    <color name="mcGrey300">#E0E0E0</color>
+    <color name="mcGrey400">#BDBDBD</color>
+    <color name="mcGrey500">#9E9E9E</color>
+    <color name="mcGrey600">#757575</color>
+    <color name="mcGrey700">#616161</color>
+    <color name="mcGrey800">#424242</color>
+    <color name="mcGrey900">#212121</color>
 </resources>
