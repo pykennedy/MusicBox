@@ -18,7 +18,7 @@
 
         <View
             style="@style/Tile"
-            android:id="gi@+id/line1"
+            android:id="@+id/line1"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
