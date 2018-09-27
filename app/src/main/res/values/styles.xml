@@ -1,11 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/mcPrimary</item>
         <item name="colorPrimaryDark">@color/mcPrimaryDark</item>
         <item name="colorAccent">@color/mcSecondary</item>
+    </style>
+
+    <style name="ActionBar">
+        <item name="android:background">@color/mcPrimary</item>
     </style>
 
     <style name="Tile">
