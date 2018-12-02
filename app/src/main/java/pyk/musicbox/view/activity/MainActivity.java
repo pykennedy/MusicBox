@@ -17,6 +17,15 @@ import pyk.musicbox.view.fragment.HomeFragment;
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView {
   
+  //TODO: VVVVVVVVVVV
+  /*
+  make presenters for each fragment
+  make each fragment present have a tiletapped method
+  this method will take a MainActivityContract.MainActivityView object
+  it will use that object to call a swap fragments method
+  this method will be called by the tiletapped in each fragment presenter
+   */
+  
   private MainActivityPresenter mainActivityPresenter;
   private ViewPager pager;
   private PagerAdapter pagerAdapter;
