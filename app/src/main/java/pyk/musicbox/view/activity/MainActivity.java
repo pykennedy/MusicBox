@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -12,23 +11,23 @@ import android.widget.Toast;
 import pyk.musicbox.R;
 import pyk.musicbox.contract.MainActivityContract;
 import pyk.musicbox.presenter.MainActivityPresenter;
-import pyk.musicbox.view.fragment.HomeFragment;
+import pyk.musicbox.view.fragment.BaseMenuFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView {
   
   //TODO: VVVVVVVVVVV
   /*
-  make presenters for each fragment
-  make each fragment present have a tiletapped method
-  this method will take a MainActivityContract.MainActivityView object
-  it will use that object to call a swap fragments method
-  this method will be called by the tiletapped in each fragment presenter
+  clean up who handles changing fragments
+  fragment change should be handled by a more generalized method in the presenter
+  i should also make a parent presenter so i dont have the same swap fragment logic
+      in 10 different places
+  then i need to test the back button, and fill out all other tests
    */
   
   private MainActivityPresenter mainActivityPresenter;
-  private ViewPager pager;
-  private PagerAdapter pagerAdapter;
+  private ViewPager             pager;
+  private FragmentStatePagerAdapter  pagerAdapter;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,10 @@ public class MainActivity extends AppCompatActivity
   public void showToast() {
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
-
+  
+  @Override public void swapFragment(String fragment) {
+  }
+  
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
   
     ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     public Fragment getItem(int position) {
       switch (position) {
         case 0:
-          return new HomeFragment();
+          return new BaseMenuFragment();
 //          return new TrackFragment();
 //          return new SettingsFragment();
 //          return new SearchFragment();
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 //          return new GroupsFragment();
 //          return new PlaylistsFragment();
         default:
-          return new HomeFragment();
+          return new BaseMenuFragment();
       }
     }
   

@@ -14,6 +14,9 @@
 
     <style name="Tile">
         <item name="android:background">@color/mcGrey300</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="TileText1">
