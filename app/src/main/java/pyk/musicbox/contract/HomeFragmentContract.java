@@ -6,6 +6,5 @@ public interface HomeFragmentContract {
   }
   
   interface HomeFragmentPresenter {
-    void tileTapped(MainActivityContract.MainActivityView mainActivityView, String fragment);
   }
 }

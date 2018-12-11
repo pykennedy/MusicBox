@@ -12,6 +12,7 @@ import pyk.musicbox.R;
 import pyk.musicbox.contract.MainActivityContract;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
+import pyk.musicbox.view.fragment.TrackFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView {
@@ -69,12 +70,8 @@ public class MainActivity extends AppCompatActivity
       switch (position) {
         case 0:
           return new BaseMenuFragment();
-//          return new TrackFragment();
-//          return new SettingsFragment();
-//          return new SearchFragment();
-//          return new SearchDetailsFragment();
-//          return new GroupsFragment();
-//          return new PlaylistsFragment();
+        case 1:
+          return new TrackFragment();
         default:
           return new BaseMenuFragment();
       }

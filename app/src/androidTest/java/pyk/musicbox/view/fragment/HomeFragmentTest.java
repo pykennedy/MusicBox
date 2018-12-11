@@ -10,8 +10,10 @@ import pyk.musicbox.view.activity.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class HomeFragmentTest {
@@ -24,5 +26,7 @@ public class HomeFragmentTest {
     onView(withId(R.id.v_groups_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.v_groups_fragmentHome)).perform(click());
     onView(withId(R.id.rv_fragmentGroups)).check(matches(isDisplayed()));
+    onView(isRoot()).perform(pressBack());
+    onView(withId(R.id.v_groups_fragmentHome)).check(matches(isDisplayed()));
   }
 }
