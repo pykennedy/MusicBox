@@ -19,11 +19,7 @@ public class MainActivity extends AppCompatActivity
   
   //TODO: VVVVVVVVVVV
   /*
-  clean up who handles changing fragments
-  fragment change should be handled by a more generalized method in the presenter
-  i should also make a parent presenter so i dont have the same swap fragment logic
-      in 10 different places
-  then i need to test the back button, and fill out all other tests
+  clean up the mess of these fragment transitions
    */
   
   private MainActivityPresenter mainActivityPresenter;
@@ -56,7 +52,9 @@ public class MainActivity extends AppCompatActivity
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
   
-  @Override public void swapFragment(String fragment) {
+  @Override public void swapFragment(String fragment, boolean replace) {
+    BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
+    baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
   }
   
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

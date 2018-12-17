@@ -2,7 +2,6 @@ package pyk.musicbox.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +32,8 @@ public class HomeFragment extends Fragment
   @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.v_groups_fragmentHome:
-        homeFragmentPresenter.tileTapped((MainActivity) getActivity(), "groups");
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.basemenu_frame, new GroupsFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        homeFragmentPresenter.tileTapped((MainActivity) getActivity(),
+                                         getResources().getString(R.string.groupsFragment), true);
         break;
       default:
         break;

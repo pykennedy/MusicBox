@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MusicBox</string>
+    <string name="homeFragment">homeFragment</string>
+    <string name="trackFragment">trackFragment</string>
+    <string name="settingsFragment">settingsFragment</string>
+    <string name="searchFragment">searchFragment</string>
+    <string name="groupsFragment">groupsFragment</string>
+    <string name="playlistsFragment">playlistsFragment</string>
 </resources>

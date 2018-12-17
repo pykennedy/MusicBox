@@ -5,7 +5,9 @@ import pyk.musicbox.contract.MainActivityContract;
 
 public class FragmentPresenter implements FragmentContract.FragmentPresenter {
   @Override
-  public void tileTapped(MainActivityContract.MainActivityView mainActivityView, String fragment) {
-    mainActivityView.swapFragment(fragment);
+  public void tileTapped(MainActivityContract.MainActivityView mainActivityView, String fragment,
+                         boolean replace) {
+      mainActivityView.swapFragment(fragment, replace);
   }
 }
+

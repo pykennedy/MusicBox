@@ -2,6 +2,7 @@ package pyk.musicbox.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,4 +25,10 @@ public class BaseMenuFragment extends Fragment {
     return view;
   }
   
+  public void swapFragment(String fragment, FragmentManager fragmentManager) {
+    FragmentTransaction transaction = fragmentManager.beginTransaction();
+    transaction.replace(R.id.basemenu_frame, new GroupsFragment());
+    transaction.addToBackStack(null);
+    transaction.commit();
+  }
 }

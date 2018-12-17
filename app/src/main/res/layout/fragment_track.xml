@@ -15,7 +15,7 @@
         android:layout_height="0dp">
 
         <View
-            android:id="@+id/v_fromTheTop_fragmentHome"
+            android:id="@+id/v_trackScroll_fragmentTrack"
             style="@style/Tile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,9 +40,9 @@
         android:layout_height="0dp">
 
         <View
-            android:id="@+id/v_settings_fragmentHome"
+            android:id="@+id/v_repeatSettings_fragmentTrack"
             style="@style/Tile"
-            app:layout_constraintBottom_toTopOf="@+id/v_find_fragmentHome"
+            app:layout_constraintBottom_toTopOf="@+id/v_volumeBoost_fragmentTrack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -54,12 +54,12 @@
             android:layout_marginBottom="4dp"/>
 
         <View
-            android:id="@+id/v_find_fragmentHome"
+            android:id="@+id/v_volumeBoost_fragmentTrack"
             style="@style/Tile"
-            app:layout_constraintBottom_toTopOf="@+id/v_groups_fragmentHome"
+            app:layout_constraintBottom_toTopOf="@+id/v_addToGroup_fragmentTrack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_settings_fragmentHome"
+            app:layout_constraintTop_toBottomOf="@id/v_repeatSettings_fragmentTrack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -68,12 +68,12 @@
             android:layout_marginBottom="8dp"/>
 
         <View
-            android:id="@+id/v_groups_fragmentHome"
+            android:id="@+id/v_addToGroup_fragmentTrack"
             style="@style/Tile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/v_playlists_fragmentHome"
+            app:layout_constraintEnd_toStartOf="@id/v_addToPlaylist_fragmentTrack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -82,12 +82,12 @@
             android:layout_marginBottom="8dp"/>
 
         <View
-            android:id="@+id/v_playlists_fragmentHome"
+            android:id="@+id/v_addToPlaylist_fragmentTrack"
             style="@style/Tile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/v_groups_fragmentHome"
+            app:layout_constraintStart_toEndOf="@id/v_addToGroup_fragmentTrack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
