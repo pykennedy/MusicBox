@@ -108,7 +108,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintBottom_toTopOf="@+id/v_groups_fragmentHome"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toStartOf="@+id/v_find_fragmentHome"
+            app:layout_constraintEnd_toStartOf="@+id/v_search_fragmentHome"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -119,12 +119,12 @@
             android:text="Settings"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/v_groups_fragmentHome"
-            app:layout_constraintEnd_toStartOf="@+id/v_find_fragmentHome"
+            app:layout_constraintEnd_toStartOf="@+id/v_search_fragmentHome"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <View
-            android:id="@+id/v_find_fragmentHome"
+            android:id="@+id/v_search_fragmentHome"
             style="@style/Tile"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -187,7 +187,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/v_find_fragmentHome"/>
+            app:layout_constraintTop_toBottomOf="@+id/v_search_fragmentHome"/>
 
         <TextView
             android:id="@+id/tv_playlists_fragmentHome"
@@ -199,7 +199,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/v_groups_fragmentHome"
-            app:layout_constraintTop_toBottomOf="@+id/v_find_fragmentHome"/>
+            app:layout_constraintTop_toBottomOf="@+id/v_search_fragmentHome"/>
 
     </android.support.constraint.ConstraintLayout>
 

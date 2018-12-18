@@ -31,7 +31,7 @@ public class HomeFragmentTest {
     onView(withId(R.id.tv_newSong_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.v_settings_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.tv_settings_fragmentHome)).check(matches(isDisplayed()));
-    onView(withId(R.id.v_find_fragmentHome)).check(matches(isDisplayed()));
+    onView(withId(R.id.v_search_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.tv_find_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.v_groups_fragmentHome)).check(matches(isDisplayed()));
     onView(withId(R.id.tv_groups_fragmentHome)).check(matches(isDisplayed()));
@@ -66,17 +66,17 @@ public class HomeFragmentTest {
   @Test
   public void settingsClick() {
     onView(withId(R.id.v_settings_fragmentHome)).perform(click());
-    onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
+    onView(withId(R.id.tv_placeholder_fragmentSettings)).check(matches(isDisplayed()));
     onView(isRoot()).perform(pressBack());
     onView(withId(R.id.v_settings_fragmentHome)).check(matches(isDisplayed()));
   }
   
   @Test
-  public void findClick() {
-    onView(withId(R.id.v_find_fragmentHome)).perform(click());
-    onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
+  public void searchClick() {
+    onView(withId(R.id.v_search_fragmentHome)).perform(click());
+    onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
     onView(isRoot()).perform(pressBack());
-    onView(withId(R.id.v_find_fragmentHome)).check(matches(isDisplayed()));
+    onView(withId(R.id.v_search_fragmentHome)).check(matches(isDisplayed()));
   }
   
   @Test
@@ -90,7 +90,7 @@ public class HomeFragmentTest {
   @Test
   public void playlistsClick() {
     onView(withId(R.id.v_playlists_fragmentHome)).perform(click());
-    onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
+    onView(withId(R.id.rv_fragmentPlaylists)).check(matches(isDisplayed()));
     onView(isRoot()).perform(pressBack());
     onView(withId(R.id.v_playlists_fragmentHome)).check(matches(isDisplayed()));
   }

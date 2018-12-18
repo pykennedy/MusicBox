@@ -19,12 +19,12 @@ public class MainActivity extends AppCompatActivity
   
   //TODO: VVVVVVVVVVV
   /*
-  clean up the mess of these fragment transitions
+  make a test suite
    */
   
-  private MainActivityPresenter mainActivityPresenter;
-  private ViewPager             pager;
-  private FragmentStatePagerAdapter  pagerAdapter;
+  private MainActivityPresenter     mainActivityPresenter;
+  private ViewPager                 pager;
+  private FragmentStatePagerAdapter pagerAdapter;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity
     pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-  
+      
       @Override
       public void onPageSelected(int position) {}
-  
+      
       @Override
       public void onPageScrollStateChanged(int state) {}
     });
@@ -52,17 +52,21 @@ public class MainActivity extends AppCompatActivity
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
   
-  @Override public void swapFragment(String fragment, boolean replace) {
-    BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
-    baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
+  @Override public void swapFragment(Fragment fragment, boolean replace) {
+    if (replace) {
+      BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
+      baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
+    } else {
+      pager.setCurrentItem(1);
+    }
   }
   
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-  
+    
     ScreenSlidePagerAdapter(FragmentManager fm) {
       super(fm);
     }
-  
+    
     @Override
     public Fragment getItem(int position) {
       switch (position) {
@@ -74,11 +78,18 @@ public class MainActivity extends AppCompatActivity
           return new BaseMenuFragment();
       }
     }
-  
+    
     @Override
     public int getCount() {
-      return 1;
+      return 2;
     }
   }
   
+  @Override public void onBackPressed() {
+    if (pager.getCurrentItem() == 1) {
+      pager.setCurrentItem(0);
+    } else {
+      super.onBackPressed();
+    }
+  }
 }

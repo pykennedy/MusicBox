@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import pyk.musicbox.R;
 
 public class BaseMenuFragment extends Fragment {
-  
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
@@ -25,9 +24,9 @@ public class BaseMenuFragment extends Fragment {
     return view;
   }
   
-  public void swapFragment(String fragment, FragmentManager fragmentManager) {
+  public void swapFragment(Fragment fragment, FragmentManager fragmentManager) {
     FragmentTransaction transaction = fragmentManager.beginTransaction();
-    transaction.replace(R.id.basemenu_frame, new GroupsFragment());
+    transaction.replace(R.id.basemenu_frame, fragment);
     transaction.addToBackStack(null);
     transaction.commit();
   }

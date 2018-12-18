@@ -1,9 +1,11 @@
 package pyk.musicbox.contract;
 
+import android.support.v4.app.Fragment;
+
 public interface MainActivityContract {
   interface MainActivityView {
     void showToast();
-    void swapFragment(String fragment, boolean replace);
+    void swapFragment(Fragment fragment, boolean replace);
   }
   
   
