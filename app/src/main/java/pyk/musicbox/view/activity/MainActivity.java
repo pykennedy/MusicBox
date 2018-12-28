@@ -17,11 +17,6 @@ import pyk.musicbox.view.fragment.TrackFragment;
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView {
   
-  //TODO: VVVVVVVVVVV
-  /*
-  make a test suite
-   */
-  
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
   private FragmentStatePagerAdapter pagerAdapter;
