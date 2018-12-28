@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -12,14 +11,15 @@ import android.widget.Toast;
 import pyk.musicbox.R;
 import pyk.musicbox.contract.MainActivityContract;
 import pyk.musicbox.presenter.MainActivityPresenter;
-import pyk.musicbox.view.fragment.HomeFragment;
+import pyk.musicbox.view.fragment.BaseMenuFragment;
+import pyk.musicbox.view.fragment.TrackFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView {
   
-  private MainActivityPresenter mainActivityPresenter;
-  private ViewPager pager;
-  private PagerAdapter pagerAdapter;
+  private MainActivityPresenter     mainActivityPresenter;
+  private ViewPager                 pager;
+  private FragmentStatePagerAdapter pagerAdapter;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity
     pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-  
+      
       @Override
       public void onPageSelected(int position) {}
-  
+      
       @Override
       public void onPageScrollStateChanged(int state) {}
     });
@@ -46,33 +46,45 @@ public class MainActivity extends AppCompatActivity
   public void showToast() {
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
-
-  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
   
+  @Override public void swapFragment(Fragment fragment, boolean replace) {
+    if (replace) {
+      BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
+      baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
+    } else {
+      pager.setCurrentItem(1);
+    }
+  }
+  
+  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    
     ScreenSlidePagerAdapter(FragmentManager fm) {
       super(fm);
     }
-  
+    
     @Override
     public Fragment getItem(int position) {
       switch (position) {
         case 0:
-          return new HomeFragment();
-//          return new TrackFragment();
-//          return new SettingsFragment();
-//          return new SearchFragment();
-//          return new SearchDetailsFragment();
-//          return new GroupsFragment();
-//          return new PlaylistsFragment();
+          return new BaseMenuFragment();
+        case 1:
+          return new TrackFragment();
         default:
-          return new HomeFragment();
+          return new BaseMenuFragment();
       }
     }
-  
+    
     @Override
     public int getCount() {
-      return 1;
+      return 2;
     }
   }
   
+  @Override public void onBackPressed() {
+    if (pager.getCurrentItem() == 1) {
+      pager.setCurrentItem(0);
+    } else {
+      super.onBackPressed();
+    }
+  }
 }
