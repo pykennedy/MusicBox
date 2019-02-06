@@ -11,5 +11,7 @@ public interface GroupListItemAdapterContract {
   
   interface GroupListItemAdapterPresenter {
     List<Group> getGroupsFromDB();
+    Group getGroupFromList(int index);
+    int getItemCount();
   }
 }
