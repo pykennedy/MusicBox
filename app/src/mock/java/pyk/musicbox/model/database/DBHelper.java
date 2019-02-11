@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import pyk.musicbox.contract.Listener;
 import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.utility.ThreadManager;
 
 public class DBHelper {
   private static final DBHelper                        instance = new DBHelper();
@@ -19,15 +20,31 @@ public class DBHelper {
   
   public void populateGroupList() {
     for (int i = 0; i < 20; i++) {
+      final int j = i;
       // for testing purposes, remove this wait
+      ThreadManager.getInstance().runTaskWithUICallback(
+          new Runnable() {
+            @Override public void run() {
+              try {
+                TimeUnit.MILLISECONDS.sleep(500);
+                groupListTableListener.onInsert(new Group(j, "Group #" + j));
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            }
+          }, new Runnable() {
+            @Override public void run() {
+            
+            }
+          });
+      
+      /*
       try {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.MILLISECONDS.sleep(100);
         groupListTableListener.onInsert(new Group(i, "Group #" + i));
       } catch (InterruptedException e) {
         e.printStackTrace();
-      }
-      
-      
+      } */
     }
   }
 }
