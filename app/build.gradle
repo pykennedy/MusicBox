@@ -29,6 +29,9 @@ android {
             versionNameSuffix "-mock"
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {

@@ -20,11 +20,14 @@ public class ThreadManager extends HandlerThread {
     backgroundHandler = new Handler(getLooper());
     uiHandler = new Handler();
   }
-  
-  public void runTaskWithUICallback(Runnable background, Runnable callback) {
-    backgroundHandler.post(background);
-    uiHandler.post(callback);
+
+  public void runTask(Runnable runnable, boolean onUIThread) {
+    if(!onUIThread) {
+      backgroundHandler.post(runnable);
+    }
+    else uiHandler.post(runnable);
   }
+  
   
   private void setup() {
     backgroundHandler = new Handler(getLooper());

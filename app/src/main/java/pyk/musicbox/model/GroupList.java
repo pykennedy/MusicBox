@@ -1,7 +1,5 @@
 package pyk.musicbox.model;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,19 +41,16 @@ public class GroupList
   
   @Override public void onInsert(final Group group) {
     // TODO: sort while adding (use add(index i, object))
-    Log.e("asdf", "onInsert");
-    
-    ThreadManager.getInstance().runTaskWithUICallback(
-        new Runnable() {
-          @Override public void run() {
-            groups.add(group);
-          }
-        }, new Runnable() {
+    ThreadManager.getInstance().runTask(new Runnable() {
+      @Override public void run() {
+        groups.add(group);
+        ThreadManager.getInstance().runTask(new Runnable() {
           @Override public void run() {
             groupListListener.listUpdated();
           }
-        });
-
+        }, true);
+      }
+    }, false);
   }
   
   @Override public void onUpdate() {
