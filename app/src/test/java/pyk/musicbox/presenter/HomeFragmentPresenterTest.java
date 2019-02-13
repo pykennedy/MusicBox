@@ -25,7 +25,7 @@ public class HomeFragmentPresenterTest {
   
   @Test
   public void tileTapped() {
-    homeFragmentPresenter.tileTapped(activityView, "");
-    verify(activityView).swapFragment("");
+    homeFragmentPresenter.tileTapped(activityView, null, true);
+    verify(activityView).swapFragment(null, true);
   }
 }
