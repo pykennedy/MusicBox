@@ -1,6 +1,8 @@
-package pyk.musicbox.contract;
+package pyk.musicbox.contract.fragment;
 
 import android.support.v4.app.Fragment;
+
+import pyk.musicbox.contract.activity.MainActivityContract;
 
 public interface FragmentContract {
   interface FragmentPresenter {

@@ -1,4 +1,4 @@
-package pyk.musicbox.contract;
+package pyk.musicbox.contract.activity;
 
 import android.support.v4.app.Fragment;
 

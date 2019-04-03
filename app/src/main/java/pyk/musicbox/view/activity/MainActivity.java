@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import pyk.musicbox.R;
-import pyk.musicbox.contract.MainActivityContract;
+import pyk.musicbox.contract.activity.MainActivityContract;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;

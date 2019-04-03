@@ -1,6 +1,6 @@
 package pyk.musicbox.presenter;
 
-import pyk.musicbox.contract.MainActivityContract;
+import pyk.musicbox.contract.activity.MainActivityContract;
 
 public class MainActivityPresenter implements MainActivityContract.MainActivityPresenter {
   private MainActivityContract.MainActivityView activityView;

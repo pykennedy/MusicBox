@@ -1,37 +1,59 @@
 package pyk.musicbox.presenter;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import pyk.musicbox.contract.GroupListItemAdapterContract;
-import pyk.musicbox.contract.Listener;
+import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
+import pyk.musicbox.model.database.DBHelper;
 import pyk.musicbox.model.dbobjects.Group;
 
 public class GroupListItemAdapterPresenter
-    implements GroupListItemAdapterContract.GroupListItemAdapterPresenter, Listener.GroupListListener {
+    implements GroupListItemAdapterContract.GroupListItemAdapterPresenter {
+  
   private GroupListItemAdapterContract.GroupListItemAdapterView gliav;
+  private GroupList groupList;
+  private DBHelper dbHelper;
   
   public GroupListItemAdapterPresenter(GroupListItemAdapterContract.GroupListItemAdapterView gliav) {
     this.gliav = gliav;
-    GroupList.getInstance().setGroupListListener(this);
+    this.groupList = GroupList.getInstance();
+    this.dbHelper = DBHelper.getInstance();
   }
   
   @Override
-  public List<Group> getGroupsFromDB() {
-    // TODO: i'll probably want to track existing groups in a hashmap and only update the
-    // TODO:   list as more groups are made
-    return GroupList.getInstance().getGroups();
+  public void populateGroupList() {
+    if(groupList.getCount() > 0) {
+      gliav.triggerRefresh();
+    }
+    
+    dbHelper.populateGroupList(new Callback.GroupListCB() {
+      @Override public void onResponse(ArrayList<Group> groups, boolean succeeded) {
+        if(succeeded) {
+          groupList.addAllGroups(groups);
+          gliav.triggerRefresh();
+        } else {
+          // TODO: error handling
+        }
+      }
+    });
   }
   
   @Override public Group getGroupFromList(int index) {
-    return GroupList.getInstance().getGroups().get(index);
+    return groupList.getGroups().get(index);
   }
   
   @Override public int getItemCount() {
-    return GroupList.getInstance().getCount();
+    return groupList.getCount();
   }
   
-  @Override public void listUpdated() {
-    gliav.triggerRefresh();
+  /****************************************************************************************
+   dependency injection for testing, no production code allowed beyond this point
+   ***************************************************************************************/
+  
+  public GroupListItemAdapterPresenter(GroupListItemAdapterContract.GroupListItemAdapterView gliav, GroupList groupList, DBHelper dbHelper) {
+    this.gliav = gliav;
+    this.groupList = groupList;
+    this.dbHelper = dbHelper;
   }
 }

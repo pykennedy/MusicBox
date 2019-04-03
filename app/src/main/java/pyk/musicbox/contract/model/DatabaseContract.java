@@ -1,4 +1,4 @@
-package pyk.musicbox.contract;
+package pyk.musicbox.contract.model;
 
 import java.util.List;
 

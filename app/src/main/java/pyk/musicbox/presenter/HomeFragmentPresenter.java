@@ -1,6 +1,6 @@
 package pyk.musicbox.presenter;
 
-import pyk.musicbox.contract.HomeFragmentContract;
+import pyk.musicbox.contract.fragment.HomeFragmentContract;
 
 public class HomeFragmentPresenter extends FragmentPresenter implements HomeFragmentContract.HomeFragmentPresenter {
   HomeFragmentContract.HomeFragmentView homeFragmentView;
