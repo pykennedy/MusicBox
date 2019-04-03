@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
-import pyk.musicbox.contract.GroupListItemAdapterContract;
+import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
 import pyk.musicbox.model.dbobjects.Group;
 import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 
@@ -22,8 +22,7 @@ public class GroupListItemAdapter
   public GroupListItemAdapter() {
     super();
     presenter = new GroupListItemAdapterPresenter(this);
-    presenter.getGroupsFromDB();
-    triggerRefresh();
+    presenter.populateGroupList();
   }
   
   @NonNull @Override

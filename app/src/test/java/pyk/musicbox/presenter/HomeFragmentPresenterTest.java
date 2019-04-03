@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import pyk.musicbox.contract.HomeFragmentContract;
-import pyk.musicbox.contract.MainActivityContract;
+import pyk.musicbox.contract.fragment.HomeFragmentContract;
+import pyk.musicbox.contract.activity.MainActivityContract;
 
 import static org.mockito.Mockito.verify;
 

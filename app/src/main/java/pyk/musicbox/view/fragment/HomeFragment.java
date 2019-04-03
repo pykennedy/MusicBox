@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pyk.musicbox.R;
-import pyk.musicbox.contract.HomeFragmentContract;
+import pyk.musicbox.contract.fragment.HomeFragmentContract;
 import pyk.musicbox.presenter.HomeFragmentPresenter;
 import pyk.musicbox.view.activity.MainActivity;
 

@@ -1,6 +1,4 @@
-package pyk.musicbox.contract;
-
-import java.util.List;
+package pyk.musicbox.contract.adapter;
 
 import pyk.musicbox.model.dbobjects.Group;
 
@@ -10,7 +8,7 @@ public interface GroupListItemAdapterContract {
   }
   
   interface GroupListItemAdapterPresenter {
-    List<Group> getGroupsFromDB();
+    void populateGroupList();
     Group getGroupFromList(int index);
     int getItemCount();
   }
