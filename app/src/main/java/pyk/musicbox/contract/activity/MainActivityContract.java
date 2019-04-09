@@ -1,5 +1,6 @@
 package pyk.musicbox.contract.activity;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
 public interface MainActivityContract {
@@ -11,6 +12,7 @@ public interface MainActivityContract {
   
   interface MainActivityPresenter {
     void tileTapped();
+    void refreshTrackList(Context context);
   }
   
   
