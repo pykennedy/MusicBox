@@ -1,9 +1,14 @@
 package pyk.musicbox.view.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity
       @Override
       public void onPageScrollStateChanged(int state) {}
     });
+    
+    getPerms();
+    
+    mainActivityPresenter.refreshTrackList(this);
   }
   
   @Override
@@ -85,6 +94,18 @@ public class MainActivity extends AppCompatActivity
       pager.setCurrentItem(0);
     } else {
       super.onBackPressed();
+    }
+  }
+  
+  private void getPerms() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+           PackageManager.PERMISSION_GRANTED
+        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+           PackageManager.PERMISSION_GRANTED) {
+      ActivityCompat.requestPermissions(this,
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        0);
     }
   }
 }
