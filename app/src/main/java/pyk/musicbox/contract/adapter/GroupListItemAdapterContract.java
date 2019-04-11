@@ -1,6 +1,6 @@
 package pyk.musicbox.contract.adapter;
 
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 
 public interface GroupListItemAdapterContract {
   interface GroupListItemAdapterView {

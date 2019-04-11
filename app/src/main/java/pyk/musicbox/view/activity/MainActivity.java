@@ -1,9 +1,13 @@
 package pyk.musicbox.view.activity;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +15,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.activity.MainActivityContract;
+import pyk.musicbox.model.entity.Track;
+import pyk.musicbox.model.viewmodel.TrackViewModel;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
@@ -47,8 +54,8 @@ public class MainActivity extends AppCompatActivity
     });
     
     getPerms();
-    
-    mainActivityPresenter.refreshTrackList(this);
+    //mainActivityPresenter.refreshTrackList(this);
+    refreshTrackList();
   }
   
   @Override
@@ -62,6 +69,28 @@ public class MainActivity extends AppCompatActivity
       baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
     } else {
       pager.setCurrentItem(1);
+    }
+  
+
+  }
+  
+  public void refreshTrackList() {
+    TrackViewModel trackViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
+    Uri            uri            = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    Cursor         cursor         = this.getContentResolver().query(uri, null, null, null, null);
+    
+    if (cursor != null) {
+      if (cursor.moveToFirst()) {
+        do {
+          Track track = new Track(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
+                                  cursor.getString(
+                                      cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
+          //tracks.add(track);
+          trackViewModel.insert(track);
+          Log.e("asdf", track.getTrackName());
+        } while (cursor.moveToNext());
+      }
+      cursor.close();
     }
   }
   

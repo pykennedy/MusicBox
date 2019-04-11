@@ -1,4 +1,4 @@
-package pyk.musicbox.model.dbobjects;
+package pyk.musicbox.model.entity;
 
 import java.util.ArrayList;
 

@@ -2,7 +2,7 @@ package pyk.musicbox.support;
 
 import java.util.ArrayList;
 
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 
 public class StaticValues {
   public static final ArrayList<Group> groupList = buildGroupList();

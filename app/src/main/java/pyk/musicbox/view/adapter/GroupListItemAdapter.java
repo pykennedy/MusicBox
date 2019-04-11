@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 
 public class GroupListItemAdapter

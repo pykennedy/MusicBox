@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import pyk.musicbox.model.dbobjects.Track;
+import pyk.musicbox.model.entity.Track;
 
 public class TrackList {
   private static final TrackList        instance = new TrackList();
@@ -39,6 +39,7 @@ public class TrackList {
                                   cursor.getString(
                                       cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
           tracks.add(track);
+          
           Log.e("asdf", track.getTrackName());
         } while (cursor.moveToNext());
       }

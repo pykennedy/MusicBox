@@ -2,7 +2,7 @@ package pyk.musicbox.model;
 
 import java.util.ArrayList;
 
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 
 public class GroupList {
   private static final GroupList                  instance = new GroupList();

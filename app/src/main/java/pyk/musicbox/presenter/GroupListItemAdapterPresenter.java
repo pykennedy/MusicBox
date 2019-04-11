@@ -6,7 +6,7 @@ import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
 import pyk.musicbox.model.database.DBHelper;
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 
 public class GroupListItemAdapterPresenter
     implements GroupListItemAdapterContract.GroupListItemAdapterPresenter {
