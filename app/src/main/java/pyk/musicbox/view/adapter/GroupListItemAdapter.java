@@ -17,7 +17,7 @@ import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 public class GroupListItemAdapter
     extends RecyclerView.Adapter<GroupListItemAdapter.ItemAdapterViewHolder>
     implements GroupListItemAdapterContract.GroupListItemAdapterView {
-  GroupListItemAdapterPresenter presenter;
+  private GroupListItemAdapterPresenter presenter;
   
   public GroupListItemAdapter() {
     super();
