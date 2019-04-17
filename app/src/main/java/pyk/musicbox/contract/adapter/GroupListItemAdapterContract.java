@@ -1,6 +1,6 @@
 package pyk.musicbox.contract.adapter;
 
-import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.GroupOld;
 
 public interface GroupListItemAdapterContract {
   interface GroupListItemAdapterView {
@@ -9,7 +9,7 @@ public interface GroupListItemAdapterContract {
   
   interface GroupListItemAdapterPresenter {
     void populateGroupList();
-    Group getGroupFromList(int index);
+    GroupOld getGroupFromList(int index);
     int getItemCount();
   }
 }

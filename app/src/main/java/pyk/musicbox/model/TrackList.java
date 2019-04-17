@@ -40,7 +40,7 @@ public class TrackList {
                                       cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
           tracks.add(track);
           
-          Log.e("asdf", track.getTrackName());
+          Log.e("asdf", track.getName());
         } while (cursor.moveToNext());
       }
       cursor.close();

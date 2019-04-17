@@ -10,7 +10,7 @@ public class StaticValues {
   private static ArrayList<Group> buildGroupList() {
     ArrayList<Group> groups = new ArrayList<>();
     for(int i = 0; i < 20; i++) {
-      groups.add(new Group(i, "Group #" + i));
+      groups.add(new Group(i, "GroupOld #" + i));
     }
     return groups;
   }

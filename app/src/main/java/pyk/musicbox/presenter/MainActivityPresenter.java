@@ -1,7 +1,6 @@
 package pyk.musicbox.presenter;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -23,21 +22,11 @@ public class MainActivityPresenter implements MainActivityContract.MainActivityP
     activityView.showToast();
   }
   
-  @Override public void refreshTrackList(Context context) {
-  
-  }
-  
-//  @Override public void refreshTrackListOld(Context context) {
-//    TrackList.getInstance().populateTrackList(context);
-//    for (Track t : TrackList.getInstance().getTracks()) {
-//      Log.e("asdf", t.getTrackName());
-//    }
-//  }
-  
+  @Override
   public void refreshTrackList(MainActivity context) {
     TrackViewModel trackViewModel = ViewModelProviders.of(context).get(TrackViewModel.class);
-    Uri    uri    = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-    Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+    Uri            uri            = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    Cursor         cursor         = context.getContentResolver().query(uri, null, null, null, null);
   
     if (cursor != null) {
       if (cursor.moveToFirst()) {
@@ -46,8 +35,8 @@ public class MainActivityPresenter implements MainActivityContract.MainActivityP
                                   cursor.getString(
                                       cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
           //tracks.add(track);
-        
-          Log.e("asdf", track.getTrackName());
+          trackViewModel.insert(track);
+          Log.e("asdf", track.getName());
         } while (cursor.moveToNext());
       }
       cursor.close();

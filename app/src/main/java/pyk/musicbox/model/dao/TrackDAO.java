@@ -18,6 +18,9 @@ public interface TrackDAO {
   @Query("DELETE FROM track_table")
   void deleteAll();
   
-  @Query("SELECT * FROM track_table ORDER BY trackname ASC")
+  @Query("SELECT * FROM track_table ORDER BY name ASC")
   LiveData<List<Track>> getAllTracks();
+  
+  @Query("SELECT * FROM track_table WHERE id = :id")
+  Track getTrackByID(int id);
 }

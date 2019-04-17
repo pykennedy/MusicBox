@@ -9,23 +9,44 @@ import android.support.annotation.NonNull;
 public class Track {
   @PrimaryKey
   @NonNull
-  @ColumnInfo(name = "trackID")
-  private int trackID;
+  @ColumnInfo(name = "id")
+  private int id;
   
   @NonNull
-  @ColumnInfo(name = "trackname")
-  private String trackName;
+  @ColumnInfo(name = "name")
+  private String name;
   
-  public Track(@NonNull int trackID, @NonNull String trackName) {
-    this.trackID = trackID;
-    this.trackName = trackName;
+  @ColumnInfo(name = "album")
+  private String album;
+  
+  @ColumnInfo(name = "artist")
+  private String artist;
+  
+  @ColumnInfo(name = "duration")
+  private String duration;
+  
+  public Track(@NonNull int id, @NonNull String name) {
+    this.id = id;
+    this.name = name;
   }
   
-  public int getTrackID() {
-    return trackID;
+  public int getId() {
+    return id;
   }
   
-  public String getTrackName() {
-    return trackName;
+  public String getName() {
+    return name;
+  }
+  
+  public String getAlbum() {
+    return album;
+  }
+  
+  public String getArtist() {
+    return artist;
+  }
+  
+  public String getDuration() {
+    return duration;
   }
 }

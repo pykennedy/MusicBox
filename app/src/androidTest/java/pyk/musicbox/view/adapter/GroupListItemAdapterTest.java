@@ -27,8 +27,8 @@ public class GroupListItemAdapterTest {
   @Test
   public void itemsExist() {
     onView(withId(R.id.v_groups_fragmentHome)).perform(click());
-    onView(withId(R.id.rv_fragmentGroups)).check(matches(hasDescendant(withText("Group #2"))));
+    onView(withId(R.id.rv_fragmentGroups)).check(matches(hasDescendant(withText("GroupOld #2"))));
     onView(withId(R.id.rv_fragmentGroups)).perform(scrollToPosition(19));
-    onView(withId(R.id.rv_fragmentGroups)).check(matches(hasDescendant(withText("Group #19"))));
+    onView(withId(R.id.rv_fragmentGroups)).check(matches(hasDescendant(withText("GroupOld #19"))));
   }
 }

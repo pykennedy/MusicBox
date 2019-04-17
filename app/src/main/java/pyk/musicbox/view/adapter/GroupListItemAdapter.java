@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
-import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.GroupOld;
 import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 
 public class GroupListItemAdapter
@@ -52,8 +52,8 @@ public class GroupListItemAdapter
       title = itemView.findViewById(R.id.tv_title_groupList);
     }
     
-    void update(Group group) {
-      String titleText = group.getGroupTitle();
+    void update(GroupOld groupOld) {
+      String titleText = groupOld.getGroupTitle();
       
       title.setText(titleText);
     }

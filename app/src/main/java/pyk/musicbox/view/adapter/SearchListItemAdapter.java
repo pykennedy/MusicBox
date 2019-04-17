@@ -55,7 +55,7 @@ public class SearchListItemAdapter
     }
     
     void update(Track track) {
-      String titleText = track.getTrackName();
+      String titleText = track.getName();
       
       title.setText(titleText);
     }

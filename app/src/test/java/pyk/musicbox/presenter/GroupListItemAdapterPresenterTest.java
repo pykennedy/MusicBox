@@ -14,7 +14,7 @@ import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
 import pyk.musicbox.model.database.DBHelper;
-import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.GroupOld;
 
 import static org.mockito.Mockito.verify;
 
@@ -38,7 +38,7 @@ public class GroupListItemAdapterPresenterTest {
   }
   
   @After
-  public void cleanup() { groupList.getGroups().clear(); }
+  public void cleanup() { groupList.getGroupOlds().clear(); }
   
   //TODO: make mock classes that don't thread long running work so these unit tests can pass.
   
@@ -67,10 +67,10 @@ public class GroupListItemAdapterPresenterTest {
   public void getGroup() {
     gliap = new GroupListItemAdapterPresenter(gliav);
     gliap.populateGroupList();
-    Group group;
-    group = gliap.getGroupFromList(2);
-    Assert.assertEquals("Group #2", group.getGroupTitle());
-    group = gliap.getGroupFromList(17);
-    Assert.assertEquals("Group #17", group.getGroupTitle());
+    GroupOld groupOld;
+    groupOld = gliap.getGroupFromList(2);
+    Assert.assertEquals("GroupOld #2", groupOld.getGroupTitle());
+    groupOld = gliap.getGroupFromList(17);
+    Assert.assertEquals("GroupOld #17", groupOld.getGroupTitle());
   }
 }

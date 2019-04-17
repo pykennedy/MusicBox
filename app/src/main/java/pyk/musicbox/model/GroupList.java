@@ -2,28 +2,28 @@ package pyk.musicbox.model;
 
 import java.util.ArrayList;
 
-import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.GroupOld;
 
 public class GroupList {
-  private static final GroupList                  instance = new GroupList();
-  private              ArrayList<Group>                groups;
+  private static final GroupList           instance = new GroupList();
+  private              ArrayList<GroupOld> groupOlds;
   
   public static GroupList getInstance() {
     return instance;
   }
   
   private GroupList() {
-    groups = new ArrayList<>();
+    groupOlds = new ArrayList<>();
   }
   
   public int getCount() {
-    return groups.size();
+    return groupOlds.size();
   }
   
-  public ArrayList<Group> getGroups() { return groups; }
+  public ArrayList<GroupOld> getGroupOlds() { return groupOlds; }
 
-  public void addAllGroups(ArrayList<Group> groups) {
-    this.groups.clear();
-    this.groups.addAll(groups);
+  public void addAllGroups(ArrayList<GroupOld> groupOlds) {
+    this.groupOlds.clear();
+    this.groupOlds.addAll(groupOlds);
   }
 }
