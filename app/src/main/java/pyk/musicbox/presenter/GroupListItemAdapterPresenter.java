@@ -6,7 +6,7 @@ import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
 import pyk.musicbox.model.database.DBHelper;
-import pyk.musicbox.model.entity.GroupOld;
+import pyk.musicbox.model.entity.Group;
 
 public class GroupListItemAdapterPresenter
     implements GroupListItemAdapterContract.GroupListItemAdapterPresenter {
@@ -28,7 +28,7 @@ public class GroupListItemAdapterPresenter
     }
     
     dbHelper.populateGroupList(new Callback.GroupListCB() {
-      @Override public void onResponse(ArrayList<GroupOld> groupOlds, boolean succeeded) {
+      @Override public void onResponse(ArrayList<Group> groupOlds, boolean succeeded) {
         if(succeeded) {
           groupList.addAllGroups(groupOlds);
           gliav.triggerRefresh();
@@ -39,7 +39,7 @@ public class GroupListItemAdapterPresenter
     });
   }
   
-  @Override public GroupOld getGroupFromList(int index) {
+  @Override public Group getGroupFromList(int index) {
     return groupList.getGroupOlds().get(index);
   }
   

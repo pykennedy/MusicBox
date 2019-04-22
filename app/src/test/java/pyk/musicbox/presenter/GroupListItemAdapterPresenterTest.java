@@ -14,6 +14,7 @@ import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
 import pyk.musicbox.model.database.DBHelper;
+import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.GroupOld;
 
 import static org.mockito.Mockito.verify;
@@ -67,7 +68,7 @@ public class GroupListItemAdapterPresenterTest {
   public void getGroup() {
     gliap = new GroupListItemAdapterPresenter(gliav);
     gliap.populateGroupList();
-    GroupOld groupOld;
+    Group groupOld;
     groupOld = gliap.getGroupFromList(2);
     Assert.assertEquals("GroupOld #2", groupOld.getGroupTitle());
     groupOld = gliap.getGroupFromList(17);

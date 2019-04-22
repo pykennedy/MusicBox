@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "track_table")
 public class Track {
   @PrimaryKey
-  @NonNull
   @ColumnInfo(name = "id")
   private int id;
   
@@ -16,24 +15,28 @@ public class Track {
   @ColumnInfo(name = "name")
   private String name;
   
-  @ColumnInfo(name = "album")
-  private String album;
-  
   @ColumnInfo(name = "artist")
   private String artist;
+  
+  @ColumnInfo(name = "album")
+  private String album;
   
   @ColumnInfo(name = "duration")
   private String duration;
   
-  public Track(@NonNull int id, @NonNull String name) {
+  public Track(int id, @NonNull String name, String artist, String album, String duration) {
     this.id = id;
     this.name = name;
+    this.artist = artist;
+    this.album = album;
+    this.duration = duration;
   }
   
   public int getId() {
     return id;
   }
   
+  @NonNull
   public String getName() {
     return name;
   }

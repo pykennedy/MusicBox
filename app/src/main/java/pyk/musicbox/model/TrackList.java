@@ -29,15 +29,16 @@ public class TrackList {
   public ArrayList<Track> getTracks() { return tracks; }
   
   public void populateTrackList(Context context) {
-    Uri    uri       = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-    Cursor cursor    = context.getContentResolver().query(uri, null, null, null, null);
+    Uri    uri    = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
     
     if (cursor != null) {
       if (cursor.moveToFirst()) {
         do {
           Track track = new Track(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
                                   cursor.getString(
-                                      cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
+                                      cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)),
+                                  null, null, null);
           tracks.add(track);
           
           Log.e("asdf", track.getName());

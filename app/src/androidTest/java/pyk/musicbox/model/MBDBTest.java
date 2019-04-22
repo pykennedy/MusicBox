@@ -34,7 +34,7 @@ public class MBDBTest {
   
   @Test
   public void writeAndReadTrack() throws Exception {
-    Track track = new Track(3, "track 3");
+    Track track = new Track(3, "track 3", null, null, null);
     trackDAO.insert(track);
     Track track2 = trackDAO.getTrackByID(3);
     assertEquals(track2.getId(), track.getId());
