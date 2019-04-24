@@ -5,19 +5,29 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "album_table")
+import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_ID;
+import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_KEY;
+import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_NAME;
+import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_TABLE;
+
+@Entity(tableName = ALBUM_TABLE)
 public class Album {
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "id")
+  @ColumnInfo(name = ALBUM_ID)
   private int id;
   
   @NonNull
-  @ColumnInfo(name = "name")
+  @ColumnInfo(name = ALBUM_NAME)
   private String name;
   
-  public Album(int id, String name) {
+  @NonNull
+  @ColumnInfo(name = ALBUM_KEY)
+  private String key;
+  
+  public Album(int id, @NonNull String name, @NonNull String key) {
     this.id = id;
-    this.name = (name == null) ? "Album #" + id : name;
+    this.name = name;
+    this.key = key;
   }
   
   public int getId() {
@@ -27,5 +37,9 @@ public class Album {
   @NonNull
   public String getName() {
     return name;
+  }
+  
+  @NonNull public String getAlbumKey() {
+    return key;
   }
 }

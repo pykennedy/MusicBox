@@ -5,14 +5,18 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "artist_table")
+import static pyk.musicbox.model.DBConstants.ArtistConstants.ARTIST_ID;
+import static pyk.musicbox.model.DBConstants.ArtistConstants.ARTIST_NAME;
+import static pyk.musicbox.model.DBConstants.ArtistConstants.ARTIST_TABLE;
+
+@Entity(tableName = ARTIST_TABLE)
 public class Artist {
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "id")
+  @ColumnInfo(name = ARTIST_ID)
   private int id;
   
   @NonNull
-  @ColumnInfo(name = "name")
+  @ColumnInfo(name = ARTIST_NAME)
   private String name;
   
   public Artist(int id, String name) {

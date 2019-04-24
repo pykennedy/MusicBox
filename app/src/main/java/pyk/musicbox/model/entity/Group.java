@@ -5,14 +5,18 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "group_table")
+import static pyk.musicbox.model.DBConstants.GroupConstants.GROUP_ID;
+import static pyk.musicbox.model.DBConstants.GroupConstants.GROUP_NAME;
+import static pyk.musicbox.model.DBConstants.GroupConstants.GROUP_TABLE;
+
+@Entity(tableName = GROUP_TABLE)
 public class Group {
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "id")
+  @ColumnInfo(name = GROUP_ID)
   private int id;
   
   @NonNull
-  @ColumnInfo(name = "name")
+  @ColumnInfo(name = GROUP_NAME)
   private String name;
   
   public Group(int id, String name) {

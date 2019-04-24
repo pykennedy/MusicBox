@@ -4,21 +4,26 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "playlist_grouptrack_table")
+import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_ENTITYID;
+import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_ENTITYTYPE;
+import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_PLAYLISTID;
+import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_TABLE;
+
+@Entity(tableName = PLAYLIST_GROUPTRACK_TABLE)
 public class Playlist_GroupTrack {
-  @ColumnInfo(name = "playlistID")
+  @ColumnInfo(name = PLAYLIST_GROUPTRACK_PLAYLISTID)
   private int playlistID;
   
-  @ColumnInfo(name = "trackID")
-  private int trackID;
+  @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYID)
+  private int entityID;
   
   @NonNull
-  @ColumnInfo(name = "entityType")
+  @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYTYPE)
   private String entityType;
   
-  public Playlist_GroupTrack(int playlistID, int trackID, @NonNull String entityType) {
+  public Playlist_GroupTrack(int playlistID, int entityID, @NonNull String entityType) {
     this.playlistID = playlistID;
-    this.trackID = trackID;
+    this.entityID = entityID;
     this.entityType = entityType;
   }
   
@@ -26,8 +31,8 @@ public class Playlist_GroupTrack {
     return playlistID;
   }
   
-  public int getTrackID() {
-    return trackID;
+  public int getEntityID() {
+    return entityID;
   }
   
   @NonNull public String getEntityType() {
