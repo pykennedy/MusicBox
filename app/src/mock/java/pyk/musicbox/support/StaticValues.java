@@ -13,7 +13,7 @@ public class StaticValues {
   private static ArrayList<Group> buildGroupList() {
     ArrayList<Group> groups = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
-      groups.add(new Group(i, "GroupOld #" + i));
+      groups.add(new Group("GroupOld #" + i));
     }
     return groups;
   }
@@ -58,8 +58,8 @@ public class StaticValues {
   private static List<Group> spoofedGroups() {
     List<Group> groups = new ArrayList<>();
     
-    groups.add(new Group(0, "Reputation"));
-    groups.add(new Group(1, "Red"));
+    groups.add(new Group("Reputation"));
+    groups.add(new Group("Red"));
     
     return groups;
   }
