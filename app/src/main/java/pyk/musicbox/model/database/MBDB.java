@@ -9,17 +9,12 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import pyk.musicbox.model.dao.AlbumDAO;
+import pyk.musicbox.model.dao.Album_TrackDAO;
+import pyk.musicbox.model.dao.ArtistDAO;
+import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.entity.Album;
 import pyk.musicbox.model.entity.Track;
-
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_ARTIST;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_KEY;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_NAME;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_TABLE;
-import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ALBUM;
-import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ARTIST;
-import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_TABLE;
 
 @Database(entities = {Track.class, Album.class}, version = 1)
 public abstract class MBDB extends RoomDatabase {
@@ -27,6 +22,10 @@ public abstract class MBDB extends RoomDatabase {
   
   public abstract TrackDAO trackDAO();
   public abstract AlbumDAO albumDAO();
+  public abstract ArtistDAO artistDAO();
+  
+  public abstract Album_TrackDAO album_trackDAO();
+  public abstract Artist_AlbumTrackDAO artist_albumTrackDAO();
   
   public static MBDB getDB(final Context context) {
     if (instance == null) {
@@ -35,7 +34,6 @@ public abstract class MBDB extends RoomDatabase {
           context.deleteDatabase("mbdb");
           instance = Room.databaseBuilder(context.getApplicationContext(), MBDB.class, "mbdb")
                          //.addCallback(purgeDB)
-                         .addCallback(createTriggers)
                          .build();
         }
       }
@@ -48,30 +46,6 @@ public abstract class MBDB extends RoomDatabase {
     public void onOpen(@NonNull SupportSQLiteDatabase db) {
       super.onOpen(db);
       new PurgeDB(instance).execute();
-    }
-  };
-  
-  private static RoomDatabase.Callback createTriggers = new RoomDatabase.Callback() {
-    @Override
-    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-      super.onCreate(db);
-      /*
-      CREATE TRIGGER IF NOT EXISTS [name] AFTER INSERT
-      ON TRACK_TABLE
-      BEGIN
-        INSERT INTO ALBUM_TABLE(ALBUM_NAME, ALBUM_ARTIST, ALBUM_KEY)
-        VALUES(new.TRACK_ALBUM, new.TRACK_ARTIST, (new.TRACK_ALBUM || new.TRACK_ARTIST))
-      END
-       */
-      db.execSQL(
-          "CREATE TRIGGER IF NOT EXISTS InsertTrackThenInsertAlbum AFTER INSERT " +
-          "ON " + TRACK_TABLE + " FOR EACH ROW " +
-          "BEGIN " +
-          "INSERT INTO " + ALBUM_TABLE + " (" + ALBUM_NAME + ", " + ALBUM_ARTIST + ", " +
-          ALBUM_KEY + ") " +
-          "VALUES (" + "new." + TRACK_ALBUM + ", new." + TRACK_ARTIST + ", (new." + TRACK_ALBUM +
-          " || " + "new." + TRACK_ARTIST + ")); " +
-          "END;");
     }
   };
   

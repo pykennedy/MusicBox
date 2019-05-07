@@ -8,15 +8,15 @@ import android.support.annotation.NonNull;
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ALBUM;
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ARTIST;
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_DURATION;
-import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_KEY;
+import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ID;
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_NAME;
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_TABLE;
 
 @Entity(tableName = TRACK_TABLE
-        , indices = {@Index(value = {TRACK_KEY}, unique = true)})
-public class Track extends Base{
-  @ColumnInfo(name = TRACK_KEY)
-  private int key;
+        , indices = {@Index(value = {TRACK_ID}, unique = true)})
+public class Track {
+  @ColumnInfo(name = TRACK_ID)
+  private long id;
   
   @NonNull
   @ColumnInfo(name = TRACK_NAME)
@@ -34,20 +34,15 @@ public class Track extends Base{
   @ColumnInfo(name = TRACK_DURATION)
   private String duration;
   
-  public Track(int key, @NonNull String name, String artist, String album, String duration) {
-    this.key = key;
+  public Track(long id, @NonNull String name, String artist, String album, String duration) {
+    this.id = id;
     this.name = name;
-    this.artist = (artist == null) ? "Artist #" + key : artist;
-    this.album = (album == null) ? "Album #" + key : album;
-    this.duration = (duration == null) ? "00:00" + key : duration;
+    this.artist = (artist == null) ? "Artist #" + id : artist;
+    this.album = (album == null) ? "Album #" + id : album;
+    this.duration = (duration == null) ? "00:00" + id : duration;
   }
   
-  @Override
-  public int getId() { return super.getId(); }
-  
-  public int getKey() {
-    return key;
-  }
+  public long getId() { return id; }
   
   @NonNull
   public String getName() {

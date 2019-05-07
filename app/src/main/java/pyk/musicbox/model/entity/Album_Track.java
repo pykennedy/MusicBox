@@ -8,24 +8,24 @@ import static pyk.musicbox.model.DBConstants.Album_TrackConstants.ALBUM_TRACK_TA
 import static pyk.musicbox.model.DBConstants.Album_TrackConstants.ALBUM_TRACK_TRACKID;
 
 
-@Entity(tableName = ALBUM_TRACK_TABLE)
+@Entity(tableName = ALBUM_TRACK_TABLE, primaryKeys = {ALBUM_TRACK_ALBUMID, ALBUM_TRACK_TRACKID})
 public class Album_Track {
   @ColumnInfo(name = ALBUM_TRACK_ALBUMID)
-  private int albumID;
+  private long albumID;
   
   @ColumnInfo(name = ALBUM_TRACK_TRACKID)
-  private int trackID;
+  private long trackID;
   
-  public Album_Track(int albumID, int trackID) {
+  public Album_Track(long albumID, long trackID) {
     this.albumID = albumID;
     this.trackID = trackID;
   }
   
-  public int getAlbumID() {
+  public long getAlbumID() {
     return albumID;
   }
   
-  public int getTrackID() {
+  public long getTrackID() {
     return trackID;
   }
 }

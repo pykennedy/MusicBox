@@ -1,12 +1,9 @@
 package pyk.musicbox.model;
 
 public interface DBConstants {
-  interface BaseConstants {
-    String ID = "id";
-  }
-  
   interface AlbumConstants {
     String ALBUM_TABLE = "album_table";
+    String ALBUM_ID = "album_id";
     String ALBUM_NAME  = "album_name";
     String ALBUM_ARTIST = "album_artist";
     String ALBUM_KEY   = "album_key";

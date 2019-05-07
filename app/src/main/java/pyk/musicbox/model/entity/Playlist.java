@@ -2,13 +2,18 @@ package pyk.musicbox.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import static pyk.musicbox.model.DBConstants.PlaylistConstants.PLAYLIST_ID;
 import static pyk.musicbox.model.DBConstants.PlaylistConstants.PLAYLIST_NAME;
 import static pyk.musicbox.model.DBConstants.PlaylistConstants.PLAYLIST_TABLE;
 
 @Entity(tableName = PLAYLIST_TABLE)
-public class Playlist extends Base {
+public class Playlist {
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = PLAYLIST_ID)
+  private long id;
   
   @NonNull
   @ColumnInfo(name = PLAYLIST_NAME)
@@ -18,8 +23,8 @@ public class Playlist extends Base {
     this.name = name;
   }
   
-  public int getId() {
-    return super.getId();
+  public long getId() {
+    return id;
   }
   
   @NonNull

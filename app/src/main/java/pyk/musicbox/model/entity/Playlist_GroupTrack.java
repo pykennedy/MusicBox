@@ -9,29 +9,30 @@ import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLI
 import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_PLAYLISTID;
 import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_TABLE;
 
-@Entity(tableName = PLAYLIST_GROUPTRACK_TABLE)
+@Entity(tableName = PLAYLIST_GROUPTRACK_TABLE,
+        primaryKeys = {PLAYLIST_GROUPTRACK_PLAYLISTID, PLAYLIST_GROUPTRACK_ENTITYID})
 public class Playlist_GroupTrack {
   @ColumnInfo(name = PLAYLIST_GROUPTRACK_PLAYLISTID)
-  private int playlistID;
+  private long playlistID;
   
   @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYID)
-  private int entityID;
+  private long entityID;
   
   @NonNull
   @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYTYPE)
   private String entityType;
   
-  public Playlist_GroupTrack(int playlistID, int entityID, @NonNull String entityType) {
+  public Playlist_GroupTrack(long playlistID, long entityID, @NonNull String entityType) {
     this.playlistID = playlistID;
     this.entityID = entityID;
     this.entityType = entityType;
   }
   
-  public int getPlaylistID() {
+  public long getPlaylistID() {
     return playlistID;
   }
   
-  public int getEntityID() {
+  public long getEntityID() {
     return entityID;
   }
   

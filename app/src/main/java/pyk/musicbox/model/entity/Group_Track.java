@@ -7,24 +7,24 @@ import static pyk.musicbox.model.DBConstants.Group_TrackConstants.GROUP_TRACK_GR
 import static pyk.musicbox.model.DBConstants.Group_TrackConstants.GROUP_TRACK_TABLE;
 import static pyk.musicbox.model.DBConstants.Group_TrackConstants.GROUP_TRACK_TRACKID;
 
-@Entity(tableName = GROUP_TRACK_TABLE)
+@Entity(tableName = GROUP_TRACK_TABLE, primaryKeys = {GROUP_TRACK_GROUPID, GROUP_TRACK_TRACKID})
 public class Group_Track {
   @ColumnInfo(name = GROUP_TRACK_GROUPID)
-  private int groupID;
+  private long groupID;
   
   @ColumnInfo(name = GROUP_TRACK_TRACKID)
-  private int trackID;
+  private long trackID;
   
-  public Group_Track(int groupID, int trackID) {
+  public Group_Track(long groupID, long trackID) {
     this.groupID = groupID;
     this.trackID = trackID;
   }
   
-  public int getGroupID() {
+  public long getGroupID() {
     return groupID;
   }
   
-  public int getTrackID() {
+  public long getTrackID() {
     return trackID;
   }
 }

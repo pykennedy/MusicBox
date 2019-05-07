@@ -2,6 +2,7 @@ package pyk.musicbox.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_ENTITYTYPE;
@@ -11,8 +12,9 @@ import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_TA
 
 @Entity(tableName = ALLENTITIES_TABLE)
 public class AllEntities {
+  @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = ALLENTITIES_ID)
-  private int id;
+  private long id;
   
   @NonNull
   @ColumnInfo(name = ALLENTITIES_NAME)
@@ -22,13 +24,13 @@ public class AllEntities {
   @ColumnInfo(name = ALLENTITIES_ENTITYTYPE)
   private String entityType;
   
-  public AllEntities(int id, @NonNull String name, @NonNull String entityType) {
+  public AllEntities(long id, @NonNull String name, @NonNull String entityType) {
     this.id = id;
     this.name = name;
     this.entityType = entityType;
   }
   
-  public int getId() {
+  public long getId() {
     return id;
   }
   

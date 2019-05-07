@@ -9,29 +9,30 @@ import static pyk.musicbox.model.DBConstants.Artist_AlbumTrackConstants.ARTIST_A
 import static pyk.musicbox.model.DBConstants.Artist_AlbumTrackConstants.ARTIST_ALBUMTRACK_ENTITYTYPE;
 import static pyk.musicbox.model.DBConstants.Artist_AlbumTrackConstants.ARTIST_ALBUMTRACK_TABLE;
 
-@Entity(tableName = ARTIST_ALBUMTRACK_TABLE)
+@Entity(tableName = ARTIST_ALBUMTRACK_TABLE,
+        primaryKeys = {ARTIST_ALBUMTRACK_ARTISTID, ARTIST_ALBUMTRACK_ENTITYID})
 public class Artist_AlbumTrack {
   @ColumnInfo(name = ARTIST_ALBUMTRACK_ARTISTID)
-  private int artistID;
+  private long artistID;
   
   @ColumnInfo(name = ARTIST_ALBUMTRACK_ENTITYID)
-  private int entityID;
+  private long entityID;
   
   @NonNull
   @ColumnInfo(name = ARTIST_ALBUMTRACK_ENTITYTYPE)
   private String entityType;
   
-  public Artist_AlbumTrack(int artistID, int entityID, @NonNull String entityType) {
+  public Artist_AlbumTrack(long artistID, long entityID, @NonNull String entityType) {
     this.artistID = artistID;
     this.entityID = entityID;
     this.entityType = entityType;
   }
   
-  public int getArtistID() {
+  public long getArtistID() {
     return artistID;
   }
   
-  public int getEntityID() {
+  public long getEntityID() {
     return entityID;
   }
   

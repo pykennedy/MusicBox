@@ -8,12 +8,13 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Track;
 
 @Dao
-public interface TrackDAO {
+public interface Artist_AlbumTrackDAO {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  long insert(Track track);
+  long insert(Artist_AlbumTrack artist_albumTrack);
   
   @Query("DELETE FROM track_table")
   void deleteAll();
