@@ -3,6 +3,7 @@ package pyk.musicbox.model.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ALBUM;
@@ -15,6 +16,7 @@ import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_TABLE;
 @Entity(tableName = TRACK_TABLE
         , indices = {@Index(value = {TRACK_ID}, unique = true)})
 public class Track {
+  @PrimaryKey
   @ColumnInfo(name = TRACK_ID)
   private long id;
   

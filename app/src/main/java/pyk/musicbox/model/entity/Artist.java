@@ -31,4 +31,8 @@ public class Artist {
   public String getName() {
     return name;
   }
+  
+  public void setId(long id) {
+    this.id = id;
+  }
 }

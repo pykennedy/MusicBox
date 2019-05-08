@@ -53,4 +53,8 @@ public class Album {
   @NonNull public String getArtist() {
     return artist;
   }
+  
+  public void setId(long id) {
+    this.id = id;
+  }
 }
