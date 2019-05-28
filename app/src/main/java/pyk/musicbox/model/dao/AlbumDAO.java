@@ -10,21 +10,20 @@ import java.util.List;
 
 import pyk.musicbox.model.entity.Album;
 
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_ID;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_NAME;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_TABLE;
-
 @Dao
 public interface AlbumDAO {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   long insert(Album album);
   
-  @Query("DELETE FROM " + ALBUM_TABLE)
+  @Query("DELETE FROM album_table")
   void deleteAll();
   
-  @Query("SELECT * FROM " + ALBUM_TABLE + " ORDER BY "+ ALBUM_NAME + " ASC")
+  @Query("SELECT * FROM album_table ORDER BY name ASC")
   LiveData<List<Album>> getAllAlbums();
   
-  @Query("SELECT * FROM " + ALBUM_TABLE + " WHERE " + ALBUM_ID + " = :id")
+  @Query("SELECT * FROM album_table WHERE id = :id")
   Album getAlbumByID(long id);
+  
+  @Query("SELECT * FROM album_table WHERE `key` = :key")
+  Album getAlbumByKey(String key);
 }

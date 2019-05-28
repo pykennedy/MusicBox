@@ -9,6 +9,7 @@ import pyk.musicbox.model.entity.Track;
 public class StaticValues {
   public static final ArrayList<Group> groupList = buildGroupList();
   public static final List<Track> trackList = spoofedTracks();
+  public static final int totalAlbums = 8;
   
   private static ArrayList<Group> buildGroupList() {
     ArrayList<Group> groups = new ArrayList<>();

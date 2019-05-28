@@ -9,19 +9,21 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import pyk.musicbox.model.entity.Artist;
-import pyk.musicbox.model.entity.Track;
 
 @Dao
 public interface ArtistDAO {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   long insert(Artist Artist);
   
-  @Query("DELETE FROM track_table")
+  @Query("DELETE FROM artist_table")
   void deleteAll();
   
-  @Query("SELECT * FROM track_table ORDER BY name ASC")
-  LiveData<List<Track>> getAllTracks();
+  @Query("SELECT * FROM artist_table ORDER BY name ASC")
+  LiveData<List<Artist>> getAllArtists();
   
-  @Query("SELECT * FROM track_table WHERE id = :id")
-  Track getTrackByID(long id);
+  @Query("SELECT * FROM artist_table WHERE id = :id")
+  Artist getArtistByID(long id);
+  
+  @Query("SELECT * FROM artist_table WHERE id = :name")
+  Artist getArtistByName(String name);
 }

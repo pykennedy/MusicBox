@@ -6,29 +6,23 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_ARTIST;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_ID;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_KEY;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_NAME;
-import static pyk.musicbox.model.DBConstants.AlbumConstants.ALBUM_TABLE;
-
-@Entity(tableName = ALBUM_TABLE
-        , indices = {@Index(value = {ALBUM_KEY}, unique = true)})
+@Entity(tableName = "album_table"
+        , indices = {@Index(value = {"key"}, unique = true)})
 public class Album {
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = ALBUM_ID)
+  @ColumnInfo(name = "id")
   private long id;
   
   @NonNull
-  @ColumnInfo(name = ALBUM_NAME)
+  @ColumnInfo(name = "name")
   private String name;
   
   @NonNull
-  @ColumnInfo(name = ALBUM_ARTIST)
+  @ColumnInfo(name = "artist")
   private String artist;
   
   @NonNull
-  @ColumnInfo(name = ALBUM_KEY)
+  @ColumnInfo(name = "key")
   private String key;
   
   public Album(@NonNull String name, @NonNull String artist, @NonNull String key) {

@@ -5,23 +5,18 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_ENTITYTYPE;
-import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_ID;
-import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_NAME;
-import static pyk.musicbox.model.DBConstants.AllEntitiesConstants.ALLENTITIES_TABLE;
-
-@Entity(tableName = ALLENTITIES_TABLE)
+@Entity(tableName = "allentities_table")
 public class AllEntities {
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = ALLENTITIES_ID)
+  @ColumnInfo(name = "id")
   private long id;
   
   @NonNull
-  @ColumnInfo(name = ALLENTITIES_NAME)
+  @ColumnInfo(name = "name")
   private String name;
   
   @NonNull
-  @ColumnInfo(name = ALLENTITIES_ENTITYTYPE)
+  @ColumnInfo(name = "entityType")
   private String entityType;
   
   public AllEntities(long id, @NonNull String name, @NonNull String entityType) {

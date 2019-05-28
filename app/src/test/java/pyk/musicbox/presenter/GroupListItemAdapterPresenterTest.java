@@ -15,7 +15,6 @@ import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
 import pyk.musicbox.model.database.DBHelper;
 import pyk.musicbox.model.entity.Group;
-import pyk.musicbox.model.entity.GroupOld;
 
 import static org.mockito.Mockito.verify;
 

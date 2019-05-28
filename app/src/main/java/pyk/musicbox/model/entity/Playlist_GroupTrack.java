@@ -4,22 +4,17 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
 
-import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_ENTITYID;
-import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_ENTITYTYPE;
-import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_PLAYLISTID;
-import static pyk.musicbox.model.DBConstants.Playlist_GroupTrackConstants.PLAYLIST_GROUPTRACK_TABLE;
-
-@Entity(tableName = PLAYLIST_GROUPTRACK_TABLE,
-        primaryKeys = {PLAYLIST_GROUPTRACK_PLAYLISTID, PLAYLIST_GROUPTRACK_ENTITYID})
+@Entity(tableName = "playlist_grouptrack_table",
+        primaryKeys = {"playlistID", "entityID"})
 public class Playlist_GroupTrack {
-  @ColumnInfo(name = PLAYLIST_GROUPTRACK_PLAYLISTID)
+  @ColumnInfo(name = "playlistID")
   private long playlistID;
   
-  @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYID)
+  @ColumnInfo(name = "entityID")
   private long entityID;
   
   @NonNull
-  @ColumnInfo(name = PLAYLIST_GROUPTRACK_ENTITYTYPE)
+  @ColumnInfo(name = "entityType")
   private String entityType;
   
   public Playlist_GroupTrack(long playlistID, long entityID, @NonNull String entityType) {

@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import pyk.musicbox.model.entity.Album;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Track;
 
@@ -19,9 +20,19 @@ public interface Artist_AlbumTrackDAO {
   @Query("DELETE FROM track_table")
   void deleteAll();
   
-  @Query("SELECT * FROM track_table ORDER BY name ASC")
-  LiveData<List<Track>> getAllTracks();
+  @Query("SELECT at.* " +
+         "FROM artist_albumtrack_table AS aatt " +
+         "INNER JOIN album_table AS at " +
+         "ON aatt.entityID = at.id " +
+         "AND aatt.artistID = :id " +
+         "AND aatt.entityType = 'album'")
+  LiveData<List<Album>> getAlbumsByArtistID(long id);
   
-  @Query("SELECT * FROM track_table WHERE id = :id")
-  Track getTrackByID(long id);
+  @Query("SELECT tt.* " +
+         "FROM artist_albumtrack_table AS aatt " +
+         "INNER JOIN track_table AS tt " +
+         "ON aatt.entityID = tt.id " +
+         "AND aatt.artistID = :id " +
+         "AND aatt.entityType = 'track'")
+  LiveData<List<Track>> getTracksByArtistID(long id);
 }

@@ -16,12 +16,13 @@ public interface Album_TrackDAO {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   long insert(Album_Track album_track);
   
-  @Query("DELETE FROM track_table")
+  @Query("DELETE FROM album_track_table")
   void deleteAll();
   
-  @Query("SELECT * FROM track_table ORDER BY name ASC")
-  LiveData<List<Track>> getAllTracks();
-  
-  @Query("SELECT * FROM track_table WHERE id = :id")
-  Track getTrackByID(long id);
+  @Query("SELECT tt.* " +
+         "FROM album_track_table AS att " +
+         "INNER JOIN track_table AS tt " +
+         "ON att.trackID = tt.id " +
+         "AND att.albumID = :id")
+  LiveData<List<Track>> getTracksByAlbumID(long id);
 }
