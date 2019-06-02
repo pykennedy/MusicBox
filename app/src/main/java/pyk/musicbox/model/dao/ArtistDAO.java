@@ -24,6 +24,6 @@ public interface ArtistDAO {
   @Query("SELECT * FROM artist_table WHERE id = :id")
   Artist getArtistByID(long id);
   
-  @Query("SELECT * FROM artist_table WHERE id = :name")
+  @Query("SELECT * FROM artist_table WHERE name = :name")
   Artist getArtistByName(String name);
 }

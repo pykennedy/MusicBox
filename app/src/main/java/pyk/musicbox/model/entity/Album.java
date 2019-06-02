@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "album_table"
-        , indices = {@Index(value = {"key"}, unique = true)})
+    , indices = {@Index(value = {"key"}, unique = true)})
 public class Album {
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")

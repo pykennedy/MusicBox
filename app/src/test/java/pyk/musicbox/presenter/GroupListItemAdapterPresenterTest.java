@@ -1,27 +1,11 @@
 package pyk.musicbox.presenter;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
-import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.GroupList;
-import pyk.musicbox.model.database.DBHelper;
-import pyk.musicbox.model.entity.Group;
-
-import static org.mockito.Mockito.verify;
 
 public class GroupListItemAdapterPresenterTest {
   GroupListItemAdapterPresenter gliap;
   GroupList                     groupList;
-  
+  /*
   @Mock
   private DBHelper                                              dbHelper;
   @Mock
@@ -72,5 +56,5 @@ public class GroupListItemAdapterPresenterTest {
     Assert.assertEquals("GroupOld #2", groupOld.getGroupTitle());
     groupOld = gliap.getGroupFromList(17);
     Assert.assertEquals("GroupOld #17", groupOld.getGroupTitle());
-  }
+  }*/
 }

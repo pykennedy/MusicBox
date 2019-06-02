@@ -2,10 +2,12 @@ package pyk.musicbox.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "artist_table")
+@Entity(tableName = "artist_table"
+    , indices = {@Index(value = {"name"}, unique = true)})
 public class Artist {
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")
