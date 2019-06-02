@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.GroupListItemAdapterContract;
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 
 public class GroupListItemAdapter
     extends RecyclerView.Adapter<GroupListItemAdapter.ItemAdapterViewHolder>
     implements GroupListItemAdapterContract.GroupListItemAdapterView {
-  GroupListItemAdapterPresenter presenter;
+  private GroupListItemAdapterPresenter presenter;
   
   public GroupListItemAdapter() {
     super();
@@ -52,8 +52,8 @@ public class GroupListItemAdapter
       title = itemView.findViewById(R.id.tv_title_groupList);
     }
     
-    void update(Group group) {
-      String titleText = group.getGroupTitle();
+    void update(Group groupOld) {
+      String titleText = groupOld.getName();
       
       title.setText(titleText);
     }

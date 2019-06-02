@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity
     });
     
     getPerms();
-    
     mainActivityPresenter.refreshTrackList(this);
   }
   
@@ -63,6 +62,8 @@ public class MainActivity extends AppCompatActivity
     } else {
       pager.setCurrentItem(1);
     }
+  
+
   }
   
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

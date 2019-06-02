@@ -2,10 +2,10 @@ package pyk.musicbox.contract.callback;
 
 import java.util.ArrayList;
 
-import pyk.musicbox.model.dbobjects.Group;
+import pyk.musicbox.model.entity.Group;
 
 public interface Callback {
   public interface GroupListCB {
-    public void onResponse(ArrayList<Group> groups, boolean succeeded);
+    public void onResponse(ArrayList<Group> groupOlds, boolean succeeded);
   }
 }
