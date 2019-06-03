@@ -6,52 +6,44 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
-import pyk.musicbox.model.entity.Album;
-import pyk.musicbox.model.entity.Track;
-import pyk.musicbox.model.viewmodel.AlbumViewModel;
-import pyk.musicbox.model.viewmodel.TrackViewModel;
+import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.viewmodel.AllEntitiesViewModel;
 import pyk.musicbox.view.fragment.SearchFragment;
 
-public class SearchListItemAdapterPresenter implements SearchListItemAdapterContract.SearchListItemAdapterPresenter {
+public class SearchListItemAdapterPresenter
+    implements SearchListItemAdapterContract.SearchListItemAdapterPresenter {
   SearchListItemAdapterContract.SearchListItemAdapterView sliav;
-  private TrackViewModel tvm;
-  private AlbumViewModel avm;
+  private AllEntitiesViewModel aevm;
+  private List<AllEntities> entities = new ArrayList<>();
   
-  private List<Track> tracks = new ArrayList<>();
-  private List<Album> albums = new ArrayList<>();
-  
-  public SearchListItemAdapterPresenter(final SearchListItemAdapterContract.SearchListItemAdapterView sliav, SearchFragment context) {
+  public SearchListItemAdapterPresenter(
+      final SearchListItemAdapterContract.SearchListItemAdapterView sliav, SearchFragment context) {
     this.sliav = sliav;
-    tvm = ViewModelProviders.of(context).get(TrackViewModel.class);
-    tvm.getAllTracks().observe(context, new Observer<List<Track>>() {
-      @Override public void onChanged(@Nullable List<Track> trackList) {
-        tracks = trackList;
-        for(Track track : tracks) {
-          Log.e("track", track.getId() + "     " + track.getName());
-        }
-        sliav.triggerRefresh();
-      }
-    });
     
-    avm = ViewModelProviders.of(context).get(AlbumViewModel.class);
-    avm.getAllAlbums().observe(context, new Observer<List<Album>>() {
-      @Override public void onChanged(@Nullable List<Album> albumList) {
-        albums = albumList;
-        for(Album album : albums) {
-          Log.e("album", album.getId() + "     " + album.getName());
-        }
-      }
-    });
+    aevm = ViewModelProviders.of(context).get(AllEntitiesViewModel.class);
+    List<String> entityTypes = Arrays.asList("track", "album", "artist", "group", "playlist");
+    aevm.getAllEntities(entityTypes)
+        .observe(context, new Observer<List<AllEntities>>() {
+          @Override public void onChanged(@Nullable List<AllEntities> allEntities) {
+            entities = allEntities;
+            Log.e("asdf", ""+ allEntities.size());
+            for(AllEntities entity : allEntities) {
+              Log.e("entity list", entity.getName());
+            }
+            sliav.triggerRefresh();
+          }
+        });
   }
   
-  @Override public Track getTrackFromList(int i) {
-    return tracks.get(i);
+  @Override public AllEntities getEntityFromList(int i) {
+    return entities.get(i);
   }
   
   @Override public int getItemCount() {
-    return tracks.size();
+    return entities.size();
   }
 }
