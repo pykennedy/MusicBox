@@ -11,6 +11,9 @@ public class AllEntities {
   @ColumnInfo(name = "id")
   private long id;
   
+  @ColumnInfo(name = "entityID")
+  private long entityID;
+  
   @NonNull
   @ColumnInfo(name = "name")
   private String name;
@@ -19,8 +22,8 @@ public class AllEntities {
   @ColumnInfo(name = "entityType")
   private String entityType;
   
-  public AllEntities(long id, @NonNull String name, @NonNull String entityType) {
-    this.id = id;
+  public AllEntities(long entityID, @NonNull String name, @NonNull String entityType) {
+    this.entityID = entityID;
     this.name = name;
     this.entityType = entityType;
   }
@@ -29,11 +32,19 @@ public class AllEntities {
     return id;
   }
   
+  public long getEntityID() {
+    return entityID;
+  }
+  
   @NonNull public String getName() {
     return name;
   }
   
   @NonNull public String getEntityType() {
     return entityType;
+  }
+  
+  public void setId(long id) {
+    this.id = id;
   }
 }

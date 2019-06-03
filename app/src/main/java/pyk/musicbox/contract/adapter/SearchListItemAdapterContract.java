@@ -1,14 +1,14 @@
 package pyk.musicbox.contract.adapter;
 
-import pyk.musicbox.model.entity.Track;
+import pyk.musicbox.model.entity.AllEntities;
 
 public interface SearchListItemAdapterContract {
-  public interface SearchListItemAdapterView {
+  interface SearchListItemAdapterView {
     void triggerRefresh();
   }
   
-  public interface SearchListItemAdapterPresenter {
-    Track getTrackFromList(int i);
+  interface SearchListItemAdapterPresenter {
+    AllEntities getEntityFromList(int i);
     int getItemCount();
   }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
-import pyk.musicbox.model.entity.Track;
+import pyk.musicbox.model.entity.AllEntities;
 import pyk.musicbox.presenter.SearchListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.SearchFragment;
 
@@ -18,24 +18,22 @@ public class SearchListItemAdapter
     extends RecyclerView.Adapter<SearchListItemAdapter.ItemAdapterViewHolder>
     implements SearchListItemAdapterContract.SearchListItemAdapterView {
   private SearchListItemAdapterPresenter sliap;
-  private SearchFragment                 searchFragment;
   
   public SearchListItemAdapter(SearchFragment searchFragment) {
     super();
-    this.searchFragment = searchFragment;
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
   }
   
   @NonNull @Override
-  public SearchListItemAdapter.ItemAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+  public ItemAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                         int viewType) {
     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent,
                                                                  false);
-    return new SearchListItemAdapter.ItemAdapterViewHolder(view);
+    return new ItemAdapterViewHolder(view);
   }
   
   @Override public void onBindViewHolder(@NonNull ItemAdapterViewHolder holder, int position) {
-    holder.update(sliap.getTrackFromList(position));
+    holder.update(sliap.getEntityFromList(position));
   }
   
   @Override public int getItemCount() {
@@ -49,13 +47,13 @@ public class SearchListItemAdapter
   static class ItemAdapterViewHolder extends ViewHolder {
     TextView title;
     
-    public ItemAdapterViewHolder(View itemView) {
+    ItemAdapterViewHolder(View itemView) {
       super(itemView);
       title = itemView.findViewById(R.id.tv_title_groupList);
     }
     
-    void update(Track track) {
-      String titleText = track.getName();
+    void update(AllEntities entity) {
+      String titleText = entity.getName();
       
       title.setText(titleText);
     }
