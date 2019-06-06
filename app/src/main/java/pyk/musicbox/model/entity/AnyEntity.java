@@ -5,8 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "allentities_table")
-public class AllEntities {
+@Entity(tableName = "anyentity_table")
+public class AnyEntity {
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")
   private long id;
@@ -22,7 +22,7 @@ public class AllEntities {
   @ColumnInfo(name = "entityType")
   private String entityType;
   
-  public AllEntities(long entityID, @NonNull String name, @NonNull String entityType) {
+  public AnyEntity(long entityID, @NonNull String name, @NonNull String entityType) {
     this.entityID = entityID;
     this.name = name;
     this.entityType = entityType;

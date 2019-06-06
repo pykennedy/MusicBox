@@ -6,10 +6,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import static pyk.musicbox.model.DBConstants.TrackConstants.TRACK_ID;
-
 @Entity(tableName = "track_table"
-        , indices = {@Index(value = {TRACK_ID}, unique = true)})
+        , indices = {@Index(value = {"id"}, unique = true)})
 public class Track {
   @PrimaryKey
   @ColumnInfo(name = "id")

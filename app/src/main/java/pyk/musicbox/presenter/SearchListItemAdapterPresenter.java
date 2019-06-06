@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
-import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.viewmodel.AllEntitiesViewModel;
 import pyk.musicbox.view.fragment.SearchFragment;
 
@@ -18,7 +18,7 @@ public class SearchListItemAdapterPresenter
     implements SearchListItemAdapterContract.SearchListItemAdapterPresenter {
   SearchListItemAdapterContract.SearchListItemAdapterView sliav;
   private AllEntitiesViewModel aevm;
-  private List<AllEntities> entities = new ArrayList<>();
+  private List<AnyEntity>      entities = new ArrayList<>();
   
   public SearchListItemAdapterPresenter(
       final SearchListItemAdapterContract.SearchListItemAdapterView sliav, SearchFragment context) {
@@ -27,11 +27,11 @@ public class SearchListItemAdapterPresenter
     aevm = ViewModelProviders.of(context).get(AllEntitiesViewModel.class);
     List<String> entityTypes = Arrays.asList("track", "album", "artist", "group", "playlist");
     aevm.getAllEntities(entityTypes)
-        .observe(context, new Observer<List<AllEntities>>() {
-          @Override public void onChanged(@Nullable List<AllEntities> allEntities) {
+        .observe(context, new Observer<List<AnyEntity>>() {
+          @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
             entities = allEntities;
             Log.e("asdf", ""+ allEntities.size());
-            for(AllEntities entity : allEntities) {
+            for(AnyEntity entity : allEntities) {
               Log.e("entity list", entity.getName());
             }
             sliav.triggerRefresh();
@@ -39,7 +39,7 @@ public class SearchListItemAdapterPresenter
         });
   }
   
-  @Override public AllEntities getEntityFromList(int i) {
+  @Override public AnyEntity getEntityFromList(int i) {
     return entities.get(i);
   }
   

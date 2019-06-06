@@ -1,6 +1,6 @@
 package pyk.musicbox.contract.adapter;
 
-import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.entity.AnyEntity;
 
 public interface SearchListItemAdapterContract {
   interface SearchListItemAdapterView {
@@ -8,7 +8,7 @@ public interface SearchListItemAdapterContract {
   }
   
   interface SearchListItemAdapterPresenter {
-    AllEntities getEntityFromList(int i);
+    AnyEntity getEntityFromList(int i);
     int getItemCount();
   }
 }

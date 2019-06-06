@@ -24,10 +24,10 @@ public class MainActivityTest {
   
   @Test
   public void defaultFragmentsExist() throws Exception {
-    onView(withId(R.id.v_groups_fragmentHome)).check(matches(isDisplayed()));
+    onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
     onView(withId(R.id.vp_mainActivity)).perform(swipeLeft());
     onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
     onView(withId(R.id.vp_mainActivity)).perform(swipeRight());
-    onView(withId(R.id.v_groups_fragmentHome)).check(matches(isDisplayed()));
+    onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
   }
 }

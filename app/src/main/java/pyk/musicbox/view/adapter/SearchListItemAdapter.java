@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
-import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.presenter.SearchListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.SearchFragment;
 
@@ -52,7 +52,7 @@ public class SearchListItemAdapter
       title = itemView.findViewById(R.id.tv_title_groupList);
     }
     
-    void update(AllEntities entity) {
+    void update(AnyEntity entity) {
       String titleText = entity.getName();
       
       title.setText(titleText);
