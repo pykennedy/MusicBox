@@ -9,10 +9,10 @@ import java.util.List;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.repository.MBRepo;
 
-public class AllEntitiesViewModel extends AndroidViewModel {
+public class AnyEntityViewModel extends AndroidViewModel {
   private MBRepo repo;
   
-  public AllEntitiesViewModel(Application application) {
+  public AnyEntityViewModel(Application application) {
     super(application);
     repo = new MBRepo(application);
   }
