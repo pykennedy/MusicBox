@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
-import pyk.musicbox.contract.fragment.SearchFragmentContract;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
@@ -23,12 +23,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
   private TextView groupSlicer;
   private TextView playlistSlicer;
   
-  private SearchListItemAdapter slia = new SearchListItemAdapter(this);
+  private SearchListItemAdapter slia;
   
-  private SearchFragmentPresenter searchFragmentPresenter = new SearchFragmentPresenter();
+  private SearchFragmentPresenter searchFragmentPresenter;
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
+  
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +51,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     playlistSlicer = rootView.findViewById(R.id.tv_playlistSlicer_fragmentSearch);
     playlistSlicer.setOnClickListener(this);
     
+    slia = new SearchListItemAdapter(this);
+    
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(slia);
+    
+    searchFragmentPresenter = new SearchFragmentPresenter();
     
     return rootView;
   }
@@ -76,8 +85,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         break;
     }
     
-    searchFragmentPresenter.slicersChanged((SearchFragmentContract.SearchFragment_SLIAP) slia,
-                                           slicerStatus);
+    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
   }
   
   private void setSlicerLight(int i) {

@@ -15,14 +15,14 @@ import pyk.musicbox.model.viewmodel.AnyEntityViewModel;
 import pyk.musicbox.view.fragment.SearchFragment;
 
 public class SearchListItemAdapterPresenter
-    implements SearchListItemAdapterContract.SearchListItemAdapterPresenter, SearchFragmentContract.SearchFragment_SLIAP {
+    implements SearchListItemAdapterContract.SearchListItemAdapterPresenter, SearchFragmentContract.SearchListItemAdapterView {
   SearchListItemAdapterContract.SearchListItemAdapterView sliav;
   private AnyEntityViewModel aevm;
   private List<AnyEntity>    entities = new ArrayList<>();
   private SearchFragment     context;
   
   public SearchListItemAdapterPresenter(
-      final SearchListItemAdapterContract.SearchListItemAdapterView sliav, SearchFragment context) {
+      final SearchListItemAdapterContract.SearchListItemAdapterView sliav, final SearchFragment context) {
     this.sliav = sliav;
     this.context = context;
     aevm = ViewModelProviders.of(context).get(AnyEntityViewModel.class);

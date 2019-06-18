@@ -1,11 +1,11 @@
 package pyk.musicbox.contract.fragment;
 
 public interface SearchFragmentContract {
-  interface SearchFragment_SLIAP {
+  interface SearchListItemAdapterView {
     void applyFilters(boolean[] slicers);
   }
   
   interface SearchFragmentPresenter {
-    void slicersChanged(SearchFragment_SLIAP sfsliap, boolean[] slicers);
+    void slicersChanged(SearchListItemAdapterView slia, boolean[] slicers);
   }
 }

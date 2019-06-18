@@ -10,5 +10,6 @@ public interface SearchListItemAdapterContract {
   interface SearchListItemAdapterPresenter {
     AnyEntity getEntityFromList(int i);
     int getItemCount();
+    void applyFilters(boolean[] slicers);
   }
 }

@@ -10,23 +10,26 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
+import pyk.musicbox.contract.fragment.SearchFragmentContract;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.presenter.SearchListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.SearchFragment;
 
 public class SearchListItemAdapter
     extends RecyclerView.Adapter<SearchListItemAdapter.ItemAdapterViewHolder>
-    implements SearchListItemAdapterContract.SearchListItemAdapterView {
+    implements SearchListItemAdapterContract.SearchListItemAdapterView
+    , SearchFragmentContract.SearchListItemAdapterView {
   private SearchListItemAdapterPresenter sliap;
   
   public SearchListItemAdapter(SearchFragment searchFragment) {
     super();
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
+    applyFilters(new boolean[]{true, true, true, true, true});
   }
   
   @NonNull @Override
   public ItemAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                                        int viewType) {
+                                                  int viewType) {
     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent,
                                                                  false);
     return new ItemAdapterViewHolder(view);
@@ -42,6 +45,10 @@ public class SearchListItemAdapter
   
   @Override public void triggerRefresh() {
     notifyDataSetChanged();
+  }
+  
+  @Override public void applyFilters(boolean[] slicers) {
+    sliap.applyFilters(slicers);
   }
   
   static class ItemAdapterViewHolder extends ViewHolder {
