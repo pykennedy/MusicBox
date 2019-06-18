@@ -140,7 +140,7 @@ public class MBDBUnitTest {
     artistDAO.insert(dupe);
     
     List<Artist> artists = LiveDataTestUtil.getValue(artistDAO.getAllArtists());
-    assertEquals(StaticValues.totalAlbums, artists.size());
+    assertEquals(StaticValues.totalArtists, artists.size());
   }
   
   @Test

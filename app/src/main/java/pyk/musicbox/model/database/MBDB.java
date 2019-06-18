@@ -10,20 +10,20 @@ import android.support.annotation.NonNull;
 
 import pyk.musicbox.model.dao.AlbumDAO;
 import pyk.musicbox.model.dao.Album_TrackDAO;
-import pyk.musicbox.model.dao.AllEntitiesDAO;
+import pyk.musicbox.model.dao.AnyEntityDAO;
 import pyk.musicbox.model.dao.ArtistDAO;
 import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.entity.Album;
 import pyk.musicbox.model.entity.Album_Track;
-import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Track;
 
 @Database(
     entities = {Track.class, Album.class, Artist.class, Album_Track.class, Artist_AlbumTrack.class,
-                AllEntities.class},
+                AnyEntity.class},
     version = 1)
 public abstract class MBDB extends RoomDatabase {
   private static volatile MBDB instance;
@@ -38,7 +38,7 @@ public abstract class MBDB extends RoomDatabase {
   
   public abstract Artist_AlbumTrackDAO artist_albumTrackDAO();
   
-  public abstract AllEntitiesDAO allEntitiesDAO();
+  public abstract AnyEntityDAO anyEntityDAO();
   
   public static MBDB getDB(final Context context) {
     if (instance == null) {

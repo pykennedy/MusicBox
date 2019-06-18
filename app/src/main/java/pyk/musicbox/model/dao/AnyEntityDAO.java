@@ -8,18 +8,18 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import pyk.musicbox.model.entity.AllEntities;
+import pyk.musicbox.model.entity.AnyEntity;
 
 @Dao
-public interface AllEntitiesDAO {
+public interface AnyEntityDAO {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  long insert(AllEntities entity);
+  long insert(AnyEntity entity);
   
-  @Query("DELETE FROM allentities_table")
+  @Query("DELETE FROM anyentity_table")
   void deleteAll();
   
-  @Query("SELECT * FROM allentities_table WHERE entityType IN (:entityTypes) ORDER BY name ASC")
-  LiveData<List<AllEntities>> getAllEntities(List<String> entityTypes);
+  @Query("SELECT * FROM anyentity_table WHERE entityType IN (:entityTypes) ORDER BY name ASC")
+  LiveData<List<AnyEntity>> getAllEntities(List<String> entityTypes);
   
   
 }

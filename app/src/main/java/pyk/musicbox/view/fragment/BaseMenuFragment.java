@@ -17,7 +17,7 @@ public class BaseMenuFragment extends Fragment {
     View view = inflater.inflate(R.layout.basemenu_fragment, container, false);
     
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-    transaction.replace(R.id.basemenu_frame, new HomeFragment());
+    transaction.replace(R.id.basemenu_frame, new SearchFragment());
     
     transaction.commit();
     
