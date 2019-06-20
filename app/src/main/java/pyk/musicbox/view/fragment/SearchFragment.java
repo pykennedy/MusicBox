@@ -1,8 +1,9 @@
 package pyk.musicbox.view.fragment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,14 @@ import pyk.musicbox.R;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
-public class SearchFragment extends Fragment implements View.OnClickListener {
-  private TextView artistSlicer;
-  private TextView albumSlicer;
-  private TextView trackSlicer;
-  private TextView groupSlicer;
-  private TextView playlistSlicer;
+public class SearchFragment extends Fragment
+    implements View.OnClickListener, AddDialogFragment.AddDialogListener {
+  private TextView             artistSlicer;
+  private TextView             albumSlicer;
+  private TextView             trackSlicer;
+  private TextView             groupSlicer;
+  private TextView             playlistSlicer;
+  private FloatingActionButton fab;
   
   private SearchListItemAdapter slia;
   
@@ -29,11 +32,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
-  
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +48,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     groupSlicer.setOnClickListener(this);
     playlistSlicer = rootView.findViewById(R.id.tv_playlistSlicer_fragmentSearch);
     playlistSlicer.setOnClickListener(this);
+    fab = rootView.findViewById(R.id.fab_addButton_fragmentSearch);
+    fab.setOnClickListener(this);
     
     slia = new SearchListItemAdapter(this);
     
@@ -65,6 +65,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
   
   @Override
   public void onClick(View view) {
+    boolean update = true;
+    
     switch (view.getId()) {
       case R.id.tv_artistSlicer_fragmentSearch:
         setSlicer(0);
@@ -81,11 +83,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
       case R.id.tv_playlistSlicer_fragmentSearch:
         setSlicer(4);
         break;
+      case R.id.fab_addButton_fragmentSearch:
+        showDialog();
+        update = false;
+        break;
       default:
         break;
     }
     
-    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    if (update) {
+      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    }
   }
   
   private void setSlicerLight(int i) {
@@ -138,5 +146,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
       }
     }
     return true;
+  }
+  
+  private void showDialog() {
+    DialogFragment dialog = new AddDialogFragment();
+    dialog.setTargetFragment(SearchFragment.this, 300);
+    dialog.show(getFragmentManager(), "AddDialogFragment");
+  }
+  
+  @Override
+  public void onGroupClick(DialogFragment dialog, String name) {
+    //TODO: add group to db, if dupe then toast warning, else tell main activity to swap to group fragment
+  }
+  
+  @Override
+  public void onPlaylistClick(DialogFragment dialog, String name) {
+    //TODO: add playlist to db, if dupe then toast warning, else tell main activity to swap to playlist fragment
   }
 }
