@@ -8,13 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
+import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
 public class SearchFragment extends Fragment
@@ -32,6 +36,8 @@ public class SearchFragment extends Fragment
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
+  
+  //TODO: properly pass activity context to all fragments for better context management for room
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -157,6 +163,19 @@ public class SearchFragment extends Fragment
   @Override
   public void onGroupClick(DialogFragment dialog, String name) {
     //TODO: add group to db, if dupe then toast warning, else tell main activity to swap to group fragment
+    searchFragmentPresenter.addGroup((MainActivity) getActivity(), name,
+                                     new Callback.InsertGroupCB() {
+                                       @Override
+                                       public void onResponse(boolean succeeded, String msg) {
+                                         if (succeeded) {
+                                           // TODO: open group fragment
+                                           Log.e("debugging", "group added callback");
+                                         } else {
+                                           Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
+                                                .show();
+                                         }
+                                       }
+                                     });
   }
   
   @Override

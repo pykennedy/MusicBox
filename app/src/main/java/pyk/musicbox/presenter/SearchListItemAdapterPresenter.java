@@ -26,7 +26,6 @@ public class SearchListItemAdapterPresenter
     this.sliav = sliav;
     this.context = context;
     aevm = ViewModelProviders.of(context).get(AnyEntityViewModel.class);
-    // TODO: try this https://medium.com/@BladeCoder/architecture-components-pitfalls-part-1-9300dd969808
   }
   
   @Override public AnyEntity getEntityFromList(int i) {
@@ -37,10 +36,11 @@ public class SearchListItemAdapterPresenter
     return entities.size();
   }
   
-  @Override public void applyFilters(boolean[] slicers) {
+  @Override public void applyFilters(final boolean[] slicers) {
     aevm.getAllEntities(toTypesList(slicers))
         .observe(context, new Observer<List<AnyEntity>>() {
           @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
+            Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
             entities = allEntities;
             Log.e("asdf", ""+ allEntities.size());
             for(AnyEntity entity : allEntities) {
