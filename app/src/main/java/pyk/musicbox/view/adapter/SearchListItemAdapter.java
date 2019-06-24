@@ -25,7 +25,7 @@ public class SearchListItemAdapter
   public SearchListItemAdapter(SearchFragment searchFragment) {
     super();
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
-    applyFilters(new boolean[]{true, true, true, true, true});
+    sliap.applyFilters(new boolean[]{true, true, true, true, true});
   }
   
   @NonNull @Override

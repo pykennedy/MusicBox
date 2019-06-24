@@ -20,6 +20,7 @@ public class SearchListItemAdapterPresenter
   private AnyEntityViewModel aevm;
   private List<AnyEntity>    entities = new ArrayList<>();
   private SearchFragment     context;
+  private Observer<List<AnyEntity>> observer;
   
   public SearchListItemAdapterPresenter(
       final SearchListItemAdapterContract.SearchListItemAdapterView sliav, final SearchFragment context) {
@@ -37,18 +38,43 @@ public class SearchListItemAdapterPresenter
   }
   
   @Override public void applyFilters(final boolean[] slicers) {
+    // TODO: figure out how to not have to make 349573489 observers, or use a mediator
+    // TODO: try this if mediator is necessary: https://proandroiddev.com/mediatorlivedata-to-the-rescue-5d27645b9bc3
+    if(observer != null) {
+      aevm.getAllEntities(toTypesList(slicers)).removeObserver(observer);
+    }
+    observer = new Observer<List<AnyEntity>>() {
+      @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
+        Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
+        entities = allEntities;
+        Log.e("asdf", ""+ allEntities.size());
+        for(AnyEntity entity : allEntities) {
+          Log.e("entity list", entity.getName());
+        }
+        sliav.triggerRefresh();
+      }
+    };
     aevm.getAllEntities(toTypesList(slicers))
-        .observe(context, new Observer<List<AnyEntity>>() {
-          @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
-            Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
-            entities = allEntities;
-            Log.e("asdf", ""+ allEntities.size());
-            for(AnyEntity entity : allEntities) {
-              Log.e("entity list", entity.getName());
-            }
-            sliav.triggerRefresh();
-          }
-        });
+        .observe(context, observer);
+  }
+  
+  public void setUpOvserver(final boolean[] slicers) {
+    if(observer != null) {
+      aevm.getAllEntities(toTypesList(slicers)).removeObserver(observer);
+    }
+    observer = new Observer<List<AnyEntity>>() {
+      @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
+        Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
+        entities = allEntities;
+        Log.e("asdf", ""+ allEntities.size());
+        for(AnyEntity entity : allEntities) {
+          Log.e("entity list", entity.getName());
+        }
+        sliav.triggerRefresh();
+      }
+    };
+    aevm.getAllEntities(toTypesList(slicers))
+        .observe(context, observer);
   }
   
   private List<String> toTypesList(boolean[] slicers) {
