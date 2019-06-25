@@ -48,7 +48,7 @@ public abstract class MBDB extends RoomDatabase {
     if (instance == null) {
       synchronized (MBDB.class) {
         if (instance == null) {
-          context.deleteDatabase("mbdb");
+          //context.deleteDatabase("mbdb");
           instance = Room.databaseBuilder(context.getApplicationContext(), MBDB.class, "mbdb")
                          //.addCallback(purgeDB)
                          .build();

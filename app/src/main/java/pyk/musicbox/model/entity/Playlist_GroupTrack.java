@@ -2,10 +2,12 @@ package pyk.musicbox.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "playlist_grouptrack_table",
-        primaryKeys = {"playlistID", "entityID"})
+@Entity(tableName = "playlist_grouptrack_table"
+    , primaryKeys = {"playlistID", "entityID"}
+    , indices = {@Index(value = {"playlistID", "entityID"}, unique = true)})
 public class Playlist_GroupTrack {
   @ColumnInfo(name = "playlistID")
   private long playlistID;

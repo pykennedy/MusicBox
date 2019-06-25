@@ -1,9 +1,10 @@
 package pyk.musicbox.presenter;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,70 +18,49 @@ import pyk.musicbox.view.fragment.SearchFragment;
 public class SearchListItemAdapterPresenter
     implements SearchListItemAdapterContract.SearchListItemAdapterPresenter, SearchFragmentContract.SearchListItemAdapterView {
   SearchListItemAdapterContract.SearchListItemAdapterView sliav;
-  private AnyEntityViewModel aevm;
-  private List<AnyEntity>    entities = new ArrayList<>();
-  private SearchFragment     context;
-  private Observer<List<AnyEntity>> observer;
+  private AnyEntityViewModel                aevm;
+  private MediatorLiveData<List<AnyEntity>> mediator = new MediatorLiveData<>();
   
   public SearchListItemAdapterPresenter(
-      final SearchListItemAdapterContract.SearchListItemAdapterView sliav, final SearchFragment context) {
+      final SearchListItemAdapterContract.SearchListItemAdapterView sliav,
+      final SearchFragment context) {
     this.sliav = sliav;
-    this.context = context;
     aevm = ViewModelProviders.of(context).get(AnyEntityViewModel.class);
+    
+    mediator.observe(context, new Observer<List<AnyEntity>>() {
+      @Override public void onChanged(@Nullable List<AnyEntity> anyEntities) {
+        sliav.triggerRefresh();
+      }
+    });
   }
   
   @Override public AnyEntity getEntityFromList(int i) {
-    return entities.get(i);
+    List<AnyEntity> list = mediator.getValue();
+    return (list != null) ? list.get(i) : null;
   }
   
   @Override public int getItemCount() {
-    return entities.size();
+    List<AnyEntity> list = mediator.getValue();
+    return (list != null) ? list.size() : 0;
   }
   
   @Override public void applyFilters(final boolean[] slicers) {
-    // TODO: figure out how to not have to make 349573489 observers, or use a mediator
-    // TODO: try this if mediator is necessary: https://proandroiddev.com/mediatorlivedata-to-the-rescue-5d27645b9bc3
-    if(observer != null) {
-      aevm.getAllEntities(toTypesList(slicers)).removeObserver(observer);
-    }
-    observer = new Observer<List<AnyEntity>>() {
+    // TODO: i'm pretty sure i need to make a callback to trigger refresh again once the music list is populated
+    // TODO: also fix the issue with duplicates and sort not working
+    
+    final LiveData<List<AnyEntity>> liveEntities = aevm.getAllEntities(toTypesList(slicers));
+    mediator.addSource(liveEntities, new Observer<List<AnyEntity>>() {
       @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
-        Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
-        entities = allEntities;
-        Log.e("asdf", ""+ allEntities.size());
-        for(AnyEntity entity : allEntities) {
-          Log.e("entity list", entity.getName());
-        }
-        sliav.triggerRefresh();
+        mediator.removeSource(liveEntities);
+        mediator.setValue(allEntities);
       }
-    };
-    aevm.getAllEntities(toTypesList(slicers))
-        .observe(context, observer);
-  }
-  
-  public void setUpOvserver(final boolean[] slicers) {
-    if(observer != null) {
-      aevm.getAllEntities(toTypesList(slicers)).removeObserver(observer);
-    }
-    observer = new Observer<List<AnyEntity>>() {
-      @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
-        Log.e("debugging", "live data onchange " + toTypesList(slicers).toString());
-        entities = allEntities;
-        Log.e("asdf", ""+ allEntities.size());
-        for(AnyEntity entity : allEntities) {
-          Log.e("entity list", entity.getName());
-        }
-        sliav.triggerRefresh();
-      }
-    };
-    aevm.getAllEntities(toTypesList(slicers))
-        .observe(context, observer);
+    });
   }
   
   private List<String> toTypesList(boolean[] slicers) {
     List<String> types = new ArrayList<>();
-    for(int i = 0; i < 5; i++) {
-      if(slicers[i]) {
+    for (int i = 0; i < 5; i++) {
+      if (slicers[i]) {
         types.add(getTypeByIndex(i));
       }
     }
@@ -89,7 +69,7 @@ public class SearchListItemAdapterPresenter
   }
   
   private String getTypeByIndex(int i) {
-    switch(i) {
+    switch (i) {
       case 0:
         return "artist";
       case 1:

@@ -3,6 +3,7 @@ package pyk.musicbox.model.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class AnyEntityViewModel extends AndroidViewModel {
   }
   
   public LiveData<List<AnyEntity>> getAllEntities(List<String> entityTypes) {
+    Log.e("debugging:", "getallentities " + entityTypes.toString());
     return repo.getAllEntities(entityTypes);
   }
   
