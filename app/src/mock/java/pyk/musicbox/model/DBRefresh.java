@@ -15,7 +15,6 @@ public class DBRefresh {
   
     for(Track track : StaticValues.trackList) {
       trackViewModel.insert(track);
-      Log.e("asdf", track.getName());
     }
   }
 }

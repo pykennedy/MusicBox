@@ -49,7 +49,6 @@ public class SearchListItemAdapter
   }
   
   @Override public void applyFilters(boolean[] slicers) {
-    Log.e("debugging", "item adapter applyFilters()");
     sliap.applyFilters(slicers);
   }
   

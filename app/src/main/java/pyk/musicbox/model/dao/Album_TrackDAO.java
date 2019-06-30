@@ -13,7 +13,7 @@ import pyk.musicbox.model.entity.Track;
 
 @Dao
 public interface Album_TrackDAO {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   long insert(Album_Track album_track);
   
   @Query("DELETE FROM album_track_table")

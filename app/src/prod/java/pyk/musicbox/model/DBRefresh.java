@@ -25,7 +25,6 @@ public class DBRefresh {
                                       cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)),
                                   null, null, null);
           trackViewModel.insert(track);
-          Log.e("asdf", track.getName());
         } while (cursor.moveToNext());
       }
       cursor.close();

@@ -19,7 +19,6 @@ public class AnyEntityViewModel extends AndroidViewModel {
   }
   
   public LiveData<List<AnyEntity>> getAllEntities(List<String> entityTypes) {
-    Log.e("debugging:", "getallentities " + entityTypes.toString());
     return repo.getAllEntities(entityTypes);
   }
   

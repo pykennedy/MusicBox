@@ -3,7 +3,6 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
@@ -104,16 +103,21 @@ public class MBRepo {
                               track.getAlbum() + track.getArtist());
       Artist artist = new Artist(track.getArtist());
       
-      long trackID  = trackDAO.insert(track);
-      long albumID  = albumDAO.insert(album);
-      long artistID = artistDAO.insert(artist);
+      long trackID = trackDAO.insert(track);
       
-      album_trackDAO.insert(new Album_Track(albumID, trackID));
-      artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
-      artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
-      anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
-      anyEntityDAO.insert(new AnyEntity(albumID, track.getAlbum(), "album"));
-      anyEntityDAO.insert(new AnyEntity(artistID, track.getArtist(), "artist"));
+      if (trackID > -1) { // if new and unique track
+        long albumID  = albumDAO.insert(album);
+        albumID = (albumID > -1) ? albumID : albumDAO.getAlbumIDByKey(album.getKey());
+        long artistID = artistDAO.insert(artist);
+        artistID = (artistID > -1) ? artistID : artistDAO.getArtistIDByName(artist.getName());
+        
+        album_trackDAO.insert(new Album_Track(albumID, trackID));
+        artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
+        artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
+        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
+        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album"));
+        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist"));
+      }
       
       return null;
     }
@@ -135,19 +139,17 @@ public class MBRepo {
       Group group = params[0];
       long  id    = groupDAO.insert(group);
       
-      if (id > 0) {
+      if (id > -1) {
         anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group"));
       }
-      
-      Log.e("group id", id + "");
       
       return id;
     }
     
     @Override
     protected void onPostExecute(Long id) {
-      if(id > 0) {
-        callback.onResponse(true, id +"");
+      if (id > 0) {
+        callback.onResponse(true, id + "");
       } else {
         callback.onResponse(false, "Failed to create Group: Duplicate Name");
       }
