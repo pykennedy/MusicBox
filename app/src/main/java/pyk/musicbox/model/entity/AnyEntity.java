@@ -7,7 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "anyentity_table"
-    , indices = {@Index(value = {"entityID", "entityType"}, unique = true)})
+    , indices = {@Index(value = {"entityID", "entityType"}, unique = true),
+                 @Index("name")})
 public class AnyEntity {
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")

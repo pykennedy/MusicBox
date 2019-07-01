@@ -45,9 +45,6 @@ public class SearchListItemAdapterPresenter
   }
   
   @Override public void applyFilters(final boolean[] slicers) {
-    // TODO: i'm pretty sure i need to make a callback to trigger refresh again once the music list is populated
-    // TODO: also fix the issue with duplicates and sort not working
-    
     final LiveData<List<AnyEntity>> liveEntities = aevm.getAllEntities(toTypesList(slicers));
     mediator.addSource(liveEntities, new Observer<List<AnyEntity>>() {
       @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {

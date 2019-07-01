@@ -3,7 +3,6 @@ package pyk.musicbox.view.adapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,10 @@ public class SearchListItemAdapter
   public SearchListItemAdapter(SearchFragment searchFragment) {
     super();
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
+    
+    // TODO: have count stored in shared preferences to detect if new tracks were added
+    // TODO: if yes, spin and sleep for 2 seconds to buy time for list to populate
+    
     sliap.applyFilters(new boolean[]{true, true, true, true, true});
   }
   
