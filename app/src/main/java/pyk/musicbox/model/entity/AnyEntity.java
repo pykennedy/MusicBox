@@ -6,6 +6,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import static android.arch.persistence.room.ColumnInfo.NOCASE;
+
 @Entity(tableName = "anyentity_table"
     , indices = {@Index(value = {"entityID", "entityType"}, unique = true),
                  @Index("name")})
@@ -18,7 +20,7 @@ public class AnyEntity {
   private long entityID;
   
   @NonNull
-  @ColumnInfo(name = "name")
+  @ColumnInfo(name = "name", collate = NOCASE)
   private String name;
   
   @NonNull

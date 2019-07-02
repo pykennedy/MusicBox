@@ -167,7 +167,6 @@ public class SearchFragment extends Fragment
                                        public void onResponse(boolean succeeded, String msg) {
                                          if (succeeded) {
                                            // TODO: open group fragment
-                                           slia.applyFilters(slicerStatus);
                                          } else {
                                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
                                                 .show();
