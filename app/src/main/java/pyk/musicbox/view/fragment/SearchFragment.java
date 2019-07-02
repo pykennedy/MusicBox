@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,7 +161,6 @@ public class SearchFragment extends Fragment
   
   @Override
   public void onGroupClick(DialogFragment dialog, String name) {
-    //TODO: add group to db, if dupe then toast warning, else tell main activity to swap to group fragment
     searchFragmentPresenter.addGroup((MainActivity) getActivity(), name,
                                      new Callback.InsertGroupCB() {
                                        @Override

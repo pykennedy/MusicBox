@@ -20,6 +20,7 @@ public class SearchListItemAdapterPresenter
   SearchListItemAdapterContract.SearchListItemAdapterView sliav;
   private AnyEntityViewModel                aevm;
   private MediatorLiveData<List<AnyEntity>> mediator = new MediatorLiveData<>();
+  private LiveData<List<AnyEntity>> currentList;
   
   public SearchListItemAdapterPresenter(
       final SearchListItemAdapterContract.SearchListItemAdapterView sliav,
@@ -45,12 +46,13 @@ public class SearchListItemAdapterPresenter
   }
   
   @Override public void applyFilters(final boolean[] slicers) {
-    // TODO: see if i can stall removing live entities until the NEXT applyFilters call
-    // TODO: this should let the live data continue to run until it needs to be changed
-    final LiveData<List<AnyEntity>> liveEntities = aevm.getAllEntities(toTypesList(slicers));
-    mediator.addSource(liveEntities, new Observer<List<AnyEntity>>() {
+    if(currentList != null) {
+      mediator.removeSource(currentList);
+    }
+    
+    currentList = aevm.getAllEntities(toTypesList(slicers));
+    mediator.addSource(currentList, new Observer<List<AnyEntity>>() {
       @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
-        mediator.removeSource(liveEntities);
         mediator.setValue(allEntities);
       }
     });

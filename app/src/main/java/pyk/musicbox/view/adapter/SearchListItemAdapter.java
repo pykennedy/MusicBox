@@ -25,9 +25,6 @@ public class SearchListItemAdapter
     super();
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
     
-    // TODO: have count stored in shared preferences to detect if new tracks were added
-    // TODO: if yes, spin and sleep for 2 seconds to buy time for list to populate
-    
     sliap.applyFilters(new boolean[]{true, true, true, true, true});
   }
   
