@@ -5,6 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/ab_fragmentSearch"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/ActionBar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_title_fragmentSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default"
+        android:textColor="@color/mcWhite87"
+        app:layout_constraintTop_toTopOf="@+id/ab_fragmentSearch"
+        app:layout_constraintStart_toStartOf="@+id/ab_fragmentSearch"
+        app:layout_constraintBottom_toBottomOf="@+id/ab_fragmentSearch"
+        android:layout_marginStart="8dp"/>
+
     <TextView
         android:id="@+id/tv_artistSlicer_fragmentSearch"
         android:layout_width="0dp"
@@ -17,7 +35,7 @@
         app:layout_constraintBottom_toTopOf="@id/rv_fragmentSearch"
         app:layout_constraintEnd_toStartOf="@+id/tv_albumSlicer_fragmentSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentSearch"/>
 
     <TextView
         android:id="@+id/tv_albumSlicer_fragmentSearch"
@@ -30,7 +48,7 @@
         android:text="Al"
         app:layout_constraintEnd_toStartOf="@+id/tv_trackSlicer_fragmentSearch"
         app:layout_constraintStart_toEndOf="@id/tv_artistSlicer_fragmentSearch"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentSearch"/>
 
     <TextView
         android:id="@+id/tv_trackSlicer_fragmentSearch"
@@ -43,7 +61,7 @@
         android:text="Tr"
         app:layout_constraintEnd_toStartOf="@+id/tv_groupSlicer_fragmentSearch"
         app:layout_constraintStart_toEndOf="@+id/tv_albumSlicer_fragmentSearch"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentSearch"/>
 
     <TextView
         android:id="@+id/tv_groupSlicer_fragmentSearch"
@@ -56,7 +74,7 @@
         android:text="Gr"
         app:layout_constraintEnd_toStartOf="@id/tv_playlistSlicer_fragmentSearch"
         app:layout_constraintStart_toEndOf="@id/tv_trackSlicer_fragmentSearch"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentSearch"/>
 
     <TextView
         android:id="@+id/tv_playlistSlicer_fragmentSearch"
@@ -69,7 +87,7 @@
         android:text="Pl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_groupSlicer_fragmentSearch"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentSearch"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_addButton_fragmentSearch"

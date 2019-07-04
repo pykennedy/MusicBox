@@ -159,14 +159,23 @@ public class SearchFragment extends Fragment
     dialog.show(getFragmentManager(), "AddDialogFragment");
   }
   
+  public void swapFragment(Fragment fragment) {
+    searchFragmentPresenter.tileTapped(
+        (MainActivity) getActivity(), fragment, true);
+  }
+  
   @Override
-  public void onGroupClick(DialogFragment dialog, String name) {
+  public void onGroupClick(DialogFragment dialog, final String name) {
     searchFragmentPresenter.addGroup((MainActivity) getActivity(), name,
                                      new Callback.InsertGroupCB() {
                                        @Override
                                        public void onResponse(boolean succeeded, String msg) {
                                          if (succeeded) {
-                                           // TODO: open group fragment
+                                           Bundle bundle = new Bundle();
+                                           bundle.putString("groupName", name);
+                                           GroupFragment groupFragment = new GroupFragment();
+                                           groupFragment.setArguments(bundle);
+                                           swapFragment(groupFragment);
                                          } else {
                                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
                                                 .show();

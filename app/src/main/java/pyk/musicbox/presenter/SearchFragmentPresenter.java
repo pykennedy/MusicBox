@@ -8,7 +8,7 @@ import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.viewmodel.GroupViewModel;
 import pyk.musicbox.view.activity.MainActivity;
 
-public class SearchFragmentPresenter implements SearchFragmentContract.SearchFragmentPresenter {
+public class SearchFragmentPresenter extends FragmentPresenter implements SearchFragmentContract.SearchFragmentPresenter {
   @Override public void slicersChanged(SearchFragmentContract.SearchListItemAdapterView sfsliap,
                                        boolean[] slicers) {
     sfsliap.applyFilters(slicers);
