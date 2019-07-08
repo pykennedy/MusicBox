@@ -29,12 +29,14 @@ public class SearchFragment extends Fragment
   private TextView             playlistSlicer;
   private FloatingActionButton fab;
   
+  private int state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
+  private long modifyingID;
   private SearchListItemAdapter slia;
-  
   private SearchFragmentPresenter searchFragmentPresenter;
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
+  boolean[] previousSlicers = {true, true, true, true, true};
   
   //TODO: properly pass activity context to all fragments for better context management for room
   
@@ -65,11 +67,29 @@ public class SearchFragment extends Fragment
     
     searchFragmentPresenter = new SearchFragmentPresenter();
     
+    Bundle args = getArguments();
+    if(args != null) {
+      modifyingID = args.getLong("id");
+      String groupOrPlaylist = args.getString("groupOrPlaylist");
+      if (groupOrPlaylist.equals("group")) {
+        state = 1;
+      } else if (groupOrPlaylist.equals("playlist")) {
+        state = 2;
+      } else {
+        state = 0;
+      }
+      forceSlicers();
+    }
+    
     return rootView;
   }
   
   @Override
   public void onClick(View view) {
+    if(state > 0) {
+      return;
+    }
+    
     boolean update = true;
     
     switch (view.getId()) {
@@ -102,6 +122,7 @@ public class SearchFragment extends Fragment
   }
   
   private void setSlicerLight(int i) {
+    // TODO: have another slicer light to show it disabled instead of just turned off
     switch (i) {
       case 0:
         artistSlicer.setBackgroundColor(
@@ -125,8 +146,24 @@ public class SearchFragment extends Fragment
     }
   }
   
+  private void forceSlicers() {
+      for (int i = 0; i < 5; i++) {
+        if(i == 2 && state > 0) {
+          slicerStatus[i] = true;
+          setSlicerLight(i);
+        } else if(i == 3 && state == 2) {
+          slicerStatus[i] = true;
+          setSlicerLight(i);
+        } else {
+          slicerStatus[i] = false;
+          setSlicerLight(i);
+        }
+      }
+      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+  }
+  
   private void setSlicer(int index) {
-    // if all slicers are on, then turn all of except selection
+    // if all slicers are on, then turn all off except selection
     if (allSlicersAre(true)) {
       for (int i = 0; i < 5; i++) {
         slicerStatus[i] = (i == index) ? true : false;
@@ -173,6 +210,7 @@ public class SearchFragment extends Fragment
                                          if (succeeded) {
                                            Bundle bundle = new Bundle();
                                            bundle.putString("groupName", name);
+                                           bundle.putLong("id", Long.parseLong(msg));
                                            GroupFragment groupFragment = new GroupFragment();
                                            groupFragment.setArguments(bundle);
                                            swapFragment(groupFragment);

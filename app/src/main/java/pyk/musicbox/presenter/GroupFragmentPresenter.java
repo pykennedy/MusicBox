@@ -1,4 +1,6 @@
 package pyk.musicbox.presenter;
 
-public class GroupFragmentPresenter {
+import pyk.musicbox.contract.fragment.GroupFragmentContract;
+
+public class GroupFragmentPresenter extends FragmentPresenter implements GroupFragmentContract.GroupFragmentPresenter {
 }

@@ -38,6 +38,7 @@ public class SearchListItemAdapter
     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent,
                                                                  false);
     
+    //TODO: create 3 view holders that change based on browse, add to group, or add to playlist states
     return new ItemAdapterViewHolder(view);
   }
   
@@ -60,6 +61,7 @@ public class SearchListItemAdapter
   class ItemAdapterViewHolder extends ViewHolder {
     TextView title;
     String type;
+    Long id;
     
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
@@ -78,6 +80,7 @@ public class SearchListItemAdapter
             case "group":
               Bundle bundle = new Bundle();
               bundle.putString("groupName", title.getText().toString());
+              bundle.putLong("id", id);
               GroupFragment groupFragment = new GroupFragment();
               groupFragment.setArguments(bundle);
               searchFragment.swapFragment(groupFragment);
@@ -93,6 +96,7 @@ public class SearchListItemAdapter
       String titleText = entity.getName();
       title.setText(titleText);
       type = entity.getEntityType();
+      id = entity.getEntityID();
     }
   }
 }

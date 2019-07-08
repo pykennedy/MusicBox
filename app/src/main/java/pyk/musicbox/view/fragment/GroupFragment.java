@@ -12,17 +12,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
+import pyk.musicbox.presenter.GroupFragmentPresenter;
+import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
 public class GroupFragment extends Fragment implements View.OnClickListener {
   private TextView title;
   private FloatingActionButton fab;
   private GroupListItemAdapter glia;
+  private String name;
+  private Long id;
+  private GroupFragmentPresenter groupFragmentPresenter;
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_group, container, false);
+    groupFragmentPresenter = new GroupFragmentPresenter();
     
     title = rootView.findViewById(R.id.tv_title_fragmentGroup);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentGroup);
@@ -33,8 +39,9 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(glia);
     
-    String titleText = getArguments().getString("groupName");
-    title.setText(titleText != null ? titleText : "Error Retrieving Group Name");
+    name = getArguments().getString("groupName");
+    id = getArguments().getLong("id");
+    title.setText(name != null ? name : "Error Retrieving Group Name");
     
     return rootView;
   }
@@ -42,6 +49,18 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
   
   @Override
   public void onClick(View view) {
-  
+    switch (view.getId()) {
+      case R.id.fab_addButton_fragmentGroup:
+        Bundle bundle = new Bundle();
+        bundle.putString("groupName", name);
+        bundle.putLong("id", id);
+        bundle.putString("groupOrPlaylist", "group");
+        SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setArguments(bundle);
+        groupFragmentPresenter.tileTapped((MainActivity) getActivity(), searchFragment, true);
+        break;
+      default:
+        break;
+    }
   }
 }
