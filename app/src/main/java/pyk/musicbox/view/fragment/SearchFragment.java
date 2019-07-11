@@ -29,14 +29,13 @@ public class SearchFragment extends Fragment
   private TextView             playlistSlicer;
   private FloatingActionButton fab;
   
-  private int state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
-  private long modifyingID;
-  private SearchListItemAdapter slia;
+  private int                     state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
+  private long                    modifyingID;
+  private SearchListItemAdapter   slia;
   private SearchFragmentPresenter searchFragmentPresenter;
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
-  boolean[] previousSlicers = {true, true, true, true, true};
   
   //TODO: properly pass activity context to all fragments for better context management for room
   
@@ -58,17 +57,10 @@ public class SearchFragment extends Fragment
     fab = rootView.findViewById(R.id.fab_addButton_fragmentSearch);
     fab.setOnClickListener(this);
     
-    slia = new SearchListItemAdapter(this);
-    
-    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
-    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(slia);
-    
     searchFragmentPresenter = new SearchFragmentPresenter();
     
     Bundle args = getArguments();
-    if(args != null) {
+    if (args != null) {
       modifyingID = args.getLong("id");
       String groupOrPlaylist = args.getString("groupOrPlaylist");
       if (groupOrPlaylist.equals("group")) {
@@ -78,7 +70,18 @@ public class SearchFragment extends Fragment
       } else {
         state = 0;
       }
+    }
+    
+    slia = new SearchListItemAdapter(this, state);
+    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
+    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(slia);
+    
+    if (state > 0) {
       forceSlicers();
+    } else {
+      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
     }
     
     return rootView;
@@ -86,7 +89,7 @@ public class SearchFragment extends Fragment
   
   @Override
   public void onClick(View view) {
-    if(state > 0) {
+    if (state > 0) {
       return;
     }
     
@@ -147,19 +150,19 @@ public class SearchFragment extends Fragment
   }
   
   private void forceSlicers() {
-      for (int i = 0; i < 5; i++) {
-        if(i == 2 && state > 0) {
-          slicerStatus[i] = true;
-          setSlicerLight(i);
-        } else if(i == 3 && state == 2) {
-          slicerStatus[i] = true;
-          setSlicerLight(i);
-        } else {
-          slicerStatus[i] = false;
-          setSlicerLight(i);
-        }
+    for (int i = 0; i < 5; i++) {
+      if (i == 2 && state > 0) {
+        slicerStatus[i] = true;
+        setSlicerLight(i);
+      } else if (i == 3 && state == 2) {
+        slicerStatus[i] = true;
+        setSlicerLight(i);
+      } else {
+        slicerStatus[i] = false;
+        setSlicerLight(i);
       }
-      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    }
+    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
   }
   
   private void setSlicer(int index) {

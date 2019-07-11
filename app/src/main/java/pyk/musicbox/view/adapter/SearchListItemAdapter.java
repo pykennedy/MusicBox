@@ -1,5 +1,6 @@
 package pyk.musicbox.view.adapter;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -23,13 +24,13 @@ public class SearchListItemAdapter
     , SearchFragmentContract.SearchListItemAdapterView {
   private SearchListItemAdapterPresenter sliap;
   private SearchFragment searchFragment;
+  private int state;
   
-  public SearchListItemAdapter(SearchFragment searchFragment) {
+  public SearchListItemAdapter(SearchFragment searchFragment, int state) {
     super();
     this.searchFragment = searchFragment;
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
-    
-    sliap.applyFilters(new boolean[]{true, true, true, true, true});
+    this.state = state;
   }
   
   @NonNull @Override
@@ -63,6 +64,7 @@ public class SearchListItemAdapter
     String type;
     Long id;
     
+    
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
       title = itemView.findViewById(R.id.tv_title_groupList);
@@ -76,14 +78,27 @@ public class SearchListItemAdapter
             case "album":
               break;
             case "track":
+              if(state == 0) {
+    
+              } else if(state == 1) {
+                title.setTextColor(Color.RED);
+              } else if(state == 2) {
+                title.setTextColor(Color.RED);
+              }
               break;
             case "group":
-              Bundle bundle = new Bundle();
-              bundle.putString("groupName", title.getText().toString());
-              bundle.putLong("id", id);
-              GroupFragment groupFragment = new GroupFragment();
-              groupFragment.setArguments(bundle);
-              searchFragment.swapFragment(groupFragment);
+              if(state == 0) {
+                Bundle bundle = new Bundle();
+                bundle.putString("groupName", title.getText().toString());
+                bundle.putLong("id", id);
+                GroupFragment groupFragment = new GroupFragment();
+                groupFragment.setArguments(bundle);
+                searchFragment.swapFragment(groupFragment);
+              } else if(state == 1) {
+                title.setTextColor(Color.RED);
+              } else if(state == 2) {
+                title.setTextColor(Color.RED);
+              }
               break;
             case "playlist":
               break;
