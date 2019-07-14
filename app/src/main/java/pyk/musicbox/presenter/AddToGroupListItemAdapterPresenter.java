@@ -9,27 +9,26 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
+import pyk.musicbox.contract.adapter.AddToGroupListItemAdapterContract;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.viewmodel.AnyEntityViewModel;
-import pyk.musicbox.view.fragment.SearchFragment;
+import pyk.musicbox.view.fragment.AddToGroupFragment;
 
-public class SearchListItemAdapterPresenter
-    implements SearchListItemAdapterContract.SearchListItemAdapterPresenter {
-  SearchListItemAdapterContract.SearchListItemAdapterView sliav;
+public class AddToGroupListItemAdapterPresenter implements AddToGroupListItemAdapterContract.AddToGroupListItemAdapterPresenter {
+  AddToGroupListItemAdapterContract.AddToGroupListItemAdapterView adapterView;
   private AnyEntityViewModel                aevm;
   private MediatorLiveData<List<AnyEntity>> mediator = new MediatorLiveData<>();
-  private LiveData<List<AnyEntity>> currentList;
+  private LiveData<List<AnyEntity>>         currentList;
   
-  public SearchListItemAdapterPresenter(
-      final SearchListItemAdapterContract.SearchListItemAdapterView sliav,
-      final SearchFragment context) {
-    this.sliav = sliav;
+  public AddToGroupListItemAdapterPresenter(
+      final AddToGroupListItemAdapterContract.AddToGroupListItemAdapterView adapterView,
+      final AddToGroupFragment context) {
+    this.adapterView = adapterView;
     aevm = ViewModelProviders.of(context).get(AnyEntityViewModel.class);
     
     mediator.observe(context, new Observer<List<AnyEntity>>() {
       @Override public void onChanged(@Nullable List<AnyEntity> anyEntities) {
-        sliav.triggerRefresh();
+        adapterView.triggerRefresh();
       }
     });
   }
@@ -44,11 +43,11 @@ public class SearchListItemAdapterPresenter
     return (list != null) ? list.size() : 0;
   }
   
-  @Override public void applyFilters(final boolean[] slicers) {
+  @Override public void applyFilters(boolean[] slicers) {
     if(currentList != null) {
       mediator.removeSource(currentList);
     }
-    
+  
     currentList = aevm.getAllEntities(toTypesList(slicers));
     mediator.addSource(currentList, new Observer<List<AnyEntity>>() {
       @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {

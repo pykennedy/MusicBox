@@ -19,7 +19,7 @@ public class TrackViewModel extends AndroidViewModel {
     tracks = repo.getAllTracks();
   }
   
-  public LiveData<List<Track>> getAllTracks() { return tracks; }
+  public LiveData<List<Track>> getTracksInGroup(Long id) { return repo.getTracksInGroup(id); }
   
   public void insert(Track track) { repo.insert(track); }
 }

@@ -3,7 +3,6 @@ package pyk.musicbox.view.adapter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import pyk.musicbox.view.fragment.GroupFragment;
 import pyk.musicbox.view.fragment.SearchFragment;
 
 public class SearchListItemAdapter
-    extends RecyclerView.Adapter<SearchListItemAdapter.ItemAdapterViewHolder>
+    extends SelectableAdapter<SearchListItemAdapter.ItemAdapterViewHolder>
     implements SearchListItemAdapterContract.SearchListItemAdapterView
     , SearchFragmentContract.SearchListItemAdapterView {
   private SearchListItemAdapterPresenter sliap;
@@ -38,13 +37,12 @@ public class SearchListItemAdapter
                                                   int viewType) {
     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent,
                                                                  false);
-    
-    //TODO: create 3 view holders that change based on browse, add to group, or add to playlist states
     return new ItemAdapterViewHolder(view);
   }
   
   @Override public void onBindViewHolder(@NonNull ItemAdapterViewHolder holder, int position) {
-    holder.update(sliap.getEntityFromList(position));
+    holder.update(sliap.getEntityFromList(position), position);
+    
   }
   
   @Override public int getItemCount() {
@@ -81,9 +79,9 @@ public class SearchListItemAdapter
               if(state == 0) {
     
               } else if(state == 1) {
-                title.setTextColor(Color.RED);
+                toggleSelection(getPosition());
               } else if(state == 2) {
-                title.setTextColor(Color.RED);
+                toggleSelection(getPosition());
               }
               break;
             case "group":
@@ -95,9 +93,9 @@ public class SearchListItemAdapter
                 groupFragment.setArguments(bundle);
                 searchFragment.swapFragment(groupFragment);
               } else if(state == 1) {
-                title.setTextColor(Color.RED);
+                toggleSelection(getPosition());
               } else if(state == 2) {
-                title.setTextColor(Color.RED);
+                toggleSelection(getPosition());
               }
               break;
             case "playlist":
@@ -107,11 +105,17 @@ public class SearchListItemAdapter
       });
     }
     
-    void update(AnyEntity entity) {
+    void update(AnyEntity entity, int position) {
       String titleText = entity.getName();
       title.setText(titleText);
       type = entity.getEntityType();
       id = entity.getEntityID();
+      
+      if(isSelected(position)) {
+        title.setTextColor(Color.RED);
+      } else {
+        title.setTextColor(Color.BLACK);
+      }
     }
   }
 }

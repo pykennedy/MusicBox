@@ -46,7 +46,6 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     return rootView;
   }
   
-  
   @Override
   public void onClick(View view) {
     switch (view.getId()) {
@@ -54,10 +53,9 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = new Bundle();
         bundle.putString("groupName", name);
         bundle.putLong("id", id);
-        bundle.putString("groupOrPlaylist", "group");
-        SearchFragment searchFragment = new SearchFragment();
-        searchFragment.setArguments(bundle);
-        groupFragmentPresenter.tileTapped((MainActivity) getActivity(), searchFragment, true);
+        AddToGroupFragment fragment = new AddToGroupFragment();
+        fragment.setArguments(bundle);
+        groupFragmentPresenter.tileTapped((MainActivity) getActivity(), fragment, true);
         break;
       default:
         break;

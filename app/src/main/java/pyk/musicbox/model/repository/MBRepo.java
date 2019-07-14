@@ -13,6 +13,7 @@ import pyk.musicbox.model.dao.AnyEntityDAO;
 import pyk.musicbox.model.dao.ArtistDAO;
 import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
 import pyk.musicbox.model.dao.GroupDAO;
+import pyk.musicbox.model.dao.Group_TrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.database.MBDB;
 import pyk.musicbox.model.entity.Album;
@@ -21,6 +22,7 @@ import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.Group_Track;
 import pyk.musicbox.model.entity.Track;
 
 public class MBRepo {
@@ -31,6 +33,7 @@ public class MBRepo {
   private Artist_AlbumTrackDAO   artist_albumTrackDAO;
   private AnyEntityDAO           anyEntityDAO;
   private GroupDAO               groupDAO;
+  private Group_TrackDAO         groupTrackDAO;
   private LiveData<List<Track>>  tracks;
   private LiveData<List<Album>>  albums;
   private LiveData<List<Artist>> artists;
@@ -44,6 +47,7 @@ public class MBRepo {
     artist_albumTrackDAO = db.artist_albumTrackDAO();
     anyEntityDAO = db.anyEntityDAO();
     groupDAO = db.groupDAO();
+    groupTrackDAO = db.groupTrackDAO();
     
     tracks = trackDAO.getAllTracks();
     albums = albumDAO.getAllAlbums();
@@ -64,6 +68,10 @@ public class MBRepo {
     return anyEntityDAO.getAllEntities(entityTypes);
   }
   
+  public LiveData<List<Track>> getTracksInGroup(Long id) {
+    return trackDAO.getTracksInGroup(id);
+  }
+  
   public void insert(Track track) {
     new insertTrack(trackDAO, albumDAO, artistDAO, album_trackDAO, artist_albumTrackDAO,
                     anyEntityDAO).execute(track);
@@ -71,6 +79,10 @@ public class MBRepo {
   
   public void insert(Group group, Callback.InsertGroupCB callback) {
     new insertGroup(groupDAO, anyEntityDAO, callback).execute(group);
+  }
+  
+  public void insert(Group_Track groupTrack) {
+    new insertGroupTrack(groupTrackDAO).execute(groupTrack);
   }
   
   /***********************************************************************************************
@@ -106,7 +118,7 @@ public class MBRepo {
       long trackID = trackDAO.insert(track);
       
       if (trackID > -1) { // if new and unique track
-        long albumID  = albumDAO.insert(album);
+        long albumID = albumDAO.insert(album);
         albumID = (albumID > -1) ? albumID : albumDAO.getAlbumIDByKey(album.getKey());
         long artistID = artistDAO.insert(artist);
         artistID = (artistID > -1) ? artistID : artistDAO.getArtistIDByName(artist.getName());
@@ -153,6 +165,22 @@ public class MBRepo {
       } else {
         callback.onResponse(false, "Failed to create Group: Duplicate Name");
       }
+    }
+  }
+  
+  private static class insertGroupTrack extends AsyncTask<Group_Track, Void, Void> {
+    Group_TrackDAO               groupTrackDAO;
+  
+    insertGroupTrack(Group_TrackDAO groupTrackDAO) {
+      this.groupTrackDAO = groupTrackDAO;
+    }
+  
+    @Override
+    protected Void doInBackground(final Group_Track... params) {
+      Group_Track groupTrack = params[0];
+      groupTrackDAO.insert(groupTrack);
+      
+      return null;
     }
   }
 }

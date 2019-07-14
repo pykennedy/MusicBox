@@ -23,4 +23,11 @@ public interface TrackDAO {
   
   @Query("SELECT * FROM track_table WHERE id = :id")
   Track getTrackByID(long id);
+  
+  @Query("SELECT tt.* FROM group_track_table AS gtt " +
+         "INNER JOIN track_table AS tt " +
+         "ON gtt.trackID = tt.id " +
+         "AND gtt.groupID = :id " +
+         "ORDER BY tt.name ASC")
+  LiveData<List<Track>> getTracksInGroup(long id);
 }
