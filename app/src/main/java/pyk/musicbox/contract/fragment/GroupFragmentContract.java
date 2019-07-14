@@ -2,10 +2,10 @@ package pyk.musicbox.contract.fragment;
 
 public interface GroupFragmentContract {
   interface GroupFragmentPresenter {
-  
+    void getTracksInGroup(Long id);
   }
   
-  interface GroupFragmentView {
-  
+  interface GroupListItemAdapterView {
+    void getTracksInGroup(Long id);
   }
 }

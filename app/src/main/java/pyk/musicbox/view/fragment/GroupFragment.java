@@ -22,18 +22,19 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
   private GroupListItemAdapter glia;
   private String name;
   private Long id;
-  private GroupFragmentPresenter groupFragmentPresenter;
+  private GroupFragmentPresenter presenter;
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_group, container, false);
-    groupFragmentPresenter = new GroupFragmentPresenter();
+    presenter = new GroupFragmentPresenter();
     
     title = rootView.findViewById(R.id.tv_title_fragmentGroup);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentGroup);
     fab.setOnClickListener(this);
   
+    glia = new GroupListItemAdapter();
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentGroup);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -42,6 +43,8 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     name = getArguments().getString("groupName");
     id = getArguments().getLong("id");
     title.setText(name != null ? name : "Error Retrieving Group Name");
+    
+    presenter.getTracksInGroup(id);
     
     return rootView;
   }
@@ -55,7 +58,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
         bundle.putLong("id", id);
         AddToGroupFragment fragment = new AddToGroupFragment();
         fragment.setArguments(bundle);
-        groupFragmentPresenter.tileTapped((MainActivity) getActivity(), fragment, true);
+        presenter.tileTapped((MainActivity) getActivity(), fragment, true);
         break;
       default:
         break;

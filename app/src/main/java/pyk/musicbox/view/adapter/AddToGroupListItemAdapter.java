@@ -16,7 +16,6 @@ import pyk.musicbox.R;
 import pyk.musicbox.contract.adapter.AddToGroupListItemAdapterContract;
 import pyk.musicbox.contract.fragment.AddToGroupFragmentContract;
 import pyk.musicbox.model.entity.AnyEntity;
-import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.presenter.AddToGroupListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.AddToGroupFragment;
 

@@ -5,7 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class GroupListItemAdapter extends RecyclerView.Adapter<SearchListItemAdapter.ItemAdapterViewHolder> {
+import pyk.musicbox.contract.fragment.GroupFragmentContract;
+import pyk.musicbox.view.fragment.GroupFragment;
+//TODO: set this thing up
+public class GroupListItemAdapter
+    extends RecyclerView.Adapter<SearchListItemAdapter.ItemAdapterViewHolder>
+    implements GroupFragmentContract.GroupListItemAdapterView {
+  GroupFragment fragment;
+  
+  public GroupListItemAdapter(GroupFragment fragment) {
+    this.fragment = fragment;
+  }
   
   @NonNull @Override
   public SearchListItemAdapter.ItemAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
@@ -23,8 +33,12 @@ public class GroupListItemAdapter extends RecyclerView.Adapter<SearchListItemAda
     return 0;
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+  @Override public void getTracksInGroup(Long id) {
   
+  }
+  
+  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+    
     public ItemAdapterViewHolder(View itemView) {
       super(itemView);
     }
