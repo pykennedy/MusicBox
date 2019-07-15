@@ -17,11 +17,11 @@ import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
 public class GroupFragment extends Fragment implements View.OnClickListener {
-  private TextView title;
-  private FloatingActionButton fab;
-  private GroupListItemAdapter glia;
-  private String name;
-  private Long id;
+  private TextView               title;
+  private FloatingActionButton   fab;
+  private GroupListItemAdapter   adapter;
+  private String                 name;
+  private Long                   id;
   private GroupFragmentPresenter presenter;
   
   @Override
@@ -33,18 +33,18 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     title = rootView.findViewById(R.id.tv_title_fragmentGroup);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentGroup);
     fab.setOnClickListener(this);
-  
-    glia = new GroupListItemAdapter();
+    
+    adapter = new GroupListItemAdapter(this);
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentGroup);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(glia);
+    recyclerView.setAdapter(adapter);
     
     name = getArguments().getString("groupName");
     id = getArguments().getLong("id");
     title.setText(name != null ? name : "Error Retrieving Group Name");
     
-    presenter.getTracksInGroup(id);
+    presenter.getTracksInGroup(adapter, id);
     
     return rootView;
   }

@@ -59,6 +59,7 @@ public class AddToGroupFragment extends Fragment implements View.OnClickListener
     switch (view.getId()) {
       case R.id.fab_addButton_fragmentAddToGroup:
         presenter.addToGroup((MainActivity) getActivity(), groupID, adapter.getSelectedTrackIDs());
+        getActivity().onBackPressed();
         break;
       default:
         break;
