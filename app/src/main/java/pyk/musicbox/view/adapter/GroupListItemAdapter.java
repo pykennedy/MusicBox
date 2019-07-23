@@ -2,7 +2,6 @@ package pyk.musicbox.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,14 +76,12 @@ public class GroupListItemAdapter
     public void onClick(View view) {
       switch (view.getId()) {
         case R.id.tv_up_groupList:
-          Log.e("asdf", "" + sortOrder);
-          if (sortOrder > 1 && sortOrder < presenter.getItemCount()) {
+          if (sortOrder > 1 && sortOrder <= presenter.getItemCount()) {
             presenter.updateSortOrder(groupID, sortOrder, sortOrder - 1);
           }
           break;
         case R.id.tv_down_groupList:
-          Log.e("asdf", "" + sortOrder);
-          if (sortOrder > 1 && sortOrder < presenter.getItemCount()) {
+          if (sortOrder >= 1 && sortOrder < presenter.getItemCount()) {
             presenter.updateSortOrder(groupID, sortOrder, sortOrder + 1);
           }
           break;

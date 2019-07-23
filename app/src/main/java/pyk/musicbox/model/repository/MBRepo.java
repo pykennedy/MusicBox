@@ -88,7 +88,7 @@ public class MBRepo {
   }
   
   public void updateGroupTrackSortOrder(long groupID, int oldSortOrder, int newSortOrder) {
-    new updateGroupTrackSortOrder(groupTrackDAO, groupID, oldSortOrder, newSortOrder);
+    new updateGroupTrackSortOrder(groupTrackDAO, groupID, oldSortOrder, newSortOrder).execute();
   }
   
   /***********************************************************************************************
@@ -206,11 +206,12 @@ public class MBRepo {
     
     @Override
     protected Void doInBackground(Void... params) {
-      Log.e("asdf", "happened");
+      // change conflicting item to a spoof sortOrder
+      groupTrackDAO.updateSortOrder(groupID, newSortOrder, 999);
       // move the item
       groupTrackDAO.updateSortOrder(groupID, oldSortOrder, newSortOrder);
       // swap the conflicting item with old spot
-      groupTrackDAO.updateSortOrder(groupID, newSortOrder, oldSortOrder);
+      groupTrackDAO.updateSortOrder(groupID, 999, oldSortOrder);
       
       return null;
     }
