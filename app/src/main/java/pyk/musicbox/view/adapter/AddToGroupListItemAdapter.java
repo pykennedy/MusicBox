@@ -35,7 +35,7 @@ public class AddToGroupListItemAdapter
   
   @NonNull @Override
   public ItemAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent,
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_entity_list, parent,
                                                                  false);
     return new ItemAdapterViewHolder(view);
   }

@@ -14,6 +14,9 @@ public class Group_Track {
   @ColumnInfo(name = "trackID")
   private long trackID;
   
+  @ColumnInfo(name = "sortOrder")
+  private int sortOrder;
+  
   public Group_Track(long groupID, long trackID) {
     this.groupID = groupID;
     this.trackID = trackID;
@@ -25,5 +28,11 @@ public class Group_Track {
   
   public long getTrackID() {
     return trackID;
+  }
+  
+  public int getSortOrder() { return sortOrder; }
+  
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

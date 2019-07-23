@@ -3,6 +3,7 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.SortedTrack;
 import pyk.musicbox.model.entity.Track;
 
 public class MBRepo {
@@ -68,7 +70,7 @@ public class MBRepo {
     return anyEntityDAO.getAllEntities(entityTypes);
   }
   
-  public LiveData<List<Track>> getTracksInGroup(Long id) {
+  public LiveData<List<SortedTrack>> getTracksInGroup(Long id) {
     return trackDAO.getTracksInGroup(id);
   }
   
@@ -83,6 +85,10 @@ public class MBRepo {
   
   public void insert(Group_Track groupTrack) {
     new insertGroupTrack(groupTrackDAO).execute(groupTrack);
+  }
+  
+  public void updateGroupTrackSortOrder(long groupID, int oldSortOrder, int newSortOrder) {
+    new updateGroupTrackSortOrder(groupTrackDAO, groupID, oldSortOrder, newSortOrder);
   }
   
   /***********************************************************************************************
@@ -178,7 +184,33 @@ public class MBRepo {
     @Override
     protected Void doInBackground(final Group_Track... params) {
       Group_Track groupTrack = params[0];
+      groupTrack.setSortOrder(groupTrackDAO.maxSortOrder()+1);
       groupTrackDAO.insert(groupTrack);
+      
+      return null;
+    }
+  }
+  
+  private static class updateGroupTrackSortOrder extends AsyncTask<Void, Void, Void> {
+    Group_TrackDAO               groupTrackDAO;
+    long groupID;
+    int oldSortOrder;
+    int newSortOrder;
+  
+    updateGroupTrackSortOrder(Group_TrackDAO groupTrackDAO, long groupID, int oldSortOrder, int newSortOrder) {
+      this.groupTrackDAO = groupTrackDAO;
+      this.groupID = groupID;
+      this.oldSortOrder = oldSortOrder;
+      this.newSortOrder = newSortOrder;
+    }
+    
+    @Override
+    protected Void doInBackground(Void... params) {
+      Log.e("asdf", "happened");
+      // move the item
+      groupTrackDAO.updateSortOrder(groupID, oldSortOrder, newSortOrder);
+      // swap the conflicting item with old spot
+      groupTrackDAO.updateSortOrder(groupID, newSortOrder, oldSortOrder);
       
       return null;
     }

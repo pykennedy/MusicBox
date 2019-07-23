@@ -1,6 +1,6 @@
 package pyk.musicbox.contract.adapter;
 
-import pyk.musicbox.model.entity.Track;
+import pyk.musicbox.model.entity.SortedTrack;
 
 public interface GroupListItemAdapterContract {
   interface GroupListItemAdapterView {
@@ -8,8 +8,9 @@ public interface GroupListItemAdapterContract {
   }
   
   interface GroupListItemAdapterPresenter {
-    Track getTrackFromList(int i);
+    SortedTrack getTrackFromList(int i);
     int getItemCount();
     void getTracksInGroup(long id);
+    void updateSortOrder(long id, int oldSortOrder, int newSortOrder);
   }
 }
