@@ -12,5 +12,6 @@ public interface GroupListItemAdapterContract {
     int getItemCount();
     void getTracksInGroup(long id);
     void updateSortOrder(long id, int oldSortOrder, int newSortOrder);
+    void removeTrack(long groupID, long trackID, int sortOrder);
   }
 }

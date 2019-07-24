@@ -19,4 +19,8 @@ public class Group_TrackViewModel extends AndroidViewModel {
   public void updateGroupTrackSortOrder(long groupID, int oldSortOrder, int newSortOrder) {
     repo.updateGroupTrackSortOrder(groupID, oldSortOrder, newSortOrder);
   }
+  
+  public void deleteTrack(long groupID, long trackID, int sortOrder) {
+    repo.deleteTrackFromGroup(groupID, trackID, sortOrder);
+  }
 }

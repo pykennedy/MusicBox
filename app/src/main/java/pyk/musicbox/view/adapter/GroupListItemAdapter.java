@@ -51,7 +51,7 @@ public class GroupListItemAdapter
     notifyDataSetChanged();
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     TextView title;
     TextView up;
     TextView down;
@@ -66,6 +66,7 @@ public class GroupListItemAdapter
       up = itemView.findViewById(R.id.tv_up_groupList);
       down = itemView.findViewById(R.id.tv_down_groupList);
       title.setOnClickListener(this);
+      title.setOnLongClickListener(this);
       up.setOnClickListener(this);
       down.setOnClickListener(this);
       
@@ -96,6 +97,14 @@ public class GroupListItemAdapter
       trackID = track.getTrack().getId();
       this.groupID = groupID;
       sortOrder = track.getSortOrder();
+    }
+  
+    // TODO: change this to a swipe and confirm
+    @Override public boolean onLongClick(View view) {presenter.removeTrack(groupID, trackID, sortOrder);
+        presenter.removeTrack(groupID, trackID, sortOrder);
+      
+      
+      return false;
     }
   }
 }

@@ -62,4 +62,8 @@ public class GroupListItemAdapterPresenter
   @Override public void updateSortOrder(long id, int oldSortOrder, int newSortOrder) {
     gtvm.updateGroupTrackSortOrder(id, oldSortOrder, newSortOrder);
   }
+  
+  @Override public void removeTrack(long groupID, long trackID, int sortOrder) {
+    gtvm.deleteTrack(groupID, trackID, sortOrder);
+  }
 }

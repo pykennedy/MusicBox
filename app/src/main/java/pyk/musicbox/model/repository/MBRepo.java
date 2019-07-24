@@ -3,7 +3,6 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
@@ -89,6 +88,10 @@ public class MBRepo {
   
   public void updateGroupTrackSortOrder(long groupID, int oldSortOrder, int newSortOrder) {
     new updateGroupTrackSortOrder(groupTrackDAO, groupID, oldSortOrder, newSortOrder).execute();
+  }
+  
+  public void deleteTrackFromGroup(long groupID, long trackID, int sortOrder) {
+    new deleteTrackFromGroup(groupTrackDAO, groupID, trackID, sortOrder).execute();
   }
   
   /***********************************************************************************************
@@ -212,6 +215,28 @@ public class MBRepo {
       groupTrackDAO.updateSortOrder(groupID, oldSortOrder, newSortOrder);
       // swap the conflicting item with old spot
       groupTrackDAO.updateSortOrder(groupID, 999, oldSortOrder);
+      
+      return null;
+    }
+  }
+  
+  private static class deleteTrackFromGroup extends AsyncTask<Void, Void, Void> {
+    Group_TrackDAO groupTrackDAO;
+    long groupID;
+    long trackID;
+    int sortOrder;
+    
+    deleteTrackFromGroup(Group_TrackDAO groupTrackDAO, long groupID, long trackID, int sortOrder) {
+      this.groupTrackDAO = groupTrackDAO;
+      this.groupID = groupID;
+      this.trackID = trackID;
+      this.sortOrder = sortOrder;
+    }
+    
+    @Override
+    protected  Void doInBackground(Void... params) {
+      groupTrackDAO.delete(groupID, trackID);
+      groupTrackDAO.cascadeSortOrder(groupID, sortOrder);
       
       return null;
     }
