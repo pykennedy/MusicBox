@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.presenter.GroupFragmentPresenter;
+import pyk.musicbox.utility.SwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
@@ -39,6 +41,8 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeDeleteCallback(adapter));
+    itemTouchHelper.attachToRecyclerView(recyclerView);
     
     name = getArguments().getString("groupName");
     id = getArguments().getLong("id");
