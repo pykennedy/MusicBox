@@ -12,7 +12,7 @@ import pyk.musicbox.model.entity.AnyEntity;
 
 @Dao
 public interface AnyEntityDAO {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   long insert(AnyEntity entity);
   
   @Query("DELETE FROM anyentity_table")

@@ -6,20 +6,21 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import pyk.musicbox.model.entity.SortedTrack;
 import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.model.repository.MBRepo;
 
 public class TrackViewModel extends AndroidViewModel {
   private MBRepo repo;
-  private LiveData<List<Track>> tracks;
+  //private LiveData<List<Track>> tracks;
   
   public TrackViewModel(Application application) {
     super(application);
     repo = new MBRepo(application);
-    tracks = repo.getAllTracks();
+    //tracks = repo.getAllTracks();
   }
   
-  public LiveData<List<Track>> getAllTracks() { return tracks; }
+  public LiveData<List<SortedTrack>> getTracksInGroup(Long id) { return repo.getTracksInGroup(id); }
   
-  public void insert(Track track) { repo.insert(track); }
+  public void insert(Track track)                              { repo.insert(track); }
 }

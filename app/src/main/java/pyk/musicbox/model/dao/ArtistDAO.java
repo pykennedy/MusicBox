@@ -12,7 +12,7 @@ import pyk.musicbox.model.entity.Artist;
 
 @Dao
 public interface ArtistDAO {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   long insert(Artist Artist);
   
   @Query("DELETE FROM artist_table")
@@ -26,4 +26,7 @@ public interface ArtistDAO {
   
   @Query("SELECT * FROM artist_table WHERE name = :name")
   Artist getArtistByName(String name);
+  
+  @Query("SELECT id FROM artist_table WHERE name = :name")
+  Long getArtistIDByName(String name);
 }

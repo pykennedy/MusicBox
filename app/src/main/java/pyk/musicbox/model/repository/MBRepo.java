@@ -6,11 +6,14 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.dao.AlbumDAO;
 import pyk.musicbox.model.dao.Album_TrackDAO;
 import pyk.musicbox.model.dao.AnyEntityDAO;
 import pyk.musicbox.model.dao.ArtistDAO;
 import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
+import pyk.musicbox.model.dao.GroupDAO;
+import pyk.musicbox.model.dao.Group_TrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.database.MBDB;
 import pyk.musicbox.model.entity.Album;
@@ -18,6 +21,9 @@ import pyk.musicbox.model.entity.Album_Track;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
+import pyk.musicbox.model.entity.Group;
+import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.SortedTrack;
 import pyk.musicbox.model.entity.Track;
 
 public class MBRepo {
@@ -27,6 +33,8 @@ public class MBRepo {
   private Album_TrackDAO         album_trackDAO;
   private Artist_AlbumTrackDAO   artist_albumTrackDAO;
   private AnyEntityDAO           anyEntityDAO;
+  private GroupDAO               groupDAO;
+  private Group_TrackDAO         groupTrackDAO;
   private LiveData<List<Track>>  tracks;
   private LiveData<List<Album>>  albums;
   private LiveData<List<Artist>> artists;
@@ -39,6 +47,8 @@ public class MBRepo {
     album_trackDAO = db.album_trackDAO();
     artist_albumTrackDAO = db.artist_albumTrackDAO();
     anyEntityDAO = db.anyEntityDAO();
+    groupDAO = db.groupDAO();
+    groupTrackDAO = db.groupTrackDAO();
     
     tracks = trackDAO.getAllTracks();
     albums = albumDAO.getAllAlbums();
@@ -59,10 +69,29 @@ public class MBRepo {
     return anyEntityDAO.getAllEntities(entityTypes);
   }
   
+  public LiveData<List<SortedTrack>> getTracksInGroup(Long id) {
+    return trackDAO.getTracksInGroup(id);
+  }
+  
   public void insert(Track track) {
     new insertTrack(trackDAO, albumDAO, artistDAO, album_trackDAO, artist_albumTrackDAO,
-                    anyEntityDAO).execute(
-        track);
+                    anyEntityDAO).execute(track);
+  }
+  
+  public void insert(Group group, Callback.InsertGroupCB callback) {
+    new insertGroup(groupDAO, anyEntityDAO, callback).execute(group);
+  }
+  
+  public void insert(Group_Track groupTrack) {
+    new insertGroupTrack(groupTrackDAO).execute(groupTrack);
+  }
+  
+  public void updateGroupTrackSortOrder(long groupID, int oldSortOrder, int newSortOrder) {
+    new updateGroupTrackSortOrder(groupTrackDAO, groupID, oldSortOrder, newSortOrder).execute();
+  }
+  
+  public void deleteTrackFromGroup(long groupID, long trackID, int sortOrder) {
+    new deleteTrackFromGroup(groupTrackDAO, groupID, trackID, sortOrder).execute();
   }
   
   /***********************************************************************************************
@@ -95,16 +124,119 @@ public class MBRepo {
                               track.getAlbum() + track.getArtist());
       Artist artist = new Artist(track.getArtist());
       
-      long trackID  = trackDAO.insert(track);
-      long albumID  = albumDAO.insert(album);
-      long artistID = artistDAO.insert(artist);
+      long trackID = trackDAO.insert(track);
       
-      album_trackDAO.insert(new Album_Track(albumID, trackID));
-      artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
-      artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
-      anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
-      anyEntityDAO.insert(new AnyEntity(albumID, track.getAlbum(), "album"));
-      anyEntityDAO.insert(new AnyEntity(artistID, track.getArtist(), "artist"));
+      if (trackID > -1) { // if new and unique track
+        long albumID = albumDAO.insert(album);
+        albumID = (albumID > -1) ? albumID : albumDAO.getAlbumIDByKey(album.getKey());
+        long artistID = artistDAO.insert(artist);
+        artistID = (artistID > -1) ? artistID : artistDAO.getArtistIDByName(artist.getName());
+        
+        album_trackDAO.insert(new Album_Track(albumID, trackID));
+        artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
+        artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
+        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
+        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album"));
+        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist"));
+      }
+      
+      return null;
+    }
+  }
+  
+  private static class insertGroup extends AsyncTask<Group, Void, Long> {
+    GroupDAO               groupDAO;
+    AnyEntityDAO           anyEntityDAO;
+    Callback.InsertGroupCB callback;
+    
+    insertGroup(GroupDAO groupDAO, AnyEntityDAO anyEntityDAO, Callback.InsertGroupCB callback) {
+      this.groupDAO = groupDAO;
+      this.anyEntityDAO = anyEntityDAO;
+      this.callback = callback;
+    }
+    
+    @Override
+    protected Long doInBackground(final Group... params) {
+      Group group = params[0];
+      long  id    = groupDAO.insert(group);
+      
+      if (id > -1) {
+        anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group"));
+      }
+      
+      return id;
+    }
+    
+    @Override
+    protected void onPostExecute(Long id) {
+      if (id > 0) {
+        callback.onResponse(true, id + "");
+      } else {
+        callback.onResponse(false, "Failed to create Group: Duplicate Name");
+      }
+    }
+  }
+  
+  private static class insertGroupTrack extends AsyncTask<Group_Track, Void, Void> {
+    Group_TrackDAO               groupTrackDAO;
+  
+    insertGroupTrack(Group_TrackDAO groupTrackDAO) {
+      this.groupTrackDAO = groupTrackDAO;
+    }
+  
+    @Override
+    protected Void doInBackground(final Group_Track... params) {
+      Group_Track groupTrack = params[0];
+      groupTrack.setSortOrder(groupTrackDAO.maxSortOrder()+1);
+      groupTrackDAO.insert(groupTrack);
+      
+      return null;
+    }
+  }
+  
+  private static class updateGroupTrackSortOrder extends AsyncTask<Void, Void, Void> {
+    Group_TrackDAO               groupTrackDAO;
+    long groupID;
+    int oldSortOrder;
+    int newSortOrder;
+  
+    updateGroupTrackSortOrder(Group_TrackDAO groupTrackDAO, long groupID, int oldSortOrder, int newSortOrder) {
+      this.groupTrackDAO = groupTrackDAO;
+      this.groupID = groupID;
+      this.oldSortOrder = oldSortOrder;
+      this.newSortOrder = newSortOrder;
+    }
+    
+    @Override
+    protected Void doInBackground(Void... params) {
+      // change conflicting item to a spoof sortOrder
+      groupTrackDAO.updateSortOrder(groupID, newSortOrder, 999);
+      // move the item
+      groupTrackDAO.updateSortOrder(groupID, oldSortOrder, newSortOrder);
+      // swap the conflicting item with old spot
+      groupTrackDAO.updateSortOrder(groupID, 999, oldSortOrder);
+      
+      return null;
+    }
+  }
+  
+  private static class deleteTrackFromGroup extends AsyncTask<Void, Void, Void> {
+    Group_TrackDAO groupTrackDAO;
+    long groupID;
+    long trackID;
+    int sortOrder;
+    
+    deleteTrackFromGroup(Group_TrackDAO groupTrackDAO, long groupID, long trackID, int sortOrder) {
+      this.groupTrackDAO = groupTrackDAO;
+      this.groupID = groupID;
+      this.trackID = trackID;
+      this.sortOrder = sortOrder;
+    }
+    
+    @Override
+    protected  Void doInBackground(Void... params) {
+      groupTrackDAO.delete(groupID, trackID);
+      groupTrackDAO.cascadeSortOrder(groupID, sortOrder);
       
       return null;
     }

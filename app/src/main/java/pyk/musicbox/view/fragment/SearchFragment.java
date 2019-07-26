@@ -1,8 +1,9 @@
 package pyk.musicbox.view.fragment;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,29 +12,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
+import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
-public class SearchFragment extends Fragment implements View.OnClickListener {
-  private TextView artistSlicer;
-  private TextView albumSlicer;
-  private TextView trackSlicer;
-  private TextView groupSlicer;
-  private TextView playlistSlicer;
+public class SearchFragment extends Fragment
+    implements View.OnClickListener, AddDialogFragment.AddDialogListener {
+  private TextView             artistSlicer;
+  private TextView             albumSlicer;
+  private TextView             trackSlicer;
+  private TextView             groupSlicer;
+  private TextView             playlistSlicer;
+  private FloatingActionButton fab;
   
-  private SearchListItemAdapter slia;
-  
+  private int                     state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
+  private long                    modifyingID;
+  private SearchListItemAdapter   slia;
   private SearchFragmentPresenter searchFragmentPresenter;
   
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
   
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-  }
+  //TODO: properly pass activity context to all fragments for better context management for room
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,21 +54,47 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     groupSlicer.setOnClickListener(this);
     playlistSlicer = rootView.findViewById(R.id.tv_playlistSlicer_fragmentSearch);
     playlistSlicer.setOnClickListener(this);
+    fab = rootView.findViewById(R.id.fab_addButton_fragmentSearch);
+    fab.setOnClickListener(this);
     
-    slia = new SearchListItemAdapter(this);
+    searchFragmentPresenter = new SearchFragmentPresenter();
     
+    Bundle args = getArguments();
+    if (args != null) {
+      modifyingID = args.getLong("id");
+      String groupOrPlaylist = args.getString("groupOrPlaylist");
+      if (groupOrPlaylist.equals("group")) {
+        state = 1;
+      } else if (groupOrPlaylist.equals("playlist")) {
+        state = 2;
+      } else {
+        state = 0;
+      }
+    }
+    
+    slia = new SearchListItemAdapter(this, state);
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(slia);
     
-    searchFragmentPresenter = new SearchFragmentPresenter();
+    if (state > 0) {
+      forceSlicers();
+    } else {
+      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    }
     
     return rootView;
   }
   
   @Override
   public void onClick(View view) {
+    if (state > 0) {
+      return;
+    }
+    
+    boolean update = true;
+    
     switch (view.getId()) {
       case R.id.tv_artistSlicer_fragmentSearch:
         setSlicer(0);
@@ -81,14 +111,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
       case R.id.tv_playlistSlicer_fragmentSearch:
         setSlicer(4);
         break;
+      case R.id.fab_addButton_fragmentSearch:
+        showDialog();
+        update = false;
+        break;
       default:
         break;
     }
     
-    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    if (update) {
+      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    }
   }
   
   private void setSlicerLight(int i) {
+    // TODO: have another slicer light to show it disabled instead of just turned off
     switch (i) {
       case 0:
         artistSlicer.setBackgroundColor(
@@ -112,8 +149,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     }
   }
   
+  private void forceSlicers() {
+    for (int i = 0; i < 5; i++) {
+      if (i == 2 && state > 0) {
+        slicerStatus[i] = true;
+        setSlicerLight(i);
+      } else if (i == 3 && state == 2) {
+        slicerStatus[i] = true;
+        setSlicerLight(i);
+      } else {
+        slicerStatus[i] = false;
+        setSlicerLight(i);
+      }
+    }
+    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+  }
+  
   private void setSlicer(int index) {
-    // if all slicers are on, then turn all of except selection
+    // if all slicers are on, then turn all off except selection
     if (allSlicersAre(true)) {
       for (int i = 0; i < 5; i++) {
         slicerStatus[i] = (i == index) ? true : false;
@@ -138,5 +191,42 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
       }
     }
     return true;
+  }
+  
+  private void showDialog() {
+    DialogFragment dialog = new AddDialogFragment();
+    dialog.setTargetFragment(SearchFragment.this, 300);
+    dialog.show(getFragmentManager(), "AddDialogFragment");
+  }
+  
+  public void swapFragment(Fragment fragment) {
+    searchFragmentPresenter.tileTapped(
+        (MainActivity) getActivity(), fragment, true);
+  }
+  
+  @Override
+  public void onGroupClick(DialogFragment dialog, final String name) {
+    searchFragmentPresenter.addGroup((MainActivity) getActivity(), name,
+                                     new Callback.InsertGroupCB() {
+                                       @Override
+                                       public void onResponse(boolean succeeded, String msg) {
+                                         if (succeeded) {
+                                           Bundle bundle = new Bundle();
+                                           bundle.putString("groupName", name);
+                                           bundle.putLong("id", Long.parseLong(msg));
+                                           GroupFragment groupFragment = new GroupFragment();
+                                           groupFragment.setArguments(bundle);
+                                           swapFragment(groupFragment);
+                                         } else {
+                                           Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
+                                                .show();
+                                         }
+                                       }
+                                     });
+  }
+  
+  @Override
+  public void onPlaylistClick(DialogFragment dialog, String name) {
+    //TODO: add playlist to db, if dupe then toast warning, else tell main activity to swap to playlist fragment
   }
 }
