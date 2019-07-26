@@ -1,9 +1,12 @@
 package pyk.musicbox.model.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+
+import java.util.List;
 
 import pyk.musicbox.model.entity.Group_Track;
 
@@ -34,9 +37,12 @@ public interface Group_TrackDAO {
   void delete(long groupID, long trackID);
   
   @Query("SELECT * FROM group_track_table " +
-         "WHERE sortorder = :sortorder " +
-         "AND groupID = :groupID")
-  Group_Track getGroupTrackBySortOrder(long groupID, int sortorder);
+         "WHERE groupID = :groupID " +
+         "AND trackID = :trackID")
+  Group_Track getGroupTrackByIDs(long groupID, long trackID);
+  
+  @Query("SELECT * FROM group_track_table")
+  LiveData<List<Group_Track>> getAllGroupTracks();
   
   @Query("DELETE FROM group_track_table")
   void deleteAll();
