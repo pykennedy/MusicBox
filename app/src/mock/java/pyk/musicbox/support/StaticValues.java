@@ -14,7 +14,7 @@ public class StaticValues {
   public static final int               totalTracks    = 26;
   public static final int               totalAlbums    = 8;
   public static final int               totalArtists   = 5;
-  public static final int               totalGroups    = 3;
+  public static final int               totalGroups    = 4;
   public static final int               totalGroupings = 12;
   
   private static List<Track> spoofedTracks() {
@@ -81,6 +81,7 @@ public class StaticValues {
     groups.add(new Group("Brandenburg Concerto"));
     groups.add(new Group("Reputation"));
     groups.add(new Group("Purpose"));
+    groups.add(new Group("aaa Empty Group"));
     
     // dupes
     groups.add(new Group("Reputation"));

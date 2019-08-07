@@ -15,7 +15,7 @@ public class SwipeDeleteCallback extends ItemTouchHelper.SimpleCallback {
   ;
   
   public SwipeDeleteCallback(GroupListItemAdapter adapter) {
-    super(0, ItemTouchHelper.START | ItemTouchHelper.END);
+    super(0, ItemTouchHelper.END);
     this.adapter = adapter;
   }
   

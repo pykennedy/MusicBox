@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import pyk.musicbox.model.dao.AlbumDAO;
@@ -25,6 +26,7 @@ import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.database.MBDB;
 import pyk.musicbox.model.entity.Album;
 import pyk.musicbox.model.entity.Album_Track;
+import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
@@ -35,6 +37,7 @@ import pyk.musicbox.utility.LiveDataTestUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class MBDBUnitTest {
   private TrackDAO             trackDAO;
@@ -52,6 +55,7 @@ public class MBDBUnitTest {
   
   @Before
   public void createDB() {
+    //TODO: see if i can do all the population here instead of in each test
     Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     db = Room.inMemoryDatabaseBuilder(context, MBDB.class)
              .allowMainThreadQueries()
@@ -167,6 +171,42 @@ public class MBDBUnitTest {
     List<Album> albums = LiveDataTestUtil.getValue(
         artist_albumTrackDAO.getAlbumsByArtistID(artistID));
     assertEquals(albumID, albums.get(0).getId());
+  }
+  
+  @Test
+  public void readAllEntitiesAlphabetical() throws InterruptedException {
+    for(Track track : StaticValues.trackList) {
+      String name   = track.getName();
+      String album  = track.getAlbum();
+      String artist = track.getArtist();
+  
+      long trackID  = trackDAO.insert(track);
+      long albumID  = albumDAO.insert(new Album(album, artist, album + artist));
+      long artistID = artistDAO.insert(new Artist(artist));
+  
+      anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
+      anyEntityDAO.insert(new AnyEntity(albumID, album, "album"));
+      anyEntityDAO.insert(new AnyEntity(artistID, artist, "artist"));
+    }
+    
+    for(Group group : StaticValues.groupList) {
+      long groupID = groupDAO.insert(group);
+      anyEntityDAO.insert(new AnyEntity(groupID, group.getName(), "group"));
+    }
+  
+    List<String> types = Arrays.asList("artist", "album", "track", "group", "playlist");
+    List<AnyEntity> entities = LiveDataTestUtil.getValue(anyEntityDAO.getAllEntities(types));
+    
+    boolean result = true;
+    String previous = "";
+    for(AnyEntity anyEntity : entities) {
+      if(anyEntity.getName().compareTo(previous) < 0) {
+        result = false;
+        previous = anyEntity.getName();
+      }
+    }
+    
+    assertTrue(result);
   }
   
   @Test
