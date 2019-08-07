@@ -8,7 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import pyk.musicbox.R;
-import pyk.musicbox.support.StaticValues;
 import pyk.musicbox.view.activity.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -21,7 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.not;
 
 public class SearchFragmentTest {
   @Rule
@@ -73,13 +72,19 @@ public class SearchFragmentTest {
     
     onView(withId(R.id.tv_groupSlicer_fragmentSearch)).perform(click());
     
-    int count = recyclerView.getAdapter().getItemCount();
+    // no artists shown
+    onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
+        matches(not(hasDescendant(withText("Taylor Swift")))));
+    // no albums shown
+    onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
+        matches(not(hasDescendant(withText("Red")))));
+    // no tracks shown
+    onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
+        matches(not(hasDescendant(withText("State of Grace")))));
+    //TODO: no playlists shown
     
-    if (count == StaticValues.totalGroups) {
-      onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
-          matches(hasDescendant(withText("aaa Empty Group"))));
-    } else {
-      fail("incorrect amount of expected items");
-    }
+    // a group is shown
+    onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
+        matches(hasDescendant(withText("Brandenburg Concerto"))));
   }
 }
