@@ -81,6 +81,9 @@ public class SearchFragment extends Fragment
     if (state > 0) {
       forceSlicers();
     } else {
+      for(int i = 0; i < slicerStatus.length; i++) {
+        setSlicerLight(i);
+      }
       searchFragmentPresenter.slicersChanged(slia, slicerStatus);
     }
     
@@ -125,7 +128,6 @@ public class SearchFragment extends Fragment
   }
   
   private void setSlicerLight(int i) {
-    // TODO: have another slicer light to show it disabled instead of just turned off
     switch (i) {
       case 0:
         artistSlicer.setBackgroundColor(
@@ -166,20 +168,16 @@ public class SearchFragment extends Fragment
   }
   
   private void setSlicer(int index) {
-    // if all slicers are on, then turn all off except selection
-    if (allSlicersAre(true)) {
+    // if all slicers are on or if selection is not turned on, then turn all off except selection
+    if (allSlicersAre(true) || !slicerStatus[index]) {
       for (int i = 0; i < 5; i++) {
         slicerStatus[i] = (i == index) ? true : false;
         setSlicerLight(i);
       }
-    } else { // otherwise toggle w/e was selected
-      slicerStatus[index] = !slicerStatus[index];
-      setSlicerLight(index);
-      if (allSlicersAre(false)) {
-        for (int i = 0; i < 5; i++) {
-          slicerStatus[i] = true;
-          setSlicerLight(i);
-        }
+    } else { // otherwise if selection is already on, turn on everything
+      for (int i = 0; i < 5; i++) {
+        slicerStatus[i] = true;
+        setSlicerLight(i);
       }
     }
   }

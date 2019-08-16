@@ -23,7 +23,7 @@ public class MainActivityTest {
       new ActivityTestRule<MainActivity>(MainActivity.class);
   
   @Test
-  public void defaultFragmentsExist() throws Exception {
+  public void defaultFragmentsExist() {
     onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
     onView(withId(R.id.vp_mainActivity)).perform(swipeLeft());
     onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
