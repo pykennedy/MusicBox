@@ -81,6 +81,9 @@ public class SearchFragment extends Fragment
     if (state > 0) {
       forceSlicers();
     } else {
+      for(int i = 0; i < slicerStatus.length; i++) {
+        setSlicerLight(i);
+      }
       searchFragmentPresenter.slicersChanged(slia, slicerStatus);
     }
     

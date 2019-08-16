@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.graphics.Color;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import pyk.musicbox.R;
+import pyk.musicbox.matcher.BackgroundColorMatcher;
 import pyk.musicbox.view.activity.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -26,8 +28,6 @@ public class SearchFragmentTest {
   @Rule
   public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
       new ActivityTestRule<MainActivity>(MainActivity.class);
-  
-  //TODO: test long press to multi select after implement it
   
   @Test
   public void allViewsExist() {
@@ -86,5 +86,26 @@ public class SearchFragmentTest {
     // a group is shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
         matches(hasDescendant(withText("Brandenburg Concerto"))));
+  }
+  
+  @Test
+  public void slicersRemainAfterOnBackPressed() {
+    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).perform(click());
+    
+    onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).perform(
+        RecyclerViewActions.actionOnItem(hasDescendant(withText("aaa Empty Group")), click()));
+    pressBack();
+  
+    onView(withId(R.id.tv_artistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+        Color.parseColor("#FFFFFF"))));
+    onView(withId(R.id.tv_albumSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+        Color.parseColor("#FFFFFF"))));
+    onView(withId(R.id.tv_trackSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+        Color.parseColor("#FFFFFF"))));
+    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+        Color.parseColor("#FF0000"))));
+    onView(withId(R.id.tv_playlistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+        Color.parseColor("#FFFFFF"))));
+    
   }
 }
