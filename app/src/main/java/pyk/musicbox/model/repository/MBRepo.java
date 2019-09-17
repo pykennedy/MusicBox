@@ -3,6 +3,7 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -187,7 +188,8 @@ public class MBRepo {
     @Override
     protected Void doInBackground(final Group_Track... params) {
       Group_Track groupTrack = params[0];
-      groupTrack.setSortOrder(groupTrackDAO.maxSortOrder()+1);
+      int sortOrder = groupTrackDAO.maxSortOrder(groupTrack.getGroupID()) + 1;
+      groupTrack.setSortOrder(sortOrder);
       groupTrackDAO.insert(groupTrack);
       
       return null;

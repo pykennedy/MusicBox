@@ -28,8 +28,9 @@ public interface Group_TrackDAO {
   void cascadeSortOrder(long groupID, int sortorder);
   
   @Query("SELECT MAX(sortorder) " +
-         "FROM group_track_table")
-  int maxSortOrder();
+         "FROM group_track_table " +
+         "WHERE groupID = :groupID")
+  int maxSortOrder(long groupID);
   
   @Query("DELETE FROM group_track_table " +
          "WHERE groupID = :groupID " +
