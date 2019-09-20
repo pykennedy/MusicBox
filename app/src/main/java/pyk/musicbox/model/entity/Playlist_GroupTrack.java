@@ -19,6 +19,9 @@ public class Playlist_GroupTrack {
   @ColumnInfo(name = "entityType")
   private String entityType;
   
+  @ColumnInfo(name = "sortOrder")
+  private int sortOrder;
+  
   public Playlist_GroupTrack(long playlistID, long entityID, @NonNull String entityType) {
     this.playlistID = playlistID;
     this.entityID = entityID;
@@ -35,5 +38,11 @@ public class Playlist_GroupTrack {
   
   @NonNull public String getEntityType() {
     return entityType;
+  }
+  
+  public int getSortOrder() { return sortOrder; }
+  
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

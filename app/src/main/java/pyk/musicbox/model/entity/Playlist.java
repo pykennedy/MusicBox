@@ -17,7 +17,7 @@ public class Playlist {
   @ColumnInfo(name = "name")
   private String name;
   
-  public Playlist(String name) {
+  public Playlist(@NonNull String name) {
     this.name = name;
   }
   

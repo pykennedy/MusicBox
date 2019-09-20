@@ -4,4 +4,8 @@ public interface Callback {
   public interface InsertGroupCB {
     public void onResponse(boolean succeeded, String msg);
   }
+  
+  public interface InsertPlaylistCB {
+    public void onResponse(boolean succeeded, String msg);
+  }
 }
