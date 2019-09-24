@@ -32,7 +32,7 @@ public interface Playlist_GroupTrackDAO {
          "WHERE playlistID = :playlistID")
   int maxSortOrder(long playlistID);
   
-  @Query("SELECT * FROM playlist_grouptrack_table " +
+  @Query("DELETE FROM playlist_grouptrack_table " +
          "WHERE playlistID = :playlistID " +
          "AND entityID = :entityID " +
          "AND entityType = :entityType")

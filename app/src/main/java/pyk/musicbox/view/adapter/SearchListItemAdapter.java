@@ -15,6 +15,7 @@ import pyk.musicbox.contract.fragment.SearchFragmentContract;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.presenter.SearchListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.GroupFragment;
+import pyk.musicbox.view.fragment.PlaylistFragment;
 import pyk.musicbox.view.fragment.SearchFragment;
 
 public class SearchListItemAdapter
@@ -22,14 +23,12 @@ public class SearchListItemAdapter
     implements SearchListItemAdapterContract.SearchListItemAdapterView
     , SearchFragmentContract.SearchListItemAdapterView {
   private SearchListItemAdapterPresenter sliap;
-  private SearchFragment searchFragment;
-  private int state;
+  private SearchFragment                 searchFragment;
   
-  public SearchListItemAdapter(SearchFragment searchFragment, int state) {
+  public SearchListItemAdapter(SearchFragment searchFragment) {
     super();
     this.searchFragment = searchFragment;
     this.sliap = new SearchListItemAdapterPresenter(this, searchFragment);
-    this.state = state;
   }
   
   @NonNull @Override
@@ -59,8 +58,8 @@ public class SearchListItemAdapter
   
   class ItemAdapterViewHolder extends ViewHolder {
     TextView title;
-    String type;
-    Long id;
+    String   type;
+    Long     id;
     
     
     ItemAdapterViewHolder(View itemView) {
@@ -70,35 +69,27 @@ public class SearchListItemAdapter
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+          Bundle bundle = new Bundle();
           switch (type) {
             case "artist":
               break;
             case "album":
               break;
             case "track":
-              if(state == 0) {
-    
-              } else if(state == 1) {
-                toggleSelection(getPosition());
-              } else if(state == 2) {
-                toggleSelection(getPosition());
-              }
               break;
             case "group":
-              if(state == 0) {
-                Bundle bundle = new Bundle();
-                bundle.putString("groupName", title.getText().toString());
-                bundle.putLong("id", id);
-                GroupFragment groupFragment = new GroupFragment();
-                groupFragment.setArguments(bundle);
-                searchFragment.swapFragment(groupFragment);
-              } else if(state == 1) {
-                toggleSelection(getPosition());
-              } else if(state == 2) {
-                toggleSelection(getPosition());
-              }
+              bundle.putString("groupName", title.getText().toString());
+              bundle.putLong("id", id);
+              GroupFragment groupFragment = new GroupFragment();
+              groupFragment.setArguments(bundle);
+              searchFragment.swapFragment(groupFragment);
               break;
             case "playlist":
+              bundle.putString("playlistName", title.getText().toString());
+              bundle.putLong("id", id);
+              PlaylistFragment playlistFragment = new PlaylistFragment();
+              playlistFragment.setArguments(bundle);
+              searchFragment.swapFragment(playlistFragment);
               break;
           }
         }
@@ -111,7 +102,7 @@ public class SearchListItemAdapter
       type = entity.getEntityType();
       id = entity.getEntityID();
       
-      if(isSelected(position)) {
+      if (isSelected(position)) {
         title.setTextColor(Color.RED);
       } else {
         title.setTextColor(Color.BLACK);

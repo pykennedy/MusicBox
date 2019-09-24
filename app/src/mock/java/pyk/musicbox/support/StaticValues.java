@@ -5,12 +5,14 @@ import java.util.List;
 
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.Playlist;
 import pyk.musicbox.model.entity.Track;
 
 public class StaticValues {
   public static final List<Track>       trackList      = spoofedTracks();
   public static final List<Group>       groupList      = spoofedGroups();
   public static final List<Group_Track> groupingsList  = spoofedGroupings();
+  public static final List<Playlist>    playlistList   = spoofedPlaylists();
   public static final int               totalTracks    = 26;
   public static final int               totalAlbums    = 8;
   public static final int               totalArtists   = 5;
@@ -117,5 +119,15 @@ public class StaticValues {
     groupings.add(new Group_Track(3, 21));
     
     return groupings;
+  }
+  
+  private static List<Playlist> spoofedPlaylists() {
+    List<Playlist> playlists = new ArrayList<>();
+    
+    playlists.add(new Playlist("Playlist 1"));
+    playlists.add(new Playlist("Playlist 2"));
+    playlists.add(new Playlist("Empty Playlist"));
+    
+    return playlists;
   }
 }

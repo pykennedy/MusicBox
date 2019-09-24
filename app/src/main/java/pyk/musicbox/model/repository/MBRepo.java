@@ -112,12 +112,15 @@ public class MBRepo {
   
   public void updatePlaylistGroupTrackSortOrder(long playlistID, int oldSortOrder,
                                                 int newSortOrder) {
-    new updatePlaylistGroupTrackSortOrder(playlistGroupTrackDAO, playlistID, oldSortOrder, newSortOrder)
+    new updatePlaylistGroupTrackSortOrder(playlistGroupTrackDAO, playlistID, oldSortOrder,
+                                          newSortOrder)
         .execute();
   }
   
-  public void deleteGroupTrackFromPlaylist(long playlistID, long trackID, String entityType, int sortOrder) {
-    new deleteGroupTrackFromPlaylist(playlistGroupTrackDAO, playlistID, trackID, entityType, sortOrder).execute();
+  public void deleteGroupTrackFromPlaylist(long playlistID, long trackID, String entityType,
+                                           int sortOrder) {
+    new deleteGroupTrackFromPlaylist(playlistGroupTrackDAO, playlistID, trackID, entityType,
+                                     sortOrder).execute();
   }
   
   /***********************************************************************************************
@@ -306,7 +309,7 @@ public class MBRepo {
   
   private static class insertPlaylistGroupTrack extends AsyncTask<Playlist_GroupTrack, Void, Void> {
     Playlist_GroupTrackDAO playlistGroupTrackDAO;
-  
+    
     insertPlaylistGroupTrack(Playlist_GroupTrackDAO playlistGroupTrackDAO) {
       this.playlistGroupTrackDAO = playlistGroupTrackDAO;
     }
@@ -314,7 +317,7 @@ public class MBRepo {
     @Override
     protected Void doInBackground(final Playlist_GroupTrack... params) {
       Playlist_GroupTrack playlistGroupTrack = params[0];
-      int                 sortOrder          = playlistGroupTrackDAO.maxSortOrder(
+      int sortOrder = playlistGroupTrackDAO.maxSortOrder(
           playlistGroupTrack.getPlaylistID()) + 1;
       playlistGroupTrack.setSortOrder(sortOrder);
       playlistGroupTrackDAO.insert(playlistGroupTrack);
@@ -325,12 +328,13 @@ public class MBRepo {
   
   private static class updatePlaylistGroupTrackSortOrder extends AsyncTask<Void, Void, Void> {
     Playlist_GroupTrackDAO playlistGroupTrackDAO;
-    long           playlistID;
-    int            oldSortOrder;
-    int            newSortOrder;
-  
-    updatePlaylistGroupTrackSortOrder(Playlist_GroupTrackDAO playlistGroupTrackDAO, long playlistID, int oldSortOrder,
-                              int newSortOrder) {
+    long                   playlistID;
+    int                    oldSortOrder;
+    int                    newSortOrder;
+    
+    updatePlaylistGroupTrackSortOrder(Playlist_GroupTrackDAO playlistGroupTrackDAO, long playlistID,
+                                      int oldSortOrder,
+                                      int newSortOrder) {
       this.playlistGroupTrackDAO = playlistGroupTrackDAO;
       this.playlistID = playlistID;
       this.oldSortOrder = oldSortOrder;
@@ -352,12 +356,13 @@ public class MBRepo {
   
   private static class deleteGroupTrackFromPlaylist extends AsyncTask<Void, Void, Void> {
     Playlist_GroupTrackDAO playlistGroupTrackDAO;
-    long           playlistID;
-    long           entityID;
-    String entityType;
-    int            sortOrder;
+    long                   playlistID;
+    long                   entityID;
+    String                 entityType;
+    int                    sortOrder;
     
-    deleteGroupTrackFromPlaylist(Playlist_GroupTrackDAO playlistGroupTrackDAO, long playlistID, long entityID, String entityType, int sortOrder) {
+    deleteGroupTrackFromPlaylist(Playlist_GroupTrackDAO playlistGroupTrackDAO, long playlistID,
+                                 long entityID, String entityType, int sortOrder) {
       this.playlistGroupTrackDAO = playlistGroupTrackDAO;
       this.playlistID = playlistID;
       this.entityID = entityID;

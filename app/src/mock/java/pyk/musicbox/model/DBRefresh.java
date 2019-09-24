@@ -5,9 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.Playlist;
 import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.model.viewmodel.GroupViewModel;
 import pyk.musicbox.model.viewmodel.Group_TrackViewModel;
+import pyk.musicbox.model.viewmodel.PlaylistViewModel;
 import pyk.musicbox.model.viewmodel.TrackViewModel;
 import pyk.musicbox.support.StaticValues;
 import pyk.musicbox.view.activity.MainActivity;
@@ -21,6 +23,7 @@ public class DBRefresh {
         GroupViewModel.class);
     Group_TrackViewModel groupTrackViewModel = ViewModelProviders.of(context).get(
         Group_TrackViewModel.class);
+    PlaylistViewModel playlistViewModel = ViewModelProviders.of(context).get(PlaylistViewModel.class);
     
     for (Track track : StaticValues.trackList) {
       trackViewModel.insert(track);
@@ -36,6 +39,14 @@ public class DBRefresh {
     
     for (Group_Track groupTrack : StaticValues.groupingsList) {
       groupTrackViewModel.insert(groupTrack);
+    }
+    
+    for(Playlist playlist : StaticValues.playlistList) {
+      playlistViewModel.insert(playlist, new Callback.InsertPlaylistCB() {
+        @Override public void onResponse(boolean succeeded, String msg) {
+    
+        }
+      });
     }
   }
 }

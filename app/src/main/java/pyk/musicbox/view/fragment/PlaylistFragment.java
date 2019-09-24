@@ -13,48 +13,46 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
-import pyk.musicbox.presenter.GroupFragmentPresenter;
-import pyk.musicbox.utility.GroupSwipeDeleteCallback;
+import pyk.musicbox.presenter.PlaylistFragmentPresenter;
+import pyk.musicbox.utility.PlaylistSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
-import pyk.musicbox.view.adapter.GroupListItemAdapter;
+import pyk.musicbox.view.adapter.PlaylistListItemAdapter;
 
-public class GroupFragment extends Fragment implements View.OnClickListener {
-  private TextView               title;
-  private FloatingActionButton   fab;
-  private GroupListItemAdapter   adapter;
-  private String                 name;
-  private Long                   id;
-  private GroupFragmentPresenter presenter;
+public class PlaylistFragment extends Fragment implements View.OnClickListener {
+  private TextView title;
+  private FloatingActionButton fab;
+  private PlaylistListItemAdapter adapter;
+  private String name;
+  private long id;
+  private PlaylistFragmentPresenter presenter;
   
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_group, container, false);
-    presenter = new GroupFragmentPresenter();
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_playlist, container, false);
+    presenter = new PlaylistFragmentPresenter();
     
-    title = rootView.findViewById(R.id.tv_title_fragmentGroup);
-    fab = rootView.findViewById(R.id.fab_addButton_fragmentGroup);
+    title = rootView.findViewById(R.id.tv_title_fragmentPlaylist);
+    fab = rootView.findViewById(R.id.fab_addButton_fragmentPlaylist);
     fab.setOnClickListener(this);
     
-    adapter = new GroupListItemAdapter(this);
-    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentGroup);
+    adapter = new PlaylistListItemAdapter(this);
+    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentPlaylist);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
-    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new GroupSwipeDeleteCallback(adapter));
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new PlaylistSwipeDeleteCallback(adapter));
     itemTouchHelper.attachToRecyclerView(recyclerView);
-    
-    name = getArguments().getString("groupName");
+  
+    name = getArguments().getString("playlistName");
     id = getArguments().getLong("id");
-    title.setText(name != null ? name : "Error Retrieving Group Name");
-    
-    presenter.getTracksInGroup(adapter, id);
+    title.setText(name != null ? name : "Error Retrieving Playlist Name");
+  
+    presenter.getEntitiesInPlaylist(adapter, id);
     
     return rootView;
   }
   
-  @Override
-  public void onClick(View view) {
+  @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.fab_addButton_fragmentGroup:
         Bundle bundle = new Bundle();

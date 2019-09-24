@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment
       }
     }
     
-    slia = new SearchListItemAdapter(this, state);
+    slia = new SearchListItemAdapter(this);
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
