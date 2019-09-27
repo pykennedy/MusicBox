@@ -6,8 +6,8 @@ import android.arch.persistence.room.Index;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "playlist_grouptrack_table"
-    , primaryKeys = {"playlistID", "entityID"}
-    , indices = {@Index(value = {"playlistID", "entityID"}, unique = true)})
+    , primaryKeys = {"playlistID", "entityID", "entityType"}
+    , indices = {@Index(value = {"playlistID", "entityID", "entityType"}, unique = true)})
 public class Playlist_GroupTrack {
   @ColumnInfo(name = "playlistID")
   private long playlistID;
@@ -18,6 +18,9 @@ public class Playlist_GroupTrack {
   @NonNull
   @ColumnInfo(name = "entityType")
   private String entityType;
+  
+  @ColumnInfo(name = "sortOrder")
+  private int sortOrder;
   
   public Playlist_GroupTrack(long playlistID, long entityID, @NonNull String entityType) {
     this.playlistID = playlistID;
@@ -35,5 +38,11 @@ public class Playlist_GroupTrack {
   
   @NonNull public String getEntityType() {
     return entityType;
+  }
+  
+  public int getSortOrder() { return sortOrder; }
+  
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
   }
 }

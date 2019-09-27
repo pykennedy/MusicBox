@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment
       }
     }
     
-    slia = new SearchListItemAdapter(this, state);
+    slia = new SearchListItemAdapter(this);
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -224,7 +224,23 @@ public class SearchFragment extends Fragment
   }
   
   @Override
-  public void onPlaylistClick(DialogFragment dialog, String name) {
-    //TODO: add playlist to db, if dupe then toast warning, else tell main activity to swap to playlist fragment
+  public void onPlaylistClick(DialogFragment dialog, final String name) {
+    searchFragmentPresenter.addPlaylist((MainActivity) getActivity(), name,
+                                     new Callback.InsertPlaylistCB() {
+                                       @Override
+                                       public void onResponse(boolean succeeded, String msg) {
+                                         if (succeeded) {
+                                           Bundle bundle = new Bundle();
+                                           bundle.putString("playlistName", name);
+                                           bundle.putLong("id", Long.parseLong(msg));
+                                           PlaylistFragment playlistFragment = new PlaylistFragment();
+                                           playlistFragment.setArguments(bundle);
+                                           swapFragment(playlistFragment);
+                                         } else {
+                                           Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
+                                                .show();
+                                         }
+                                       }
+                                     });
   }
 }

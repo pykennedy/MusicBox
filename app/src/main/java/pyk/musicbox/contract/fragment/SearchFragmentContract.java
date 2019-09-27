@@ -11,5 +11,6 @@ public interface SearchFragmentContract {
   interface SearchFragmentPresenter {
     void slicersChanged(SearchListItemAdapterView slia, boolean[] slicers);
     void addGroup(MainActivity context, String name, Callback.InsertGroupCB callback);
+    void addPlaylist(MainActivity context, String name, Callback.InsertPlaylistCB callback);
   }
 }

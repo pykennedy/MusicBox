@@ -15,6 +15,8 @@ import pyk.musicbox.model.dao.ArtistDAO;
 import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
 import pyk.musicbox.model.dao.GroupDAO;
 import pyk.musicbox.model.dao.Group_TrackDAO;
+import pyk.musicbox.model.dao.PlaylistDAO;
+import pyk.musicbox.model.dao.Playlist_GroupTrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.entity.Album;
 import pyk.musicbox.model.entity.Album_Track;
@@ -23,11 +25,14 @@ import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.Playlist;
+import pyk.musicbox.model.entity.Playlist_GroupTrack;
 import pyk.musicbox.model.entity.Track;
 
 @Database(
     entities = {Track.class, Album.class, Artist.class, Album_Track.class, Artist_AlbumTrack.class,
-                AnyEntity.class, Group.class, Group_Track.class},
+                AnyEntity.class, Group.class, Group_Track.class, Playlist.class,
+                Playlist_GroupTrack.class},
     version = 1)
 public abstract class MBDB extends RoomDatabase {
   private static volatile MBDB instance;
@@ -47,6 +52,10 @@ public abstract class MBDB extends RoomDatabase {
   public abstract GroupDAO groupDAO();
   
   public abstract Group_TrackDAO groupTrackDAO();
+  
+  public abstract PlaylistDAO playlistDAO();
+  
+  public abstract Playlist_GroupTrackDAO playlistGroupTrackDAO();
   
   public static MBDB getDB(final Context context) {
     if (instance == null) {

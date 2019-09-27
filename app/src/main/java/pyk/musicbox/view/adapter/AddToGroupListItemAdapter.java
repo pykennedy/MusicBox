@@ -72,7 +72,7 @@ public class AddToGroupListItemAdapter
     
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
-      title = itemView.findViewById(R.id.tv_title_groupList);
+      title = itemView.findViewById(R.id.tv_title_entityList);
       
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -99,3 +99,4 @@ public class AddToGroupListItemAdapter
     }
   }
 }
+// 11466

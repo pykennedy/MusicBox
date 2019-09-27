@@ -5,7 +5,6 @@ import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import pyk.musicbox.view.fragment.GroupFragment;
 
 public class GroupListItemAdapterPresenter
     implements GroupListItemAdapterContract.GroupListItemAdapterPresenter {
-  GroupListItemAdapterContract.GroupListItemAdapterView adapterView;
+  private GroupListItemAdapterContract.GroupListItemAdapterView adapterView;
   private TrackViewModel                      tvm;
   private Group_TrackViewModel                gtvm;
   private MediatorLiveData<List<SortedTrack>> mediator = new MediatorLiveData<>();

@@ -9,12 +9,11 @@ import android.view.View;
 
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
-public class SwipeDeleteCallback extends ItemTouchHelper.SimpleCallback {
+public class GroupSwipeDeleteCallback extends ItemTouchHelper.SimpleCallback {
   GroupListItemAdapter adapter;
   private final ColorDrawable background = new ColorDrawable(Color.RED);
-  ;
   
-  public SwipeDeleteCallback(GroupListItemAdapter adapter) {
+  public GroupSwipeDeleteCallback(GroupListItemAdapter adapter) {
     super(0, ItemTouchHelper.END);
     this.adapter = adapter;
   }
@@ -32,14 +31,14 @@ public class SwipeDeleteCallback extends ItemTouchHelper.SimpleCallback {
   public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           float dX, float dY, int actionState, boolean isCurrentlyActive) {
     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-    View itemView = viewHolder.itemView;
-    int backgroundCornerOffset = 0; // to adjust for rounded corners
-  
+    View itemView               = viewHolder.itemView;
+    int  backgroundCornerOffset = 0; // to adjust for rounded corners
+    
     if (dX > 0) { // Swiping to the right
       background.setBounds(itemView.getLeft(), itemView.getTop(),
                            itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
                            itemView.getBottom());
-    
+      
     } else if (dX < 0) { // Swiping to the left
       background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
                            itemView.getTop(), itemView.getRight(), itemView.getBottom());

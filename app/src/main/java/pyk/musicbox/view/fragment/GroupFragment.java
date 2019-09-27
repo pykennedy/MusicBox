@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.presenter.GroupFragmentPresenter;
-import pyk.musicbox.utility.SwipeDeleteCallback;
+import pyk.musicbox.utility.GroupSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
@@ -41,7 +41,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
-    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeDeleteCallback(adapter));
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new GroupSwipeDeleteCallback(adapter));
     itemTouchHelper.attachToRecyclerView(recyclerView);
     
     name = getArguments().getString("groupName");
