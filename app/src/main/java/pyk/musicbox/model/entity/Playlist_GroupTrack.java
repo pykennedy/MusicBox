@@ -6,8 +6,8 @@ import android.arch.persistence.room.Index;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "playlist_grouptrack_table"
-    , primaryKeys = {"playlistID", "entityID"}
-    , indices = {@Index(value = {"playlistID", "entityID"}, unique = true)})
+    , primaryKeys = {"playlistID", "entityID", "entityType"}
+    , indices = {@Index(value = {"playlistID", "entityID", "entityType"}, unique = true)})
 public class Playlist_GroupTrack {
   @ColumnInfo(name = "playlistID")
   private long playlistID;

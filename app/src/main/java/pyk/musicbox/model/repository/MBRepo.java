@@ -3,6 +3,7 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
 import pyk.musicbox.model.entity.Playlist;
 import pyk.musicbox.model.entity.Playlist_GroupTrack;
+import pyk.musicbox.model.entity.SortedEntity;
 import pyk.musicbox.model.entity.SortedTrack;
 import pyk.musicbox.model.entity.Track;
 
@@ -79,6 +81,10 @@ public class MBRepo {
   
   public LiveData<List<SortedTrack>> getTracksInGroup(Long id) {
     return trackDAO.getTracksInGroup(id);
+  }
+  
+  public LiveData<List<SortedEntity>> getItemsInPlaylist(long id) {
+    return playlistGroupTrackDAO.getItemsInPlaylist(id);
   }
   
   public void insert(Track track) {

@@ -12,6 +12,6 @@ public interface PlaylistListItemAdapterContract {
     int getItemCount();
     void getEntitiesInPlaylist(long id);
     void updateSortOrder(long id, int oldSortOrder, int newSortOrder);
-    void removeEntity(long playlistID, long entityID, int sortOrder);
+    void removeEntity(long playlistID, long entityID, String entityType, int sortOrder);
   }
 }

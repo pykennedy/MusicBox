@@ -56,9 +56,9 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     switch (view.getId()) {
       case R.id.fab_addButton_fragmentGroup:
         Bundle bundle = new Bundle();
-        bundle.putString("groupName", name);
+        bundle.putString("playlistName", name);
         bundle.putLong("id", id);
-        AddToGroupFragment fragment = new AddToGroupFragment();
+        AddToPlaylistFragment fragment = new AddToPlaylistFragment();
         fragment.setArguments(bundle);
         presenter.tileTapped((MainActivity) getActivity(), fragment, true);
         break;

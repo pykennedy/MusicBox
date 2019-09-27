@@ -6,18 +6,22 @@ import java.util.List;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
 import pyk.musicbox.model.entity.Playlist;
+import pyk.musicbox.model.entity.Playlist_GroupTrack;
 import pyk.musicbox.model.entity.Track;
 
 public class StaticValues {
-  public static final List<Track>       trackList      = spoofedTracks();
-  public static final List<Group>       groupList      = spoofedGroups();
-  public static final List<Group_Track> groupingsList  = spoofedGroupings();
-  public static final List<Playlist>    playlistList   = spoofedPlaylists();
-  public static final int               totalTracks    = 26;
-  public static final int               totalAlbums    = 8;
-  public static final int               totalArtists   = 5;
-  public static final int               totalGroups    = 4;
-  public static final int               totalGroupings = 12;
+  public static final List<Track>               trackList          = spoofedTracks();
+  public static final List<Group>               groupList          = spoofedGroups();
+  public static final List<Group_Track>         groupingsList      = spoofedGroupings();
+  public static final List<Playlist>            playlistList       = spoofedPlaylists();
+  public static final List<Playlist_GroupTrack> playlistItems      = spoofedPlaylistItems();
+  public static final int                       totalTracks        = 26;
+  public static final int                       totalAlbums        = 8;
+  public static final int                       totalArtists       = 5;
+  public static final int                       totalGroups        = 4;
+  public static final int                       totalGroupings     = 12;
+  public static final int                       totalPlaylists     = 3;
+  public static final int                       TotalPlaylistItems = 15;
   
   private static List<Track> spoofedTracks() {
     List<Track> tracks = new ArrayList<>();
@@ -124,10 +128,41 @@ public class StaticValues {
   private static List<Playlist> spoofedPlaylists() {
     List<Playlist> playlists = new ArrayList<>();
     
-    playlists.add(new Playlist("Playlist 1"));
-    playlists.add(new Playlist("Playlist 2"));
+    playlists.add(new Playlist("Taylor Swift Mix"));
+    playlists.add(new Playlist("Justin Bieber Mix"));
     playlists.add(new Playlist("Empty Playlist"));
     
     return playlists;
+  }
+  
+  private static List<Playlist_GroupTrack> spoofedPlaylistItems() {
+    List<Playlist_GroupTrack> playlistItems = new ArrayList<>();
+    
+    // Taylor Swift stuff
+    playlistItems.add(new Playlist_GroupTrack(1, 1, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 2, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 3, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 4, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 5, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 2, "group"));
+    playlistItems.add(new Playlist_GroupTrack(1, 6, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 7, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 8, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 9, "track"));
+    
+    // Justin Bieber stuff
+    playlistItems.add(new Playlist_GroupTrack(2, 21, "track"));
+    playlistItems.add(new Playlist_GroupTrack(2, 22, "track"));
+    playlistItems.add(new Playlist_GroupTrack(2, 23, "track"));
+    playlistItems.add(new Playlist_GroupTrack(2, 24, "track"));
+    playlistItems.add(new Playlist_GroupTrack(2, 3, "group"));
+    
+    // dupes
+    playlistItems.add(new Playlist_GroupTrack(1, 5, "track"));
+    playlistItems.add(new Playlist_GroupTrack(1, 2, "group"));
+    playlistItems.add(new Playlist_GroupTrack(2, 24, "track"));
+    playlistItems.add(new Playlist_GroupTrack(2, 3, "group"));
+    
+    return playlistItems;
   }
 }

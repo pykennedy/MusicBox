@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import pyk.musicbox.view.adapter.GroupListItemAdapter;
 import pyk.musicbox.view.adapter.PlaylistListItemAdapter;
 
 public class PlaylistSwipeDeleteCallback extends ItemTouchHelper.SimpleCallback {

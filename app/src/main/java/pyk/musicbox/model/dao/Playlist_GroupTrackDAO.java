@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import pyk.musicbox.model.entity.Playlist_GroupTrack;
+import pyk.musicbox.model.entity.SortedEntity;
 
 @Dao
 public interface Playlist_GroupTrackDAO {
@@ -49,4 +50,32 @@ public interface Playlist_GroupTrackDAO {
   
   @Query("DELETE FROM playlist_grouptrack_table")
   void deleteAll();
+  
+  @Query("SELECT pgtt.sortOrder AS sortOrder " +
+         ", pgtt.entityID AS entityID " +
+         ", tt.name AS entityName " +
+         ", pgtt.entityType AS entityType " +
+         ", tt.album AS otherInfo1 " +
+         ", tt.artist AS otherInfo2 " +
+         ", null AS otherInfo3 " +
+         "FROM playlist_grouptrack_table AS pgtt " +
+         "INNER JOIN track_table AS tt " +
+         "ON pgtt.entityID = tt.id " +
+         "AND pgtt.entityType = 'track' " +
+         "AND pgtt.playlistID = :id "  +
+         "UNION ALL " +
+         "SELECT pgtt.sortOrder AS sortOrder " +
+         ", pgtt.entityID AS entityID " +
+         ", gt.name AS entityName " +
+         ", pgtt.entityType AS entityType " +
+         ", null AS otherInfo1 " +
+         ", null AS otherInfo2 " +
+         ", null AS otherInfo3 " +
+         "FROM playlist_grouptrack_table AS pgtt " +
+         "INNER JOIN group_table AS gt " +
+         "ON pgtt.entityID = gt.id " +
+         "AND pgtt.entityType = 'group' " +
+         "AND pgtt.playlistID = :id "+
+         "ORDER BY pgtt.sortOrder")
+  LiveData<List<SortedEntity>> getItemsInPlaylist(long id);
 }
