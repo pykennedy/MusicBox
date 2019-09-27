@@ -67,7 +67,7 @@ public class GroupListItemAdapter
     
     public ItemAdapterViewHolder(View itemView, final GroupListItemAdapterPresenter presenter) {
       super(itemView);
-      title = itemView.findViewById(R.id.tv_title_groupList);
+      title = itemView.findViewById(R.id.tv_title_entityList);
       up = itemView.findViewById(R.id.tv_up_groupList);
       down = itemView.findViewById(R.id.tv_down_groupList);
       title.setOnClickListener(this);

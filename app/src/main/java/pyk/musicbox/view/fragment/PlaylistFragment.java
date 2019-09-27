@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,12 +55,13 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
   
   @Override public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.fab_addButton_fragmentGroup:
+      case R.id.fab_addButton_fragmentPlaylist:
         Bundle bundle = new Bundle();
         bundle.putString("playlistName", name);
         bundle.putLong("id", id);
         AddToPlaylistFragment fragment = new AddToPlaylistFragment();
         fragment.setArguments(bundle);
+        Log.e("asdf", "gothere");
         presenter.tileTapped((MainActivity) getActivity(), fragment, true);
         break;
       default:

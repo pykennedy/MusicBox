@@ -44,7 +44,7 @@
         android:text="Al"
         app:layout_constraintEnd_toStartOf="@+id/tv_trackSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toEndOf="@id/tv_artistSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToGroup"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
 
     <TextView
         android:id="@+id/tv_trackSlicer_fragmentAddToPlaylist"
@@ -63,12 +63,12 @@
         android:id="@+id/tv_groupSlicer_fragmentAddToPlaylist"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/mcBlack12"
+        android:background="#FF0000"
         android:gravity="center"
         android:text="Gr"
         app:layout_constraintEnd_toStartOf="@id/tv_playlistSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toEndOf="@id/tv_trackSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToGroup"/>
+        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
 
     <TextView
         android:id="@+id/tv_playlistSlicer_fragmentAddToPlaylist"
