@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
 public class SearchFragment extends Fragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener {
+  private Toolbar              toolbar;
   private TextView             artistSlicer;
   private TextView             albumSlicer;
   private TextView             trackSlicer;
@@ -44,6 +48,9 @@ public class SearchFragment extends Fragment
                            Bundle savedInstanceState) {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_search, container, false);
     
+    toolbar = rootView.findViewById(R.id.tb_fragmentSearch);
+    toolbar.inflateMenu(R.menu.menu_search);
+    setHasOptionsMenu(true);
     artistSlicer = rootView.findViewById(R.id.tv_artistSlicer_fragmentSearch);
     artistSlicer.setOnClickListener(this);
     albumSlicer = rootView.findViewById(R.id.tv_albumSlicer_fragmentSearch);
@@ -81,13 +88,19 @@ public class SearchFragment extends Fragment
     if (state > 0) {
       forceSlicers();
     } else {
-      for(int i = 0; i < slicerStatus.length; i++) {
+      for (int i = 0; i < slicerStatus.length; i++) {
         setSlicerLight(i);
       }
       searchFragmentPresenter.slicersChanged(slia, slicerStatus);
     }
     
     return rootView;
+  }
+  
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_search, menu);
+    super.onCreateOptionsMenu(menu, inflater);
   }
   
   @Override
@@ -226,21 +239,22 @@ public class SearchFragment extends Fragment
   @Override
   public void onPlaylistClick(DialogFragment dialog, final String name) {
     searchFragmentPresenter.addPlaylist((MainActivity) getActivity(), name,
-                                     new Callback.InsertPlaylistCB() {
-                                       @Override
-                                       public void onResponse(boolean succeeded, String msg) {
-                                         if (succeeded) {
-                                           Bundle bundle = new Bundle();
-                                           bundle.putString("playlistName", name);
-                                           bundle.putLong("id", Long.parseLong(msg));
-                                           PlaylistFragment playlistFragment = new PlaylistFragment();
-                                           playlistFragment.setArguments(bundle);
-                                           swapFragment(playlistFragment);
-                                         } else {
-                                           Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
-                                                .show();
-                                         }
-                                       }
-                                     });
+                                        new Callback.InsertPlaylistCB() {
+                                          @Override
+                                          public void onResponse(boolean succeeded, String msg) {
+                                            if (succeeded) {
+                                              Bundle bundle = new Bundle();
+                                              bundle.putString("playlistName", name);
+                                              bundle.putLong("id", Long.parseLong(msg));
+                                              PlaylistFragment playlistFragment =
+                                                  new PlaylistFragment();
+                                              playlistFragment.setArguments(bundle);
+                                              swapFragment(playlistFragment);
+                                            } else {
+                                              Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT)
+                                                   .show();
+                                            }
+                                          }
+                                        });
   }
 }
