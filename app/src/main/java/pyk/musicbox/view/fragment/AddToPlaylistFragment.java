@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.AddToPlaylistFragmentPresenter;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.AddToPlaylistListItemAdapter;
@@ -23,8 +25,18 @@ public class AddToPlaylistFragment extends Fragment implements View.OnClickListe
   private FloatingActionButton           fab;
   private AddToPlaylistListItemAdapter   adapter;
   private AddToPlaylistFragmentPresenter presenter;
+  private Listener.FragmentListener      listener;
   
   boolean[] slicerStatus = {false, false, true, true, false};
+  
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    
+    if (context instanceof Listener.FragmentListener) {
+      listener = (Listener.FragmentListener) context;
+    }
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,8 +54,10 @@ public class AddToPlaylistFragment extends Fragment implements View.OnClickListe
     presenter = new AddToPlaylistFragmentPresenter();
     
     Bundle args = getArguments();
-    if(args != null) {
+    if (args != null) {
       playlistID = args.getLong("id");
+      listener.updateTitle(args.getString("groupName") != null ? "Adding to: " + args.getString("groupName")
+                                                               : "Error Retrieving Group Name");
     }
     
     adapter = new AddToPlaylistListItemAdapter(this);
@@ -60,7 +74,8 @@ public class AddToPlaylistFragment extends Fragment implements View.OnClickListe
   @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.fab_addButton_fragmentAddToPlaylist:
-        presenter.addToPlaylist((MainActivity) getActivity(), playlistID, adapter.getSelectedEntityIDs());
+        presenter.addToPlaylist((MainActivity) getActivity(), playlistID,
+                                adapter.getSelectedEntityIDs());
         getActivity().onBackPressed();
         break;
       default:

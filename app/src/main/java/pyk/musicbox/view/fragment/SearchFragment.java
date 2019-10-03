@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,10 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,12 +23,13 @@ import android.widget.Toast;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.callback.Callback;
+import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
 public class SearchFragment extends Fragment
-    implements View.OnClickListener, AddDialogFragment.AddDialogListener {
+    implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
   private Toolbar              toolbar;
   private TextView             artistSlicer;
   private TextView             albumSlicer;
@@ -38,18 +43,29 @@ public class SearchFragment extends Fragment
   private SearchListItemAdapter   slia;
   private SearchFragmentPresenter searchFragmentPresenter;
   
+  private Listener.FragmentListener listener;
+  
   // { artist , album , track , group , playlist }
   boolean[] slicerStatus = {true, true, true, true, true};
   
   //TODO: properly pass activity context to all fragments for better context management for room
   
   @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    
+    if(context instanceof Listener.FragmentListener) {
+      listener = (Listener.FragmentListener) context;
+    }
+  }
+  
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_search, container, false);
     
-    toolbar = rootView.findViewById(R.id.tb_fragmentSearch);
-    toolbar.inflateMenu(R.menu.menu_search);
+    //toolbar = rootView.findViewById(R.id.tb_fragmentSearch);
+    //toolbar.inflateMenu(R.menu.menu_search);
     setHasOptionsMenu(true);
     artistSlicer = rootView.findViewById(R.id.tv_artistSlicer_fragmentSearch);
     artistSlicer.setOnClickListener(this);
@@ -94,6 +110,8 @@ public class SearchFragment extends Fragment
       searchFragmentPresenter.slicersChanged(slia, slicerStatus);
     }
     
+    listener.updateTitle("Music Box");
+    
     return rootView;
   }
   
@@ -101,6 +119,10 @@ public class SearchFragment extends Fragment
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.menu_search, menu);
     super.onCreateOptionsMenu(menu, inflater);
+    MenuItem item = menu.findItem(R.id.sv_menu);
+    SearchView searchView = (SearchView) item.getActionView();
+    searchView.setOnQueryTextListener(this);
+    
   }
   
   @Override
@@ -256,5 +278,15 @@ public class SearchFragment extends Fragment
                                             }
                                           }
                                         });
+  }
+  
+  @Override public boolean onQueryTextSubmit(String s) {
+    Log.e("submit", s);
+    return false;
+  }
+  
+  @Override public boolean onQueryTextChange(String s) {
+    Log.e("change", s);
+    return false;
   }
 }

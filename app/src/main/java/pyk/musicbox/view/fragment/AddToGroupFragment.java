@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.AddToGroupFragmentPresenter;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.AddToGroupListItemAdapter;
@@ -22,8 +24,18 @@ public class AddToGroupFragment extends Fragment implements View.OnClickListener
   private FloatingActionButton        fab;
   private AddToGroupListItemAdapter   adapter;
   private AddToGroupFragmentPresenter presenter;
+  private Listener.FragmentListener   listener;
   
   boolean[] slicerStatus = {false, false, true, false, false};
+  
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    
+    if (context instanceof Listener.FragmentListener) {
+      listener = (Listener.FragmentListener) context;
+    }
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +54,8 @@ public class AddToGroupFragment extends Fragment implements View.OnClickListener
     Bundle args = getArguments();
     if (args != null) {
       groupID = args.getLong("id");
+      listener.updateTitle(args.getString("groupName") != null ? "Adding to: " + args.getString("groupName")
+                                                               : "Error Retrieving Group Name");
     }
     
     adapter = new AddToGroupListItemAdapter(this);
