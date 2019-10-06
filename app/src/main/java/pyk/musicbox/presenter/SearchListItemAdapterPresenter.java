@@ -57,6 +57,19 @@ public class SearchListItemAdapterPresenter
     });
   }
   
+  @Override public void search(boolean[] slicers, String text) {
+    if(currentList != null) {
+      mediator.removeSource(currentList);
+    }
+    
+    currentList = aevm.searchAllEntities(toTypesList(slicers), text);
+    mediator.addSource(currentList, new Observer<List<AnyEntity>>() {
+      @Override public void onChanged(@Nullable List<AnyEntity> allEntities) {
+        mediator.setValue(allEntities);
+      }
+    });
+  }
+  
   private List<String> toTypesList(boolean[] slicers) {
     List<String> types = new ArrayList<>();
     for (int i = 0; i < 5; i++) {

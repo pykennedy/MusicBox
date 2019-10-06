@@ -21,5 +21,10 @@ public interface AnyEntityDAO {
   @Query("SELECT * FROM anyentity_table WHERE entityType IN (:entityTypes) ORDER BY name ASC")
   LiveData<List<AnyEntity>> getAllEntities(List<String> entityTypes);
   
-  
+  @Query("SELECT * " +
+         "FROM anyentity_table " +
+         "WHERE entityType IN (:entityTypes) " +
+         "AND searchtext LIKE :text" +
+         " ORDER BY name ASC")
+  LiveData<List<AnyEntity>> searchAllEntities(List<String> entityTypes, String text);
 }

@@ -27,4 +27,10 @@ public class SearchFragmentPresenter extends FragmentPresenter implements Search
     PlaylistViewModel playlistViewModel = ViewModelProviders.of(context).get(PlaylistViewModel.class);
     playlistViewModel.insert(new Playlist(name), callback);
   }
+  
+  @Override
+  public void search(SearchFragmentContract.SearchListItemAdapterView slia, boolean[] slicers,
+                     String text) {
+    slia.search(slicers, text);
+  }
 }

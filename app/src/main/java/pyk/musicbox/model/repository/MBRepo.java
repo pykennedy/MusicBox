@@ -3,7 +3,6 @@ package pyk.musicbox.model.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
@@ -77,6 +76,10 @@ public class MBRepo {
   
   public LiveData<List<AnyEntity>> getAllEntities(List<String> entityTypes) {
     return anyEntityDAO.getAllEntities(entityTypes);
+  }
+  
+  public LiveData<List<AnyEntity>> searchAllEntities(List<String> entityTypes, String text) {
+    return anyEntityDAO.searchAllEntities(entityTypes, "%" + text + "%");
   }
   
   public LiveData<List<SortedTrack>> getTracksInGroup(Long id) {
@@ -159,6 +162,11 @@ public class MBRepo {
                               track.getAlbum() + track.getArtist());
       Artist artist = new Artist(track.getArtist());
       
+      String trackSearchtext  =
+          track.getName() + "|||" + track.getAlbum() + "|||" + track.getArtist();
+      String albumSearchText  = track.getAlbum() + "|||" + track.getArtist();
+      String artistSearchText = track.getArtist();
+      
       long trackID = trackDAO.insert(track);
       
       if (trackID > -1) { // if new and unique track
@@ -170,9 +178,9 @@ public class MBRepo {
         album_trackDAO.insert(new Album_Track(albumID, trackID));
         artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
         artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
-        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
-        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album"));
-        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist"));
+        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track", trackSearchtext));
+        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album", albumSearchText));
+        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist", artistSearchText));
       }
       
       return null;
@@ -196,7 +204,7 @@ public class MBRepo {
       long  id    = groupDAO.insert(group);
       
       if (id > -1) {
-        anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group"));
+        anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group", group.getName()));
       }
       
       return id;
@@ -297,7 +305,7 @@ public class MBRepo {
       long     id       = playlistDAO.insert(playlist);
       
       if (id > -1) {
-        anyEntityDAO.insert(new AnyEntity(id, playlist.getName(), "playlist"));
+        anyEntityDAO.insert(new AnyEntity(id, playlist.getName(), "playlist", playlist.getName()));
       }
       
       return id;

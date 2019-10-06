@@ -10,8 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +28,7 @@ import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
 public class SearchFragment extends Fragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
-  private Toolbar              toolbar;
+  private String               searchText = null;
   private TextView             artistSlicer;
   private TextView             albumSlicer;
   private TextView             trackSlicer;
@@ -54,7 +52,7 @@ public class SearchFragment extends Fragment
   public void onAttach(Context context) {
     super.onAttach(context);
     
-    if(context instanceof Listener.FragmentListener) {
+    if (context instanceof Listener.FragmentListener) {
       listener = (Listener.FragmentListener) context;
     }
   }
@@ -107,7 +105,7 @@ public class SearchFragment extends Fragment
       for (int i = 0; i < slicerStatus.length; i++) {
         setSlicerLight(i);
       }
-      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+      search();
     }
     
     listener.updateTitle("Music Box");
@@ -119,10 +117,9 @@ public class SearchFragment extends Fragment
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.menu_search, menu);
     super.onCreateOptionsMenu(menu, inflater);
-    MenuItem item = menu.findItem(R.id.sv_menu);
+    MenuItem   item       = menu.findItem(R.id.sv_menu);
     SearchView searchView = (SearchView) item.getActionView();
     searchView.setOnQueryTextListener(this);
-    
   }
   
   @Override
@@ -158,7 +155,7 @@ public class SearchFragment extends Fragment
     }
     
     if (update) {
-      searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+      search();
     }
   }
   
@@ -199,7 +196,7 @@ public class SearchFragment extends Fragment
         setSlicerLight(i);
       }
     }
-    searchFragmentPresenter.slicersChanged(slia, slicerStatus);
+    search();
   }
   
   private void setSlicer(int index) {
@@ -281,12 +278,22 @@ public class SearchFragment extends Fragment
   }
   
   @Override public boolean onQueryTextSubmit(String s) {
-    Log.e("submit", s);
+    searchText = s;
+    search();
     return false;
   }
   
   @Override public boolean onQueryTextChange(String s) {
-    Log.e("change", s);
+    searchText = s;
+    search();
     return false;
+  }
+  
+  private void search() {
+    if (searchText == null || searchText.equals("")) {
+      slia.applyFilters(slicerStatus);
+    } else {
+      slia.search(slicerStatus, searchText);
+    }
   }
 }
