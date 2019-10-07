@@ -28,13 +28,14 @@ import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
 public class SearchFragment extends Fragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
-  private String               searchText = null;
+  private String               searchText;
   private TextView             artistSlicer;
   private TextView             albumSlicer;
   private TextView             trackSlicer;
   private TextView             groupSlicer;
   private TextView             playlistSlicer;
   private FloatingActionButton fab;
+  private Bundle args;
   
   private int                     state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
   private long                    modifyingID;
@@ -47,6 +48,10 @@ public class SearchFragment extends Fragment
   boolean[] slicerStatus = {true, true, true, true, true};
   
   //TODO: properly pass activity context to all fragments for better context management for room
+  
+  public SearchFragment() {
+    setArguments(new Bundle());
+  }
   
   @Override
   public void onAttach(Context context) {
@@ -61,6 +66,8 @@ public class SearchFragment extends Fragment
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_search, container, false);
+    args = getArguments();
+    searchText = (args != null) ? args.getString("searchText") : null;
     
     //toolbar = rootView.findViewById(R.id.tb_fragmentSearch);
     //toolbar.inflateMenu(R.menu.menu_search);
@@ -79,19 +86,6 @@ public class SearchFragment extends Fragment
     fab.setOnClickListener(this);
     
     searchFragmentPresenter = new SearchFragmentPresenter();
-    
-    Bundle args = getArguments();
-    if (args != null) {
-      modifyingID = args.getLong("id");
-      String groupOrPlaylist = args.getString("groupOrPlaylist");
-      if (groupOrPlaylist.equals("group")) {
-        state = 1;
-      } else if (groupOrPlaylist.equals("playlist")) {
-        state = 2;
-      } else {
-        state = 0;
-      }
-    }
     
     slia = new SearchListItemAdapter(this);
     RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentSearch);
@@ -119,7 +113,12 @@ public class SearchFragment extends Fragment
     super.onCreateOptionsMenu(menu, inflater);
     MenuItem   item       = menu.findItem(R.id.sv_menu);
     SearchView searchView = (SearchView) item.getActionView();
+    searchView.setMaxWidth(Integer.MAX_VALUE);
     searchView.setOnQueryTextListener(this);
+    if (!(searchText == null || searchText.equals(""))) {
+      searchView.setQuery(searchText, true);
+      searchView.setIconified(false);
+    }
   }
   
   @Override
@@ -287,6 +286,14 @@ public class SearchFragment extends Fragment
     searchText = s;
     search();
     return false;
+  }
+  
+  @Override
+  public void onPause() {
+    super.onPause();
+    if(args != null) {
+      args.putString("searchText", searchText);
+    }
   }
   
   private void search() {
