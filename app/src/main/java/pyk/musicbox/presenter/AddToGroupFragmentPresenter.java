@@ -24,4 +24,9 @@ public class AddToGroupFragmentPresenter
       groupTrackViewModel.insert(new Group_Track(groupID, trackID));
     }
   }
+  
+  @Override public void search(AddToGroupFragmentContract.AddToGroupListItemAdapterView adapter,
+                               boolean[] slicers, String text) {
+    adapter.search(slicers, text);
+  }
 }

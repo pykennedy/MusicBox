@@ -23,6 +23,7 @@ import pyk.musicbox.R;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.SearchFragmentPresenter;
+import pyk.musicbox.utility.KeyboardManager;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
 
@@ -92,15 +93,11 @@ public class SearchFragment extends Fragment
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(slia);
-    
-    if (state > 0) {
-      forceSlicers();
-    } else {
-      for (int i = 0; i < slicerStatus.length; i++) {
-        setSlicerLight(i);
-      }
-      search();
+  
+    for (int i = 0; i < slicerStatus.length; i++) {
+      setSlicerLight(i);
     }
+    search();
     
     listener.updateTitle("Music Box");
     
@@ -229,6 +226,7 @@ public class SearchFragment extends Fragment
   }
   
   public void swapFragment(Fragment fragment) {
+    KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
     searchFragmentPresenter.tileTapped(
         (MainActivity) getActivity(), fragment, true);
   }

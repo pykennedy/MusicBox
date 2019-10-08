@@ -11,5 +11,6 @@ public interface AddToGroupListItemAdapterContract {
     AnyEntity getEntityFromList(int i);
     int getItemCount();
     void applyFilters(boolean[] slicers);
+    void search(boolean[] slicers, String text);
   }
 }

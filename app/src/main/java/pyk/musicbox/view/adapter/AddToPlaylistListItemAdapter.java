@@ -52,6 +52,8 @@ public class AddToPlaylistListItemAdapter
   
   @Override public void applyFilters(boolean[] slicers) { presenter.applyFilters(slicers); }
   
+  @Override public void search(boolean[] slicers, String text) { presenter.search(slicers, text); }
+  
   public List<AnyEntity> getSelectedEntityIDs() {
     List<AnyEntity> entities = new ArrayList<>();
     for(int i = 0; i < selectedEntities.size(); i++) {

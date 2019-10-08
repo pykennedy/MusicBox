@@ -57,6 +57,8 @@ public class AddToGroupListItemAdapter
     presenter.applyFilters(slicers);
   }
   
+  @Override public void search(boolean[] slicers, String text) { presenter.search(slicers, text); }
+  
   public List<Long> getSelectedTrackIDs() {
     List<Long> tracks = new ArrayList<>();
     for(int i = 0; i < selectedTracks.size(); i++) {
