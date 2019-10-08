@@ -27,4 +27,10 @@ public class AddToPlaylistFragmentPresenter
           new Playlist_GroupTrack(playlistID, entity.getEntityID(), entity.getEntityType()));
     }
   }
+  
+  @Override
+  public void search(AddToPlaylistFragmentContract.AddToPlaylistListItemAdapterView adapter,
+                     boolean[] slicers, String text) {
+    adapter.search(slicers, text);
+  }
 }

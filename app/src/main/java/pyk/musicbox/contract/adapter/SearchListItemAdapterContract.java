@@ -11,5 +11,6 @@ public interface SearchListItemAdapterContract {
     AnyEntity getEntityFromList(int i);
     int getItemCount();
     void applyFilters(boolean[] slicers);
+    void search(boolean[] slicers, String text);
   }
 }

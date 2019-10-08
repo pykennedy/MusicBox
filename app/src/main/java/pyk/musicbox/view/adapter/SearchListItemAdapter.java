@@ -56,6 +56,8 @@ public class SearchListItemAdapter
     sliap.applyFilters(slicers);
   }
   
+  @Override public void search(boolean[] slicers, String text) { sliap.search(slicers, text); }
+  
   class ItemAdapterViewHolder extends ViewHolder {
     TextView title;
     String   type;

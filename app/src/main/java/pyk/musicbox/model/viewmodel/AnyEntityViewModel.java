@@ -21,4 +21,8 @@ public class AnyEntityViewModel extends AndroidViewModel {
     return repo.getAllEntities(entityTypes);
   }
   
+  public LiveData<List<AnyEntity>> searchAllEntities(List<String> entityTypes, String text) {
+    return repo.searchAllEntities(entityTypes, text);
+  }
+  
 }

@@ -5,24 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View
-        android:id="@+id/ab_fragmentAddToPlaylist"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        style="@style/ActionBar"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_title_fragmentAddToPlaylist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Default"
-        android:textColor="@color/mcWhite87"
-        app:layout_constraintTop_toTopOf="@+id/ab_fragmentAddToPlaylist"
-        app:layout_constraintStart_toStartOf="@+id/ab_fragmentAddToPlaylist"
-        app:layout_constraintBottom_toBottomOf="@+id/ab_fragmentAddToPlaylist"
-        android:layout_marginStart="8dp"/>
-
     <TextView
         android:id="@+id/tv_artistSlicer_fragmentAddToPlaylist"
         android:layout_width="0dp"
@@ -33,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@id/rv_fragmentAddToPlaylist"
         app:layout_constraintEnd_toStartOf="@+id/tv_albumSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_albumSlicer_fragmentAddToPlaylist"
@@ -44,7 +26,7 @@
         android:text="Al"
         app:layout_constraintEnd_toStartOf="@+id/tv_trackSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toEndOf="@id/tv_artistSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tv_trackSlicer_fragmentAddToPlaylist"
@@ -57,7 +39,7 @@
         android:text="Tr"
         app:layout_constraintEnd_toStartOf="@+id/tv_groupSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toEndOf="@+id/tv_albumSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tv_groupSlicer_fragmentAddToPlaylist"
@@ -68,7 +50,7 @@
         android:text="Gr"
         app:layout_constraintEnd_toStartOf="@id/tv_playlistSlicer_fragmentAddToPlaylist"
         app:layout_constraintStart_toEndOf="@id/tv_trackSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tv_playlistSlicer_fragmentAddToPlaylist"
@@ -79,7 +61,7 @@
         android:text="Pl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_groupSlicer_fragmentAddToPlaylist"
-        app:layout_constraintTop_toBottomOf="@+id/ab_fragmentAddToPlaylist"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_addButton_fragmentAddToPlaylist"

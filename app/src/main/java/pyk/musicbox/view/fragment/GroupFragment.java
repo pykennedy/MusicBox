@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,21 +11,30 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.GroupFragmentPresenter;
 import pyk.musicbox.utility.GroupSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
 
 public class GroupFragment extends Fragment implements View.OnClickListener {
-  private TextView               title;
   private FloatingActionButton   fab;
   private GroupListItemAdapter   adapter;
   private String                 name;
   private Long                   id;
   private GroupFragmentPresenter presenter;
+  private Listener.FragmentListener listener;
+  
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    
+    if(context instanceof Listener.FragmentListener) {
+      listener = (Listener.FragmentListener) context;
+    }
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +42,6 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_group, container, false);
     presenter = new GroupFragmentPresenter();
     
-    title = rootView.findViewById(R.id.tv_title_fragmentGroup);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentGroup);
     fab.setOnClickListener(this);
     
@@ -46,7 +55,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     
     name = getArguments().getString("groupName");
     id = getArguments().getLong("id");
-    title.setText(name != null ? name : "Error Retrieving Group Name");
+    listener.updateTitle(name != null ? name : "Error Retrieving Group Name");
     
     presenter.getTracksInGroup(adapter, id);
     

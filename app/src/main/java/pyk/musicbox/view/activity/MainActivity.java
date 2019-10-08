@@ -15,12 +15,13 @@ import android.widget.Toast;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.activity.MainActivityContract;
+import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
 
 public class MainActivity extends AppCompatActivity
-    implements MainActivityContract.MainActivityView {
+    implements MainActivityContract.MainActivityView, Listener.FragmentListener {
   
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
@@ -64,6 +65,10 @@ public class MainActivity extends AppCompatActivity
     }
   
 
+  }
+  
+  @Override public void updateTitle(String newTitle) {
+    setTitle(newTitle);
   }
   
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
