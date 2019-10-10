@@ -11,5 +11,10 @@ public class FragmentPresenter implements FragmentContract.FragmentPresenter {
                          boolean replace) {
       mainActivityView.swapFragment(fragment, replace);
   }
+  
+  @Override
+  public void swapTrack(MainActivityContract.MainActivityView mainActivityView, long id, String name) {
+    mainActivityView.swapTrack(id, name);
+  }
 }
 

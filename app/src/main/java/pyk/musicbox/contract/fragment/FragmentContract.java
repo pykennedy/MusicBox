@@ -8,5 +8,6 @@ public interface FragmentContract {
   interface FragmentPresenter {
     void tileTapped(MainActivityContract.MainActivityView mainActivityView, Fragment fragment,
                     boolean replace);
+    void swapTrack(MainActivityContract.MainActivityView mainActivityView, long id, String name);
   }
 }

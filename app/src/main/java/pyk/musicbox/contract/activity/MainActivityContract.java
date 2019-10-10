@@ -8,6 +8,7 @@ public interface MainActivityContract {
   interface MainActivityView {
     void showToast();
     void swapFragment(Fragment fragment, boolean replace);
+    void swapTrack(long id, String name);
   }
   
   

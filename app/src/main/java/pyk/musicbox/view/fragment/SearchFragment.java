@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment
   private TextView             groupSlicer;
   private TextView             playlistSlicer;
   private FloatingActionButton fab;
-  private Bundle args;
+  private Bundle               args;
   
   private int                     state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
   private long                    modifyingID;
@@ -93,7 +93,7 @@ public class SearchFragment extends Fragment
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(slia);
-  
+    
     for (int i = 0; i < slicerStatus.length; i++) {
       setSlicerLight(i);
     }
@@ -226,9 +226,16 @@ public class SearchFragment extends Fragment
   }
   
   public void swapFragment(Fragment fragment) {
-    KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
-    searchFragmentPresenter.tileTapped(
-        (MainActivity) getActivity(), fragment, true);
+    if (fragment != null) {
+      KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
+      searchFragmentPresenter.tileTapped((MainActivity) getActivity(), fragment, true);
+    } else {
+      searchFragmentPresenter.tileTapped((MainActivity) getActivity(), null, false);
+    }
+  }
+  
+  public void swapTrack(long id, String name) {
+    searchFragmentPresenter.swapTrack((MainActivity) getActivity(), id, name);
   }
   
   @Override
@@ -289,7 +296,7 @@ public class SearchFragment extends Fragment
   @Override
   public void onPause() {
     super.onPause();
-    if(args != null) {
+    if (args != null) {
       args.putString("searchText", searchText);
     }
   }

@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
   private FragmentStatePagerAdapter pagerAdapter;
+  private TrackFragment trackFragment;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,15 @@ public class MainActivity extends AppCompatActivity
     } else {
       pager.setCurrentItem(1);
     }
+  }
   
-
+  @Override public void swapTrack(long id, String name) {
+    Bundle bundle = new Bundle();
+    bundle.putLong("id", id);
+    bundle.putString("trackName", name);
+    trackFragment.setArguments(bundle);
+    pager.setCurrentItem(1);
+    trackFragment.updateInfo();
   }
   
   @Override public void updateTitle(String newTitle) {
@@ -83,7 +91,8 @@ public class MainActivity extends AppCompatActivity
         case 0:
           return new BaseMenuFragment();
         case 1:
-          return new TrackFragment();
+          trackFragment = (trackFragment == null) ? new TrackFragment() : trackFragment;
+          return trackFragment;
         default:
           return new BaseMenuFragment();
       }
