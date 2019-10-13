@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.widget.Toast;
 
 import pyk.musicbox.R;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity
   private FragmentStatePagerAdapter pagerAdapter;
   private TrackFragment             trackFragment;
   private BaseFragment              menuFragment;
+  private Menu                      menu;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +47,29 @@ public class MainActivity extends AppCompatActivity
       public void onPageSelected(int position) {
         if (position == 1) {
           updateTitle(trackFragment.getTitle());
+          menu.findItem(R.id.sv_menu).setVisible(false);
         } else {
           if (menuFragment == null) {
             updateTitle("Music Box");
           } else {
             updateTitle(menuFragment.desiredTitle);
           }
+          menu.findItem(R.id.sv_menu).setVisible(true);
+          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setQuery("",false);
+          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setIconified(true);
         }
       }
     });
     
     getPerms();
     mainActivityPresenter.refreshTrackList(this);
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    super.onCreateOptionsMenu(menu);
+    this.menu = menu;
+    return true;
   }
   
   @Override
