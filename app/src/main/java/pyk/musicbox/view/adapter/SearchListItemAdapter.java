@@ -41,7 +41,6 @@ public class SearchListItemAdapter
   
   @Override public void onBindViewHolder(@NonNull ItemAdapterViewHolder holder, int position) {
     holder.update(sliap.getEntityFromList(position), position);
-    
   }
   
   @Override public int getItemCount() {
@@ -78,6 +77,7 @@ public class SearchListItemAdapter
             case "album":
               break;
             case "track":
+              searchFragment.swapTrack(id, title.getText().toString());
               break;
             case "group":
               bundle.putString("groupName", title.getText().toString());

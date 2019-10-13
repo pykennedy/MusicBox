@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pyk.musicbox.R;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class BaseMenuFragment extends Fragment {
+public class BaseMenuFragment extends BaseFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.basemenu_fragment, container, false);
+    desiredTitle = "Music Box";
     
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
     transaction.replace(R.id.basemenu_frame, new SearchFragment());

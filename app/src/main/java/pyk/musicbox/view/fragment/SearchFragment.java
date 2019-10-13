@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +25,9 @@ import pyk.musicbox.presenter.SearchFragmentPresenter;
 import pyk.musicbox.utility.KeyboardManager;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class SearchFragment extends Fragment
+public class SearchFragment extends BaseFragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
   private String               searchText;
   private TextView             artistSlicer;
@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment
   private TextView             groupSlicer;
   private TextView             playlistSlicer;
   private FloatingActionButton fab;
-  private Bundle args;
+  private Bundle               args;
   
   private int                     state; // 0 = browse, 1 = adding to group, 2 = adding to playlist
   private long                    modifyingID;
@@ -93,13 +93,14 @@ public class SearchFragment extends Fragment
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(slia);
-  
+    
     for (int i = 0; i < slicerStatus.length; i++) {
       setSlicerLight(i);
     }
     search();
     
-    listener.updateTitle("Music Box");
+    desiredTitle = "MusicBox";
+    listener.updateTitle(desiredTitle);
     
     return rootView;
   }
@@ -225,10 +226,17 @@ public class SearchFragment extends Fragment
     dialog.show(getFragmentManager(), "AddDialogFragment");
   }
   
-  public void swapFragment(Fragment fragment) {
-    KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
-    searchFragmentPresenter.tileTapped(
-        (MainActivity) getActivity(), fragment, true);
+  public void swapFragment(BaseFragment fragment) {
+    if (fragment != null) {
+      KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
+      searchFragmentPresenter.tileTapped((MainActivity) getActivity(), fragment, true);
+    } else {
+      searchFragmentPresenter.tileTapped((MainActivity) getActivity(), null, false);
+    }
+  }
+  
+  public void swapTrack(long id, String name) {
+    searchFragmentPresenter.swapTrack((MainActivity) getActivity(), id, name);
   }
   
   @Override
@@ -289,7 +297,7 @@ public class SearchFragment extends Fragment
   @Override
   public void onPause() {
     super.onPause();
-    if(args != null) {
+    if (args != null) {
       args.putString("searchText", searchText);
     }
   }

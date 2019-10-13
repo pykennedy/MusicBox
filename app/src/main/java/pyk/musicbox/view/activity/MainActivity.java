@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.widget.Toast;
 
 import pyk.musicbox.R;
@@ -19,6 +21,7 @@ import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView, Listener.FragmentListener {
@@ -26,6 +29,9 @@ public class MainActivity extends AppCompatActivity
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
   private FragmentStatePagerAdapter pagerAdapter;
+  private TrackFragment             trackFragment;
+  private BaseFragment              menuFragment;
+  private Menu                      menu;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +42,23 @@ public class MainActivity extends AppCompatActivity
     pager = findViewById(R.id.vp_mainActivity);
     pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     pager.setAdapter(pagerAdapter);
-    pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
       @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-      
-      @Override
-      public void onPageSelected(int position) {}
-      
-      @Override
-      public void onPageScrollStateChanged(int state) {}
+      public void onPageSelected(int position) {
+        if (position == 1) {
+          updateTitle(trackFragment.getTitle());
+          menu.findItem(R.id.sv_menu).setVisible(false);
+        } else {
+          if (menuFragment == null) {
+            updateTitle("Music Box");
+          } else {
+            updateTitle(menuFragment.desiredTitle);
+          }
+          menu.findItem(R.id.sv_menu).setVisible(true);
+          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setQuery("",false);
+          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setIconified(true);
+        }
+      }
     });
     
     getPerms();
@@ -52,19 +66,30 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    super.onCreateOptionsMenu(menu);
+    this.menu = menu;
+    return true;
+  }
+  
+  @Override
   public void showToast() {
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
   
-  @Override public void swapFragment(Fragment fragment, boolean replace) {
+  @Override public void swapFragment(BaseFragment fragment, boolean replace) {
+    menuFragment = fragment;
     if (replace) {
       BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
       baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
     } else {
       pager.setCurrentItem(1);
     }
+  }
   
-
+  @Override public void swapTrack(long id, String name) {
+    trackFragment.updateInfo(true, id, name);
+    pager.setCurrentItem(1);
   }
   
   @Override public void updateTitle(String newTitle) {
@@ -83,7 +108,8 @@ public class MainActivity extends AppCompatActivity
         case 0:
           return new BaseMenuFragment();
         case 1:
-          return new TrackFragment();
+          trackFragment = (trackFragment == null) ? new TrackFragment() : trackFragment;
+          return trackFragment;
         default:
           return new BaseMenuFragment();
       }
@@ -110,7 +136,8 @@ public class MainActivity extends AppCompatActivity
         && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
            PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(this,
-                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                         0);
     }
   }

@@ -3,7 +3,6 @@ package pyk.musicbox.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +18,9 @@ import pyk.musicbox.presenter.PlaylistFragmentPresenter;
 import pyk.musicbox.utility.PlaylistSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.PlaylistListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class PlaylistFragment extends Fragment implements View.OnClickListener {
+public class PlaylistFragment extends BaseFragment implements View.OnClickListener {
   private FloatingActionButton fab;
   private PlaylistListItemAdapter adapter;
   private String name;
@@ -55,7 +55,8 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
   
     name = getArguments().getString("playlistName");
     id = getArguments().getLong("id");
-    listener.updateTitle(name != null ? name : "Error Retrieving Playlist Name");
+    desiredTitle = name != null ? name : "Error Retrieving Playlist Name";
+    listener.updateTitle(desiredTitle);
   
     presenter.getEntitiesInPlaylist(adapter, id);
     
