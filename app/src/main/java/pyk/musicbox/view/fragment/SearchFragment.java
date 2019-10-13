@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,8 +25,9 @@ import pyk.musicbox.presenter.SearchFragmentPresenter;
 import pyk.musicbox.utility.KeyboardManager;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.SearchListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class SearchFragment extends Fragment
+public class SearchFragment extends BaseFragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
   private String               searchText;
   private TextView             artistSlicer;
@@ -99,7 +99,8 @@ public class SearchFragment extends Fragment
     }
     search();
     
-    listener.updateTitle("Music Box");
+    desiredTitle = "MusicBox";
+    listener.updateTitle(desiredTitle);
     
     return rootView;
   }
@@ -225,7 +226,7 @@ public class SearchFragment extends Fragment
     dialog.show(getFragmentManager(), "AddDialogFragment");
   }
   
-  public void swapFragment(Fragment fragment) {
+  public void swapFragment(BaseFragment fragment) {
     if (fragment != null) {
       KeyboardManager.hideKeyboardFrom(getContext(), artistSlicer); // random view to make it work
       searchFragmentPresenter.tileTapped((MainActivity) getActivity(), fragment, true);

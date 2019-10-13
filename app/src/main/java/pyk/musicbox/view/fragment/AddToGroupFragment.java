@@ -3,7 +3,6 @@ package pyk.musicbox.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +21,9 @@ import pyk.musicbox.presenter.AddToGroupFragmentPresenter;
 import pyk.musicbox.utility.KeyboardManager;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.AddToGroupListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class AddToGroupFragment extends Fragment
+public class AddToGroupFragment extends BaseFragment
     implements View.OnClickListener, SearchView.OnQueryTextListener {
   private long                        groupID;
   private TextView                    trackSlicer;
@@ -69,9 +69,9 @@ public class AddToGroupFragment extends Fragment
     
     if (args != null) {
       groupID = args.getLong("id");
-      listener.updateTitle(
-          args.getString("groupName") != null ? "Adding to: " + args.getString("groupName")
-                                              : "Error Retrieving Group Name");
+      desiredTitle = args.getString("groupName") != null ? "Adding to: " + args.getString(
+          "groupName") : "Error Retrieving Group Name";
+      listener.updateTitle(desiredTitle);
     }
     
     adapter = new AddToGroupListItemAdapter(this);

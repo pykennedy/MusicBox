@@ -12,8 +12,12 @@ import pyk.musicbox.contract.listener.Listener;
 
 public class TrackFragment extends Fragment {
   private Listener.FragmentListener listener;
-  private String                    name;
-  private Long                      id;
+  private String                    viewingName;
+  private long                      viewingID; // set to random track so its never empty
+  private long                      playingID;
+  private String                    playingName;
+  private boolean                   viewing = false;
+  private boolean                   playing = false;
   
   @Override
   public void onAttach(Context context) {
@@ -32,11 +36,29 @@ public class TrackFragment extends Fragment {
     return rootView;
   }
   
-  public void updateInfo() {
-    if(getArguments() != null) {
-      name = getArguments().getString("trackName");
-      id = getArguments().getLong("id");
-      listener.updateTitle(name != null ? name : "Error Retrieving Track Name");
+  public void updateInfo(boolean viewing, long id, String name) {
+    this.viewing = viewing;
+    
+    if (viewing) {
+      viewingID = id;
+      viewingName = name;
+    } else {
+      playingID = id;
+      playingName = name;
     }
+  }
+  
+  public String getTitle() {
+    String title;
+    
+    if(viewing) {
+      title = viewingName;
+    } else if(playing) {
+      title = playingName;
+    } else {
+      title = viewingName;
+    }
+    
+    return title;
   }
 }

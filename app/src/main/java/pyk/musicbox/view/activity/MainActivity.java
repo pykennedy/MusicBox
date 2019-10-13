@@ -19,6 +19,7 @@ import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView, Listener.FragmentListener {
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
   private FragmentStatePagerAdapter pagerAdapter;
-  private TrackFragment trackFragment;
+  private TrackFragment             trackFragment;
+  private BaseFragment              menuFragment;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +39,19 @@ public class MainActivity extends AppCompatActivity
     pager = findViewById(R.id.vp_mainActivity);
     pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     pager.setAdapter(pagerAdapter);
-    pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
       @Override
-      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-      
-      @Override
-      public void onPageSelected(int position) {}
-      
-      @Override
-      public void onPageScrollStateChanged(int state) {}
+      public void onPageSelected(int position) {
+        if (position == 1) {
+          updateTitle(trackFragment.getTitle());
+        } else {
+          if (menuFragment == null) {
+            updateTitle("Music Box");
+          } else {
+            updateTitle(menuFragment.desiredTitle);
+          }
+        }
+      }
     });
     
     getPerms();
@@ -57,7 +63,8 @@ public class MainActivity extends AppCompatActivity
     Toast.makeText(this, "it worked", Toast.LENGTH_SHORT).show();
   }
   
-  @Override public void swapFragment(Fragment fragment, boolean replace) {
+  @Override public void swapFragment(BaseFragment fragment, boolean replace) {
+    menuFragment = fragment;
     if (replace) {
       BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
       baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
@@ -67,12 +74,8 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override public void swapTrack(long id, String name) {
-    Bundle bundle = new Bundle();
-    bundle.putLong("id", id);
-    bundle.putString("trackName", name);
-    trackFragment.setArguments(bundle);
+    trackFragment.updateInfo(true, id, name);
     pager.setCurrentItem(1);
-    trackFragment.updateInfo();
   }
   
   @Override public void updateTitle(String newTitle) {
@@ -119,7 +122,8 @@ public class MainActivity extends AppCompatActivity
         && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
            PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(this,
-                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                         0);
     }
   }

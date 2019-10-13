@@ -3,7 +3,6 @@ package pyk.musicbox.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +21,9 @@ import pyk.musicbox.presenter.AddToPlaylistFragmentPresenter;
 import pyk.musicbox.utility.KeyboardManager;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.AddToPlaylistListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class AddToPlaylistFragment extends Fragment
+public class AddToPlaylistFragment extends BaseFragment
     implements View.OnClickListener, SearchView.OnQueryTextListener {
   private long                           playlistID;
   private TextView                       trackSlicer;
@@ -71,9 +71,9 @@ public class AddToPlaylistFragment extends Fragment
     
     if (args != null) {
       playlistID = args.getLong("id");
-      listener.updateTitle(
-          args.getString("playlistName") != null ? "Adding to: " + args.getString("playlistName")
-                                              : "Error Retrieving Playlist Name");
+      desiredTitle = args.getString("playlistName") != null ? "Adding to: " + args.getString(
+          "playlistName") : "Error Retrieving Playlist Name";
+      listener.updateTitle(desiredTitle);
     }
     
     adapter = new AddToPlaylistListItemAdapter(this);

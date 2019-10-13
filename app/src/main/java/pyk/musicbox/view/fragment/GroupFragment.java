@@ -3,7 +3,6 @@ package pyk.musicbox.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,9 @@ import pyk.musicbox.presenter.GroupFragmentPresenter;
 import pyk.musicbox.utility.GroupSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
 import pyk.musicbox.view.adapter.GroupListItemAdapter;
+import pyk.musicbox.view.fragment.base.BaseFragment;
 
-public class GroupFragment extends Fragment implements View.OnClickListener {
+public class GroupFragment extends BaseFragment implements View.OnClickListener {
   private FloatingActionButton   fab;
   private GroupListItemAdapter   adapter;
   private String                 name;
@@ -55,7 +55,8 @@ public class GroupFragment extends Fragment implements View.OnClickListener {
     
     name = getArguments().getString("groupName");
     id = getArguments().getLong("id");
-    listener.updateTitle(name != null ? name : "Error Retrieving Group Name");
+    desiredTitle = name != null ? name : "Error Retrieving Group Name";
+    listener.updateTitle(desiredTitle);
     
     presenter.getTracksInGroup(adapter, id);
     
