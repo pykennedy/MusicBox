@@ -14,6 +14,8 @@ import pyk.musicbox.contract.adapter.SearchListItemAdapterContract;
 import pyk.musicbox.contract.fragment.SearchFragmentContract;
 import pyk.musicbox.model.entity.AnyEntity;
 import pyk.musicbox.presenter.SearchListItemAdapterPresenter;
+import pyk.musicbox.view.fragment.AlbumFragment;
+import pyk.musicbox.view.fragment.ArtistFragment;
 import pyk.musicbox.view.fragment.GroupFragment;
 import pyk.musicbox.view.fragment.PlaylistFragment;
 import pyk.musicbox.view.fragment.SearchFragment;
@@ -73,8 +75,18 @@ public class SearchListItemAdapter
           Bundle bundle = new Bundle();
           switch (type) {
             case "artist":
+              bundle.putString("artistName", title.getText().toString());
+              bundle.putLong("id", id);
+              ArtistFragment artistFragment = new ArtistFragment();
+              artistFragment.setArguments(bundle);
+              searchFragment.swapFragment(artistFragment);
               break;
             case "album":
+              bundle.putString("albumName", title.getText().toString());
+              bundle.putLong("id", id);
+              AlbumFragment albumFragment = new AlbumFragment();
+              albumFragment.setArguments(bundle);
+              searchFragment.swapFragment(albumFragment);
               break;
             case "track":
               searchFragment.swapTrack(id, title.getText().toString());

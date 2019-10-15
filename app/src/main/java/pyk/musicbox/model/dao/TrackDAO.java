@@ -32,4 +32,11 @@ public interface TrackDAO {
          "AND gtt.groupID = :id " +
          "ORDER BY gtt.sortOrder ASC")
   LiveData<List<SortedTrack>> getTracksInGroup(long id);
+  
+  @Query("SELECT 0 as sortOrder, tt.* " +
+         "FROM album_track_table AS att " +
+         "INNER JOIN track_table AS tt " +
+         "ON att.trackID = tt.id " +
+         "AND att.albumID = :id")
+  LiveData<List<SortedTrack>> getTracksInAlbum(long id);
 }

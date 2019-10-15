@@ -85,9 +85,16 @@ public class MBRepo {
   public LiveData<List<SortedTrack>> getTracksInGroup(Long id) {
     return trackDAO.getTracksInGroup(id);
   }
+  public LiveData<List<SortedTrack>> getTracksInAlbum(Long id) {
+    return trackDAO.getTracksInAlbum(id);
+  }
   
   public LiveData<List<SortedEntity>> getItemsInPlaylist(long id) {
     return playlistGroupTrackDAO.getItemsInPlaylist(id);
+  }
+  
+  public LiveData<List<SortedEntity>> getItemsInArtist(long id) {
+    return artist_albumTrackDAO.getItemsInArtist(id);
   }
   
   public void insert(Track track) {

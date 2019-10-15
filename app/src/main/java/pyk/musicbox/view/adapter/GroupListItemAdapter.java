@@ -14,7 +14,6 @@ import pyk.musicbox.model.entity.SortedTrack;
 import pyk.musicbox.presenter.GroupListItemAdapterPresenter;
 import pyk.musicbox.view.fragment.GroupFragment;
 
-//TODO: set this thing up
 public class GroupListItemAdapter
     extends SelectableAdapter<GroupListItemAdapter.ItemAdapterViewHolder>
     implements GroupFragmentContract.GroupListItemAdapterView, GroupListItemAdapterContract.GroupListItemAdapterView {

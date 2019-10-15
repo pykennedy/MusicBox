@@ -22,5 +22,7 @@ public class TrackViewModel extends AndroidViewModel {
   
   public LiveData<List<SortedTrack>> getTracksInGroup(Long id) { return repo.getTracksInGroup(id); }
   
+  public LiveData<List<SortedTrack>> getTracksInAlbum(Long id) { return repo.getTracksInAlbum(id); }
+  
   public void insert(Track track)                              { repo.insert(track); }
 }
