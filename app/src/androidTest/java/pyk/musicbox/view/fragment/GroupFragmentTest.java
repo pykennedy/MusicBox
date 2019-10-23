@@ -29,8 +29,6 @@ public class GroupFragmentTest {
         .perform(RecyclerViewActions.actionOnItem(
             hasDescendant(withText("aaa Empty Group")), click()));
     
-    onView(withId(R.id.ab_fragmentGroup)).check(matches(isDisplayed()));
-    onView(withId(R.id.tv_title_fragmentGroup)).check(matches(isDisplayed()));
     onView(withId(R.id.rv_fragmentGroup)).check(matches(isDisplayed()));
     onView(withId(R.id.fab_addButton_fragmentGroup)).check(matches(isDisplayed()));
   }
