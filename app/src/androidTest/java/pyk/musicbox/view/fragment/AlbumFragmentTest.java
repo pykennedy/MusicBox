@@ -17,7 +17,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class ArtistFragmentTest {
+public class AlbumFragmentTest {
   @Rule
   public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
       new ActivityTestRule<MainActivity>(MainActivity.class);
@@ -26,8 +26,8 @@ public class ArtistFragmentTest {
   public void allViewsExist() {
     onView(withId(R.id.rv_fragmentSearch))
         .perform(RecyclerViewActions.actionOnItem(
-            hasDescendant(withText("Taylor Swift")), click()));
+            hasDescendant(withText("07")), click()));
     
-    onView(withId(R.id.rv_fragmentArtist)).check(matches(isDisplayed()));
+    onView(withId(R.id.rv_fragmentAlbum)).check(matches(isDisplayed()));
   }
 }

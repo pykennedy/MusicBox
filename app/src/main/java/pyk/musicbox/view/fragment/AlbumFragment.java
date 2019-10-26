@@ -34,11 +34,11 @@ public class AlbumFragment extends BaseFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_group, container, false);
+    ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_album, container, false);
     presenter = new AlbumFragmentPresenter();
     
     adapter = new AlbumListItemAdapter(this);
-    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentGroup);
+    RecyclerView recyclerView = rootView.findViewById(R.id.rv_fragmentAlbum);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
