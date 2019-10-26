@@ -21,7 +21,7 @@ public class StaticValues {
   public static final int                       totalGroups        = 4;
   public static final int                       totalGroupings     = 12;
   public static final int                       totalPlaylists     = 3;
-  public static final int                       TotalPlaylistItems = 15;
+  public static final int                       totalPlaylistItems = 15;
   
   private static List<Track> spoofedTracks() {
     List<Track> tracks = new ArrayList<>();
@@ -130,7 +130,7 @@ public class StaticValues {
     
     playlists.add(new Playlist("Taylor Swift Mix"));
     playlists.add(new Playlist("Justin Bieber Mix"));
-    playlists.add(new Playlist("Empty Playlist"));
+    playlists.add(new Playlist("aaa Empty Playlist"));
     
     return playlists;
   }

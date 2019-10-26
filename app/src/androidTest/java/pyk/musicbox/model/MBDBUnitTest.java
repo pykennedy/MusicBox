@@ -22,6 +22,8 @@ import pyk.musicbox.model.dao.ArtistDAO;
 import pyk.musicbox.model.dao.Artist_AlbumTrackDAO;
 import pyk.musicbox.model.dao.GroupDAO;
 import pyk.musicbox.model.dao.Group_TrackDAO;
+import pyk.musicbox.model.dao.PlaylistDAO;
+import pyk.musicbox.model.dao.Playlist_GroupTrackDAO;
 import pyk.musicbox.model.dao.TrackDAO;
 import pyk.musicbox.model.database.MBDB;
 import pyk.musicbox.model.entity.Album;
@@ -31,6 +33,8 @@ import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.Playlist;
+import pyk.musicbox.model.entity.Playlist_GroupTrack;
 import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.support.StaticValues;
 import pyk.musicbox.utility.LiveDataTestUtil;
@@ -40,15 +44,17 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class MBDBUnitTest {
-  private TrackDAO             trackDAO;
-  private AlbumDAO             albumDAO;
-  private ArtistDAO            artistDAO;
-  private Album_TrackDAO       album_trackDAO;
-  private Artist_AlbumTrackDAO artist_albumTrackDAO;
-  private AnyEntityDAO         anyEntityDAO;
-  private GroupDAO             groupDAO;
-  private Group_TrackDAO       groupTrackDAO;
-  private MBDB                 db;
+  private TrackDAO               trackDAO;
+  private AlbumDAO               albumDAO;
+  private ArtistDAO              artistDAO;
+  private Album_TrackDAO         album_trackDAO;
+  private Artist_AlbumTrackDAO   artist_albumTrackDAO;
+  private AnyEntityDAO           anyEntityDAO;
+  private GroupDAO               groupDAO;
+  private Group_TrackDAO         groupTrackDAO;
+  private PlaylistDAO            playlistDAO;
+  private Playlist_GroupTrackDAO playlistGroupTrackDAO;
+  private MBDB                   db;
   
   @Rule
   public TestRule rule = new InstantTaskExecutorRule();
@@ -68,6 +74,8 @@ public class MBDBUnitTest {
     anyEntityDAO = db.anyEntityDAO();
     groupDAO = db.groupDAO();
     groupTrackDAO = db.groupTrackDAO();
+    playlistDAO = db.playlistDAO();
+    playlistGroupTrackDAO = db.playlistGroupTrackDAO();
   }
   
   @After
@@ -175,32 +183,42 @@ public class MBDBUnitTest {
   
   @Test
   public void readAllEntitiesAlphabetical() throws InterruptedException {
-    for(Track track : StaticValues.trackList) {
+    for (Track track : StaticValues.trackList) {
       String name   = track.getName();
       String album  = track.getAlbum();
       String artist = track.getArtist();
-  
+      
       long trackID  = trackDAO.insert(track);
       long albumID  = albumDAO.insert(new Album(album, artist, album + artist));
       long artistID = artistDAO.insert(new Artist(artist));
-  
-      anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track"));
-      anyEntityDAO.insert(new AnyEntity(albumID, album, "album"));
-      anyEntityDAO.insert(new AnyEntity(artistID, artist, "artist"));
+      
+      String trackSearchtext =
+          track.getName() + "|||" + track.getAlbum() + "|||" + track.getArtist();
+      String albumSearchText  = track.getAlbum() + "|||" + track.getArtist();
+      String artistSearchText = track.getArtist();
+      anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track", trackSearchtext));
+      anyEntityDAO.insert(new AnyEntity(albumID, album, "album", albumSearchText));
+      anyEntityDAO.insert(new AnyEntity(artistID, artist, "artist", artistSearchText));
     }
     
-    for(Group group : StaticValues.groupList) {
+    for (Group group : StaticValues.groupList) {
       long groupID = groupDAO.insert(group);
-      anyEntityDAO.insert(new AnyEntity(groupID, group.getName(), "group"));
+      anyEntityDAO.insert(new AnyEntity(groupID, group.getName(), "group", group.getName()));
     }
-  
-    List<String> types = Arrays.asList("artist", "album", "track", "group", "playlist");
+    
+    for (Playlist playlist : StaticValues.playlistList) {
+      long playlistID = playlistDAO.insert(playlist);
+      anyEntityDAO.insert(
+          new AnyEntity(playlistID, playlist.getName(), "playlist", playlist.getName()));
+    }
+    
+    List<String>    types    = Arrays.asList("artist", "album", "track", "group", "playlist");
     List<AnyEntity> entities = LiveDataTestUtil.getValue(anyEntityDAO.getAllEntities(types));
     
-    boolean result = true;
-    String previous = "";
-    for(AnyEntity anyEntity : entities) {
-      if(anyEntity.getName().compareTo(previous) < 0) {
+    boolean result   = true;
+    String  previous = "";
+    for (AnyEntity anyEntity : entities) {
+      if (anyEntity.getName().compareTo(previous) < 0) {
         result = false;
         previous = anyEntity.getName();
       }
@@ -265,5 +283,64 @@ public class MBDBUnitTest {
     assertNull(groupTrack);
     // list shrank by exactly 1
     assertEquals(StaticValues.totalGroupings - 1, groupings.size());
+  }
+  
+  
+  @Test
+  public void writeAndReadPlaylist() {
+    Playlist playlist  = StaticValues.playlistList.get(0);
+    long  id     = playlistDAO.insert(playlist);
+    Playlist playlist2 = playlistDAO.getPlaylistByID(id);
+    assertEquals(playlist2.getId(), id);
+  }
+  
+  @Test
+  public void writeAllPlaylistsNoDupes() throws InterruptedException {
+    for (Playlist playlist : StaticValues.playlistList) {
+      playlistDAO.insert(playlist);
+    }
+    
+    List<Playlist> playlists = LiveDataTestUtil.getValue(playlistDAO.getAllPlaylists());
+    assertEquals(StaticValues.totalPlaylists, playlists.size());
+  }
+  
+  @Test
+  public void writeAndReadPlaylistItems() {
+    Playlist_GroupTrack playlistGroupTrack = StaticValues.playlistItems.get(0);
+    playlistGroupTrackDAO.insert(playlistGroupTrack);
+    Playlist_GroupTrack playlistGroupTrack2 = playlistGroupTrackDAO.getPlaylistGroupTrackByIDs(playlistGroupTrack.getPlaylistID(),
+                                                               playlistGroupTrack.getEntityID(), playlistGroupTrack.getEntityType());
+    assertEquals(playlistGroupTrack2.getEntityID(), playlistGroupTrack.getEntityID());
+    assertEquals(playlistGroupTrack2.getPlaylistID(), playlistGroupTrack.getPlaylistID());
+  }
+  
+  @Test
+  public void writeAllPlaylistItemsNoDupes() throws InterruptedException {
+    for (Playlist_GroupTrack playlistGroupTrack : StaticValues.playlistItems) {
+      playlistGroupTrackDAO.insert(playlistGroupTrack);
+    }
+    
+    List<Playlist_GroupTrack> playlistGroupTracks = LiveDataTestUtil.getValue(playlistGroupTrackDAO.getAllPlaylistGroupTracks());
+    assertEquals(StaticValues.totalPlaylistItems, playlistGroupTracks.size());
+  }
+  
+  @Test
+  public void deletePlaylistItem() throws InterruptedException {
+    for (Playlist_GroupTrack playlistGroupTrack : StaticValues.playlistItems) {
+      playlistGroupTrackDAO.insert(playlistGroupTrack);
+    }
+    playlistGroupTrackDAO.delete(StaticValues.playlistItems.get(0).getPlaylistID(),
+                         StaticValues.playlistItems.get(0).getEntityID(), StaticValues.playlistItems.get(0).getEntityType());
+    
+    List<Playlist_GroupTrack> playlistGroupTracks = LiveDataTestUtil.getValue(playlistGroupTrackDAO.getAllPlaylistGroupTracks());
+    
+    Playlist_GroupTrack playlistGroupTrack = playlistGroupTrackDAO.getPlaylistGroupTrackByIDs(
+        StaticValues.playlistItems.get(0).getPlaylistID(),
+        StaticValues.playlistItems.get(0).getEntityID(), StaticValues.playlistItems.get(0).getEntityType());
+    
+    // doesn't exist
+    assertNull(playlistGroupTrack);
+    // list shrank by exactly 1
+    assertEquals(StaticValues.totalPlaylistItems - 1, playlistGroupTracks.size());
   }
 }
