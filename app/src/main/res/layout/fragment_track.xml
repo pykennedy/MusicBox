@@ -18,6 +18,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/ib_playpause_fragmentTrack"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toStartOf="@id/v_trackScroll_fragmentTrack"
+        app:layout_constraintTop_toTopOf="@id/v_trackScroll_fragmentTrack"/>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_bottomArea_fragmentTrack"
         android:layout_width="0dp"

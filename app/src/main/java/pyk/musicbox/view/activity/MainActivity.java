@@ -1,30 +1,41 @@
 package pyk.musicbox.view.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
+
+import java.util.List;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.activity.MainActivityContract;
 import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.MainActivityPresenter;
+import pyk.musicbox.service.PlaybackManager;
+import pyk.musicbox.service.PlaybackService;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
 import pyk.musicbox.view.fragment.base.BaseFragment;
 
 public class MainActivity extends AppCompatActivity
-    implements MainActivityContract.MainActivityView, Listener.FragmentListener {
+    implements MainActivityContract.MainActivityView, Listener.FragmentListener, Listener.PlaybackControlListener {
   
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
@@ -32,6 +43,65 @@ public class MainActivity extends AppCompatActivity
   private TrackFragment             trackFragment;
   private BaseFragment              menuFragment;
   private Menu                      menu;
+  
+  private MediaMetadataCompat currentMetadata;
+  private PlaybackStateCompat currentState;
+  
+  private MediaBrowserCompat mediaBrowser;
+  
+  private final MediaBrowserCompat.ConnectionCallback connectionCallback =
+      new MediaBrowserCompat.ConnectionCallback() {
+        @Override
+        public void onConnected() {
+          mediaBrowser.subscribe(mediaBrowser.getRoot(), subscriptionCallback);
+          try {
+            MediaControllerCompat mediaController =
+                new MediaControllerCompat(
+                    MainActivity.this, mediaBrowser.getSessionToken());
+            updatePlaybackState(mediaController.getPlaybackState());
+            updateMetadata(mediaController.getMetadata());
+            mediaController.registerCallback(mediaControllerCallback);
+            MediaControllerCompat.setMediaController(
+                MainActivity.this, mediaController);
+          } catch (RemoteException e) {
+            throw new RuntimeException(e);
+          }
+        }
+      };
+  
+  // Receive callbacks from the MediaController. Here we update our state such as which queue
+  // is being shown, the current title and description and the PlaybackState.
+  private final MediaControllerCompat.Callback mediaControllerCallback =
+      new MediaControllerCompat.Callback() {
+        @Override
+        public void onMetadataChanged(MediaMetadataCompat metadata) {
+          updateMetadata(metadata);
+        }
+        
+        @Override
+        public void onPlaybackStateChanged(PlaybackStateCompat state) {
+          updatePlaybackState(state);
+        }
+        
+        @Override
+        public void onSessionDestroyed() {
+          updatePlaybackState(null);
+        }
+      };
+  
+  private final MediaBrowserCompat.SubscriptionCallback subscriptionCallback =
+      new MediaBrowserCompat.SubscriptionCallback() {
+        @Override
+        public void onChildrenLoaded(
+            String parentId, List<MediaBrowserCompat.MediaItem> children) {
+        }
+      };
+  
+  private void onMediaItemSelected(String id) {
+    MediaControllerCompat.getMediaController(MainActivity.this)
+                         .getTransportControls()
+                         .playFromMediaId(id, null);
+  }
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +125,42 @@ public class MainActivity extends AppCompatActivity
             updateTitle(menuFragment.desiredTitle);
           }
           menu.findItem(R.id.sv_menu).setVisible(true);
-          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setQuery("",false);
-          ((SearchView)menu.findItem(R.id.sv_menu).getActionView()).setIconified(true);
+          ((SearchView) menu.findItem(R.id.sv_menu).getActionView()).setQuery("", false);
+          ((SearchView) menu.findItem(R.id.sv_menu).getActionView()).setIconified(true);
         }
       }
     });
     
     getPerms();
     mainActivityPresenter.refreshTrackList(this);
+  }
+  
+  @Override
+  public void onStart() {
+    super.onStart();
+    
+    mediaBrowser =
+        new MediaBrowserCompat(
+            this,
+            new ComponentName(this, PlaybackService.class),
+            connectionCallback,
+            null);
+    mediaBrowser.connect();
+  }
+  
+  @Override
+  public void onStop() {
+    super.onStop();
+    MediaControllerCompat controller = MediaControllerCompat.getMediaController(this);
+    if (controller != null) {
+      controller.unregisterCallback(mediaControllerCallback);
+    }
+    if (mediaBrowser != null && mediaBrowser.isConnected()) {
+      if (currentMetadata != null) {
+        mediaBrowser.unsubscribe(currentMetadata.getString("id"));
+      }
+      mediaBrowser.disconnect();
+    }
   }
   
   @Override
@@ -96,6 +194,34 @@ public class MainActivity extends AppCompatActivity
     setTitle(newTitle);
   }
   
+  @Override public void playToggle(String id) {
+    if(mediaBrowser.isConnected()) {
+      Log.e("asdf", "connected");
+    }
+    final int state =
+        currentState == null
+        ? PlaybackStateCompat.STATE_NONE
+        : currentState.getState();
+    if (state == PlaybackStateCompat.STATE_PAUSED
+        || state == PlaybackStateCompat.STATE_STOPPED
+        || state == PlaybackStateCompat.STATE_NONE) {
+    
+      if (currentMetadata == null) {
+        currentMetadata = PlaybackManager.toMetaData(this, id);
+        updateMetadata(currentMetadata);
+      }
+      MediaControllerCompat.getMediaController(MainActivity.this)
+                           .getTransportControls()
+                           .playFromMediaId(id, null);
+    } else {
+      MediaControllerCompat.getMediaController(MainActivity.this)
+                           .getTransportControls()
+                           .pause();
+    }
+    
+    updatePlaybackState(currentState);
+  }
+  
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     
     ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -127,6 +253,15 @@ public class MainActivity extends AppCompatActivity
     } else {
       super.onBackPressed();
     }
+  }
+  
+  private void updatePlaybackState(PlaybackStateCompat state) {
+    currentState = state;
+    trackFragment.setPlayPause(state);
+  }
+  
+  private void updateMetadata(MediaMetadataCompat metadata) {
+    currentMetadata = metadata;
   }
   
   private void getPerms() {
