@@ -18,8 +18,12 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -35,7 +39,7 @@ import pyk.musicbox.view.fragment.TrackFragment;
 import pyk.musicbox.view.fragment.base.BaseFragment;
 
 public class MainActivity extends AppCompatActivity
-    implements MainActivityContract.MainActivityView, Listener.FragmentListener, Listener.PlaybackControlListener {
+    implements MainActivityContract.MainActivityView, Listener.FragmentListener, Listener.PlaybackControlListener, View.OnClickListener {
   
   private MainActivityPresenter     mainActivityPresenter;
   private ViewPager                 pager;
@@ -43,6 +47,14 @@ public class MainActivity extends AppCompatActivity
   private TrackFragment             trackFragment;
   private BaseFragment              menuFragment;
   private Menu                      menu;
+  private ViewGroup                 playback;
+  private TextView                  title;
+  private TextView                  details;
+  private ImageButton               back;
+  private ImageButton               playPause;
+  private ImageButton               forward;
+  private SeekBar                   seekBar;
+  private String currentID;
   
   private MediaMetadataCompat currentMetadata;
   private PlaybackStateCompat currentState;
@@ -108,6 +120,18 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     mainActivityPresenter = new MainActivityPresenter(this);
+    
+    playback = findViewById(R.id.cl_playback_mainActivity);
+    title = playback.findViewById(R.id.tv_title_playback);
+    details = playback.findViewById(R.id.tv_secondaryDetails_playback);
+    back = playback.findViewById(R.id.ib_back_playback);
+    playPause = playback.findViewById(R.id.ib_playpause_playback);
+    forward = playback.findViewById(R.id.ib_forward_playback);
+    
+    back.setOnClickListener(this);
+    playPause.setOnClickListener(this);
+    forward.setOnClickListener(this);
+    
     
     pager = findViewById(R.id.vp_mainActivity);
     pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
@@ -186,8 +210,10 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override public void swapTrack(long id, String name) {
-    trackFragment.updateInfo(true, id, name);
-    pager.setCurrentItem(1);
+    title.setText(name);
+    currentID = Long.toString(id);
+    playToggle(currentID);
+    // todo: set other details
   }
   
   @Override public void updateTitle(String newTitle) {
@@ -195,9 +221,6 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override public void playToggle(String id) {
-    if(mediaBrowser.isConnected()) {
-      Log.e("asdf", "connected");
-    }
     final int state =
         currentState == null
         ? PlaybackStateCompat.STATE_NONE
@@ -205,21 +228,40 @@ public class MainActivity extends AppCompatActivity
     if (state == PlaybackStateCompat.STATE_PAUSED
         || state == PlaybackStateCompat.STATE_STOPPED
         || state == PlaybackStateCompat.STATE_NONE) {
-    
+      
       if (currentMetadata == null) {
         currentMetadata = PlaybackManager.toMetaData(this, id);
         updateMetadata(currentMetadata);
       }
+  
+      playPause.setImageDrawable(
+          ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
       MediaControllerCompat.getMediaController(MainActivity.this)
                            .getTransportControls()
                            .playFromMediaId(id, null);
     } else {
+      playPause.setImageDrawable(
+          ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
       MediaControllerCompat.getMediaController(MainActivity.this)
                            .getTransportControls()
                            .pause();
     }
     
     updatePlaybackState(currentState);
+  }
+  
+  @Override public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.ib_back_playback:
+        break;
+      case R.id.ib_playpause_playback:
+        playToggle(currentID);
+        break;
+      case R.id.ib_forward_playback:
+        break;
+      default:
+        break;
+    }
   }
   
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
