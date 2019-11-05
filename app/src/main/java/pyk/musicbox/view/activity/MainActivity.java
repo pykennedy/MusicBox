@@ -18,6 +18,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -253,11 +254,13 @@ public class MainActivity extends AppCompatActivity
   @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.ib_back_playback:
+        Log.e("asdf", "previous");
         break;
       case R.id.ib_playpause_playback:
         playToggle(currentID);
         break;
       case R.id.ib_forward_playback:
+        Log.e("asdf", "next");
         break;
       default:
         break;
@@ -299,7 +302,15 @@ public class MainActivity extends AppCompatActivity
   
   private void updatePlaybackState(PlaybackStateCompat state) {
     currentState = state;
-    trackFragment.setPlayPause(state);
+    if (state == null
+        || state.getState() == PlaybackStateCompat.STATE_PAUSED
+        || state.getState() == PlaybackStateCompat.STATE_STOPPED) {
+      playPause.setImageDrawable(
+          ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
+    } else {
+      playPause.setImageDrawable(
+          ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
+    }
   }
   
   private void updateMetadata(MediaMetadataCompat metadata) {

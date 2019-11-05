@@ -6,6 +6,7 @@ import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +46,13 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         
         @Override
         public void onSkipToNext() {
+          Log.e("asdf", "next");
           //onPlayFromMediaId(MusicLibrary.getNextSong(mPlayback.getCurrentMediaId()), null);
         }
         
         @Override
         public void onSkipToPrevious() {
+          Log.e("asdf", "previous");
           //onPlayFromMediaId(MusicLibrary.getPreviousSong(mPlayback.getCurrentMediaId()), null);
         }
       };
@@ -65,8 +68,7 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
     setSessionToken(session.getSessionToken());
     
-    // TODO: Uncomment the following line to show a notification
-    // final MediaNotificationManager mediaNotificationManager = new MediaNotificationManager(this);
+    final PlaybackNotificationManager mediaNotificationManager = new PlaybackNotificationManager(this);
   
     playback =
         new PlaybackManager(
@@ -76,8 +78,7 @@ public class PlaybackService extends MediaBrowserServiceCompat {
               public void onPlaybackStatusChanged(PlaybackStateCompat state) {
                 session.setPlaybackState(state);
                 
-                // TODO: Uncomment the following line to show a notification
-                // mediaNotificationManager.update(mPlayback.getCurrentMedia(), state, getSessionToken());
+                mediaNotificationManager.update(playback.getCurrentMedia(), state, getSessionToken());
               }
             });
   }
