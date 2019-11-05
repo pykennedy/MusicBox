@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.model.viewmodel.TrackViewModel;
@@ -23,7 +22,12 @@ public class DBRefresh {
           Track track = new Track(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
                                   cursor.getString(
                                       cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)),
-                                  null, null, null);
+                                  cursor.getString(
+                                      cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
+                                  cursor.getString(
+                                      cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                                  cursor.getString(
+                                      cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
           trackViewModel.insert(track);
         } while (cursor.moveToNext());
       }
