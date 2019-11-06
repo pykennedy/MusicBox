@@ -65,7 +65,7 @@ public class MBRepo {
   }
   
   public LiveData<List<Track>> getAllTracks() {
-    return tracks;
+    return trackDAO.getAllTracks();
   }
   
   public LiveData<List<Album>> getAllAlbums() {

@@ -8,4 +8,8 @@ public interface Callback {
   public interface InsertPlaylistCB {
     public void onResponse(boolean succeeded, String msg);
   }
+  
+  public interface InitPlaylistCB {
+    public void onComplete(boolean succeeded, String msg);
+  }
 }

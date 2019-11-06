@@ -31,10 +31,12 @@ import java.util.List;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.activity.MainActivityContract;
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.contract.listener.Listener;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.service.PlaybackManager;
 import pyk.musicbox.service.PlaybackService;
+import pyk.musicbox.service.PlaylistManager;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
 import pyk.musicbox.view.fragment.TrackFragment;
 import pyk.musicbox.view.fragment.base.BaseFragment;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity
   private ImageButton               forward;
   private SeekBar                   seekBar;
   private String currentID;
+  private PlaylistManager playlistManager;
   
   private MediaMetadataCompat currentMetadata;
   private PlaybackStateCompat currentState;
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     mainActivityPresenter = new MainActivityPresenter(this);
+    PlaylistManager.setContext(this);
     
     playback = findViewById(R.id.cl_playback_mainActivity);
     title = playback.findViewById(R.id.tv_title_playback);
@@ -221,7 +225,7 @@ public class MainActivity extends AppCompatActivity
     setTitle(newTitle);
   }
   
-  @Override public void playToggle(String id) {
+  @Override public void playToggle(final String id) {
     final int state =
         currentState == null
         ? PlaybackStateCompat.STATE_NONE
@@ -235,11 +239,17 @@ public class MainActivity extends AppCompatActivity
         updateMetadata(currentMetadata);
       }
   
-      playPause.setImageDrawable(
-          ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
-      MediaControllerCompat.getMediaController(MainActivity.this)
-                           .getTransportControls()
-                           .playFromMediaId(id, null);
+      PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
+        @Override public void onComplete(boolean succeeded, String msg) {
+          playPause.setImageDrawable(
+              ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause_black_24dp));
+          MediaControllerCompat.getMediaController(MainActivity.this)
+                               .getTransportControls()
+                               .playFromMediaId(id, null);
+        }
+      });
+      
+      
     } else {
       playPause.setImageDrawable(
           ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
@@ -252,15 +262,28 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override public void onClick(View view) {
+    String id;
     switch (view.getId()) {
       case R.id.ib_back_playback:
         Log.e("asdf", "previous");
+        id = Long.toString(PlaylistManager.getPrev().getId());
+        currentMetadata = PlaybackManager.toMetaData(this, id);
+        updateMetadata(currentMetadata);
+        MediaControllerCompat.getMediaController(MainActivity.this)
+                             .getTransportControls()
+                             .playFromMediaId(id, null);
         break;
       case R.id.ib_playpause_playback:
         playToggle(currentID);
         break;
       case R.id.ib_forward_playback:
         Log.e("asdf", "next");
+        id = Long.toString(PlaylistManager.getNext().getId());
+        currentMetadata = PlaybackManager.toMetaData(this, id);
+        updateMetadata(currentMetadata);
+        MediaControllerCompat.getMediaController(MainActivity.this)
+                             .getTransportControls()
+                             .playFromMediaId(id, null);
         break;
       default:
         break;
