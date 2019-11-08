@@ -14,12 +14,13 @@ import pyk.musicbox.model.viewmodel.TrackViewModel;
 import pyk.musicbox.view.activity.MainActivity;
 
 public class PlaylistManager {
-  private static final PlaylistManager               instance = new PlaylistManager();
+  private static final PlaylistManager               instance    = new PlaylistManager();
   private              MainActivity                  context;
   private              TrackViewModel                tvm;
-  private              MediatorLiveData<List<Track>> mediator = new MediatorLiveData<>();
+  private              MediatorLiveData<List<Track>> mediator    = new MediatorLiveData<>();
   private              LiveData<List<Track>>         currentList;
-  private              int                           index    = 0;
+  private              List<Track>                   list;
+  private              int                           index       = 0;
   private              boolean                       initialized = false;
   
   private PlaylistManager()           {}
@@ -28,7 +29,7 @@ public class PlaylistManager {
   
   public static void setContext(MainActivity context) {
     get().context = context;
-  
+    
     get().mediator.observe(context, new Observer<List<Track>>() {
       @Override public void onChanged(@Nullable List<Track> tracks) {
         // TODO: maybe do logic here idk
@@ -54,25 +55,54 @@ public class PlaylistManager {
     get().mediator.addSource(get().currentList, new Observer<List<Track>>() {
       @Override public void onChanged(@Nullable List<Track> tracks) {
         get().mediator.setValue(tracks);
-        get().initialized = true;
+        configList(callback);
         callback.onComplete(true, "Initialized Playlist");
       }
     });
   }
   
+  public static void configList(final Callback.InitPlaylistCB callback) {
+    get().list = get().mediator.getValue();
+    // todo: sort by sort order, shuffle, etc.
+    get().initialized = true;
+    callback.onComplete(true, "Initialized Playlist");
+  }
+  
+  public static void moveHead(long trackID, Callback.moveHeadCB callback) {
+    List<Track> list = get().list;
+    for(int i = 0; i < list.size(); i++) {
+      Track track = list.get(i);
+      if(track.getId() == trackID) {
+        get().index = i;
+        callback.onComplete(true, "found");
+        return;
+      }
+    }
+  }
+  
   public static Track getNext() {
-    get().index+= 1;
+    get().index += 1;
     return getCurrent();
   }
   
   public static Track getCurrent() {
     List<Track> list = get().mediator.getValue();
-    return (list != null && get().index >= 0 && get().index < list.size()) ? list.get(get().index)
-                                                                           : null;
+    
+    if (list != null) {
+      if (get().index < 0) {
+        get().index = list.size() - 1;
+      } else if (get().index >= list.size()) {
+        get().index = 0;
+      }
+      
+      return list.get(get().index);
+    } else {
+      return null;
+    }
   }
   
   public static Track getPrev() {
-    get().index--;
+    get().index -= 1;
     return getCurrent();
   }
 }

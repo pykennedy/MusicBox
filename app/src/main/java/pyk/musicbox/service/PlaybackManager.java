@@ -194,13 +194,13 @@ public class PlaybackManager
         .build();
   }
   
-  public static MediaMetadataCompat toMetaData(Context context, String id) {
+  public static MediaMetadataCompat toMetaData(Context context, String id, Track track) {
     return new MediaMetadataCompat.Builder()
         .putString("id", id)
-        .putString("name", null)
-        .putString("album", null)
-        .putString("artist", null)
-        .putString("duration", null)
+        .putString("name", (track != null) ? track.getName() : null)
+        .putString("album", (track != null) ? track.getAlbum() : null)
+        .putString("artist", (track != null) ? track.getArtist() : null)
+        .putString("duration", (track != null) ? track.getDuration() : null)
         .build();
   }
   

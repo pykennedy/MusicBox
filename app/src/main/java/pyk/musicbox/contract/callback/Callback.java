@@ -12,4 +12,8 @@ public interface Callback {
   public interface InitPlaylistCB {
     public void onComplete(boolean succeeded, String msg);
   }
+  
+  public interface moveHeadCB {
+    public void onComplete(boolean succeeded, String msg);
+  }
 }

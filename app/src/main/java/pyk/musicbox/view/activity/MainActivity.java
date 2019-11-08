@@ -235,17 +235,21 @@ public class MainActivity extends AppCompatActivity
         || state == PlaybackStateCompat.STATE_NONE) {
       
       if (currentMetadata == null) {
-        currentMetadata = PlaybackManager.toMetaData(this, id);
+        currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
       }
   
       PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
         @Override public void onComplete(boolean succeeded, String msg) {
-          playPause.setImageDrawable(
-              ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause_black_24dp));
-          MediaControllerCompat.getMediaController(MainActivity.this)
-                               .getTransportControls()
-                               .playFromMediaId(id, null);
+          PlaylistManager.moveHead(Long.parseLong(id), new Callback.moveHeadCB() {
+            @Override public void onComplete(boolean succeeded, String msg) {
+              playPause.setImageDrawable(
+                  ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause_black_24dp));
+              MediaControllerCompat.getMediaController(MainActivity.this)
+                                   .getTransportControls()
+                                   .playFromMediaId(id, null);
+            }
+          });
         }
       });
       
@@ -267,7 +271,7 @@ public class MainActivity extends AppCompatActivity
       case R.id.ib_back_playback:
         Log.e("asdf", "previous");
         id = Long.toString(PlaylistManager.getPrev().getId());
-        currentMetadata = PlaybackManager.toMetaData(this, id);
+        currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
         MediaControllerCompat.getMediaController(MainActivity.this)
                              .getTransportControls()
@@ -279,7 +283,7 @@ public class MainActivity extends AppCompatActivity
       case R.id.ib_forward_playback:
         Log.e("asdf", "next");
         id = Long.toString(PlaylistManager.getNext().getId());
-        currentMetadata = PlaybackManager.toMetaData(this, id);
+        currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
         MediaControllerCompat.getMediaController(MainActivity.this)
                              .getTransportControls()
@@ -338,6 +342,12 @@ public class MainActivity extends AppCompatActivity
   
   private void updateMetadata(MediaMetadataCompat metadata) {
     currentMetadata = metadata;
+    if(metadata != null) {
+      title.setText(metadata.getString("name"));
+      String detailsText = metadata.getString("artist") + " | "
+                           + metadata.getString("album");
+      details.setText(detailsText);
+    }
   }
   
   private void getPerms() {
