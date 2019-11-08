@@ -11,6 +11,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import pyk.musicbox.model.entity.Track;
+
 public class PlaybackService extends MediaBrowserServiceCompat {
   
   private MediaSessionCompat session;
@@ -22,7 +24,7 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         public void onPlayFromMediaId(String mediaId, Bundle extras) {
           session.setActive(true);
           MediaMetadataCompat metadata =
-              PlaybackManager.toMetaData(PlaybackService.this, mediaId);
+              PlaybackManager.toMetaData(PlaybackService.this, mediaId, PlaylistManager.getCurrent());
           session.setMetadata(metadata);
           playback.play(metadata);
         }
@@ -47,20 +49,22 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         @Override
         public void onSkipToNext() {
           Log.e("asdf", "next");
-          //onPlayFromMediaId(MusicLibrary.getNextSong(mPlayback.getCurrentMediaId()), null);
+          Track track = PlaylistManager.getNext();
+          onPlayFromMediaId(Long.toString(track.getId()), null);
         }
         
         @Override
         public void onSkipToPrevious() {
           Log.e("asdf", "previous");
-          //onPlayFromMediaId(MusicLibrary.getPreviousSong(mPlayback.getCurrentMediaId()), null);
+          Track track = PlaylistManager.getPrev();
+          onPlayFromMediaId(Long.toString(track.getId()), null);
         }
       };
   
   @Override
   public void onCreate() {
-    super.onCreate();
     
+    super.onCreate();
     session = new MediaSessionCompat(this, "PlaybackService");
     session.setCallback(callback);
     session.setFlags(
