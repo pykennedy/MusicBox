@@ -1,11 +1,15 @@
 package pyk.musicbox.view.activity;
 
 import android.Manifest;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,12 +31,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.activity.MainActivityContract;
 import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.contract.listener.Listener;
+import pyk.musicbox.model.entity.PlaybackEntity;
+import pyk.musicbox.model.entity.PlaybackGrouping;
+import pyk.musicbox.model.viewmodel.TrackViewModel;
 import pyk.musicbox.presenter.MainActivityPresenter;
 import pyk.musicbox.service.PlaybackManager;
 import pyk.musicbox.service.PlaybackService;
@@ -57,8 +65,8 @@ public class MainActivity extends AppCompatActivity
   private ImageButton               playPause;
   private ImageButton               forward;
   private SeekBar                   seekBar;
-  private String currentID;
-  private PlaylistManager playlistManager;
+  private String                    currentID;
+  private PlaylistManager           playlistManager;
   
   private MediaMetadataCompat currentMetadata;
   private PlaybackStateCompat currentState;
@@ -215,10 +223,47 @@ public class MainActivity extends AppCompatActivity
   }
   
   @Override public void swapTrack(long id, String name) {
+    final TrackViewModel                            tvm      = ViewModelProviders.of(this).get(
+        TrackViewModel.class);
+    final MediatorLiveData<List<PlaybackEntity>>   mediatorTracks = new MediatorLiveData<>();
+    final MediatorLiveData<List<PlaybackGrouping>> mediatorGroups = new MediatorLiveData<>();
+    
+    mediatorTracks.observe(this, new Observer<List<PlaybackEntity>>() {
+      @Override public void onChanged(@Nullable List<PlaybackEntity> tracks) {}
+    });
+  
+    mediatorGroups.observe(this, new Observer<List<PlaybackGrouping>>() {
+      @Override public void onChanged(@Nullable List<PlaybackGrouping> groupings) {}
+    });
+    
+    mediatorTracks.addSource(tvm.getAllPlaybackEntities(), new Observer<List<PlaybackEntity>>() {
+      @Override public void onChanged(@Nullable List<PlaybackEntity> entities) {
+        mediatorTracks.setValue(entities);
+        List<PlaybackEntity> pe = mediatorTracks.getValue();
+        
+        List<Long> groupIDs = new ArrayList<>();
+        
+        for(PlaybackEntity entity : pe) {
+          if(entity.getEntityType().equals("group")) {
+            groupIDs.add(entity.getEntityID());
+          }
+        }
+  
+        mediatorGroups.addSource(tvm.getAllPlaybackGroupings(groupIDs), new Observer<List<PlaybackGrouping>>() {
+          @Override public void onChanged(@Nullable List<PlaybackGrouping> groupings) {
+            mediatorGroups.setValue(groupings);
+            List<PlaybackGrouping> g = mediatorGroups.getValue();
+            // TODO: dump this into playlist manager to make a full list
+          }
+        });
+      }
+    });
+    /*
     title.setText(name);
     currentID = Long.toString(id);
     playToggle(currentID);
     // todo: set other details
+    */
   }
   
   @Override public void updateTitle(String newTitle) {
@@ -238,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
       }
-  
+      
       PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
         @Override public void onComplete(boolean succeeded, String msg) {
           PlaylistManager.moveHead(Long.parseLong(id), new Callback.moveHeadCB() {
@@ -342,7 +387,7 @@ public class MainActivity extends AppCompatActivity
   
   private void updateMetadata(MediaMetadataCompat metadata) {
     currentMetadata = metadata;
-    if(metadata != null) {
+    if (metadata != null) {
       title.setText(metadata.getString("name"));
       String detailsText = metadata.getString("artist") + " | "
                            + metadata.getString("album");

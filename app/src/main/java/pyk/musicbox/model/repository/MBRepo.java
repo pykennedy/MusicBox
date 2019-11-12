@@ -25,6 +25,8 @@ import pyk.musicbox.model.entity.Artist;
 import pyk.musicbox.model.entity.Artist_AlbumTrack;
 import pyk.musicbox.model.entity.Group;
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.PlaybackEntity;
+import pyk.musicbox.model.entity.PlaybackGrouping;
 import pyk.musicbox.model.entity.Playlist;
 import pyk.musicbox.model.entity.Playlist_GroupTrack;
 import pyk.musicbox.model.entity.SortedEntity;
@@ -87,6 +89,14 @@ public class MBRepo {
   }
   public LiveData<List<SortedTrack>> getTracksInAlbum(Long id) {
     return trackDAO.getTracksInAlbum(id);
+  }
+  
+  public LiveData<List<PlaybackEntity>> getAllPlaybackEntities() {
+    return trackDAO.getAllPlaybackEntities();
+  }
+  
+  public LiveData<List<PlaybackGrouping>> getAllPlaybackGroupings(List<Long> groupIDs) {
+    return trackDAO.getAllPlaybackGroupings(groupIDs);
   }
   
   public LiveData<List<SortedEntity>> getItemsInPlaylist(long id) {
