@@ -69,4 +69,9 @@ public interface TrackDAO {
          "INNER JOIN group_table AS gt " +
          "ON gtt.groupID = gt.id")
   LiveData<List<PlaybackGrouping>> getAllPlaybackGroupings(List<Long> groups);
+  
+  @Query("SELECT * " +
+         "FROM track_table AS tt " +
+         "WHERE tt.id IN (:trackIDs)")
+  LiveData<List<Track>> getTracks(List<Long> trackIDs);
 }

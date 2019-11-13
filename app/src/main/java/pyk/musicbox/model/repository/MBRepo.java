@@ -99,6 +99,10 @@ public class MBRepo {
     return trackDAO.getAllPlaybackGroupings(groupIDs);
   }
   
+  public LiveData<List<Track>> getTracks(List<Long> trackIDs) {
+    return trackDAO.getTracks(trackIDs);
+  }
+  
   public LiveData<List<SortedEntity>> getItemsInPlaylist(long id) {
     return playlistGroupTrackDAO.getItemsInPlaylist(id);
   }

@@ -24,7 +24,7 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         public void onPlayFromMediaId(String mediaId, Bundle extras) {
           session.setActive(true);
           MediaMetadataCompat metadata =
-              PlaybackManager.toMetaData(PlaybackService.this, mediaId, PlaylistManager.getCurrent());
+              PlaybackManager.toMetaData(PlaybackService.this, mediaId, PlaylistManager.getCurrent().getTrack());
           session.setMetadata(metadata);
           playback.play(metadata);
         }
@@ -49,14 +49,14 @@ public class PlaybackService extends MediaBrowserServiceCompat {
         @Override
         public void onSkipToNext() {
           Log.e("asdf", "next");
-          Track track = PlaylistManager.getNext();
+          Track track = PlaylistManager.getNext().getTrack();
           onPlayFromMediaId(Long.toString(track.getId()), null);
         }
         
         @Override
         public void onSkipToPrevious() {
           Log.e("asdf", "previous");
-          Track track = PlaylistManager.getPrev();
+          Track track = PlaylistManager.getPrev().getTrack();
           onPlayFromMediaId(Long.toString(track.getId()), null);
         }
       };

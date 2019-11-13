@@ -6,9 +6,13 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pyk.musicbox.contract.callback.Callback;
+import pyk.musicbox.model.entity.PlaybackEntity;
+import pyk.musicbox.model.entity.PlaybackGrouping;
+import pyk.musicbox.model.entity.PlaybackTrack;
 import pyk.musicbox.model.entity.Track;
 import pyk.musicbox.model.viewmodel.TrackViewModel;
 import pyk.musicbox.view.activity.MainActivity;
@@ -16,10 +20,8 @@ import pyk.musicbox.view.activity.MainActivity;
 public class PlaylistManager {
   private static final PlaylistManager               instance    = new PlaylistManager();
   private              MainActivity                  context;
-  private              TrackViewModel                tvm;
-  private              MediatorLiveData<List<Track>> mediator    = new MediatorLiveData<>();
   private              LiveData<List<Track>>         currentList;
-  private              List<Track>                   list;
+  private              List<PlaybackTrack>                   list;
   private              int                           index       = 0;
   private              boolean                       initialized = false;
   
@@ -29,12 +31,6 @@ public class PlaylistManager {
   
   public static void setContext(MainActivity context) {
     get().context = context;
-    
-    get().mediator.observe(context, new Observer<List<Track>>() {
-      @Override public void onChanged(@Nullable List<Track> tracks) {
-        // TODO: maybe do logic here idk
-      }
-    });
   }
   
   public static void initPlaylist(final Callback.InitPlaylistCB callback) {
@@ -45,34 +41,102 @@ public class PlaylistManager {
     
     get().initialized = false;
     
-    get().tvm = ViewModelProviders.of(get().context).get(TrackViewModel.class);
+    final TrackViewModel tvm = ViewModelProviders.of(
+        get().context).get(TrackViewModel.class);
+    final MediatorLiveData<List<PlaybackEntity>>   mediatorEntities = new MediatorLiveData<>();
+    final MediatorLiveData<List<Track>>            mediatorTracks   = new MediatorLiveData<>();
+    final MediatorLiveData<List<PlaybackGrouping>> mediatorGroups   = new MediatorLiveData<>();
     
-    if (get().currentList != null) {
-      get().mediator.removeSource(get().currentList);
-    }
+    mediatorEntities.observe(get().context, new Observer<List<PlaybackEntity>>() {
+      @Override public void onChanged(@Nullable List<PlaybackEntity> tracks) {}
+    });
     
-    get().currentList = get().tvm.getAllTracks();
-    get().mediator.addSource(get().currentList, new Observer<List<Track>>() {
-      @Override public void onChanged(@Nullable List<Track> tracks) {
-        get().mediator.setValue(tracks);
-        configList(callback);
-        callback.onComplete(true, "Initialized Playlist");
+    mediatorGroups.observe(get().context, new Observer<List<PlaybackGrouping>>() {
+      @Override public void onChanged(@Nullable List<PlaybackGrouping> groupings) {}
+    });
+  
+    mediatorTracks.observe(get().context, new Observer<List<Track>>() {
+      @Override public void onChanged(@Nullable List<Track> groupings) {}
+    });
+    
+    mediatorEntities.addSource(tvm.getAllPlaybackEntities(), new Observer<List<PlaybackEntity>>() {
+      @Override public void onChanged(@Nullable List<PlaybackEntity> entities) {
+        mediatorEntities.setValue(entities);
+        final List<PlaybackEntity> pe = mediatorEntities.getValue();
+        
+        List<Long>       groupIDs = new ArrayList<>();
+        final List<Long> trackIDs = new ArrayList<>();
+        
+        for (PlaybackEntity entity : pe) {
+          if (entity.getEntityType().equals("group")) {
+            groupIDs.add(entity.getEntityID());
+          } else {
+            trackIDs.add(entity.getEntityID());
+          }
+        }
+        
+        mediatorGroups.addSource(tvm.getAllPlaybackGroupings(groupIDs),
+                                 new Observer<List<PlaybackGrouping>>() {
+                                   @Override public void onChanged(
+                                       @Nullable List<PlaybackGrouping> groupings) {
+                                     mediatorGroups.setValue(groupings);
+                                     final List<PlaybackGrouping> pg = mediatorGroups.getValue();
+            
+                                     mediatorTracks.addSource(tvm.getTracks(trackIDs),
+                                                              new Observer<List<Track>>() {
+                                                                @Override public void onChanged(
+                                                                    @Nullable List<Track> tracks) {
+                                                                  mediatorTracks.setValue(tracks);
+                                                                  List<Track> t =
+                                                                      mediatorTracks.getValue();
+                
+                                                                  configList(callback, pe, pg, t);
+                                                                  // TODO: dump this into playlist manager to make a full list
+                                                                }
+                                                              });
+                                   }
+                                 });
       }
     });
+    
+    
   }
   
-  public static void configList(final Callback.InitPlaylistCB callback) {
-    get().list = get().mediator.getValue();
+  public static void configList(final Callback.InitPlaylistCB callback,
+                                List<PlaybackEntity> playbackEntities,
+                                List<PlaybackGrouping> groupings, List<Track> tracks) {
+    List<PlaybackTrack> temp = new ArrayList<>();
+    
+    for (PlaybackEntity entity : playbackEntities) {
+      if (entity.getEntityType().equals("track")) {
+        Long trackID = entity.getEntityID();
+        for (Track track : tracks) {
+          if (track.getId() == trackID) {
+            temp.add(new PlaybackTrack(-1, null, track));
+          }
+        }
+      } else {
+        Long groupID = entity.getEntityID();
+        for(PlaybackGrouping group : groupings) {
+          if(group.getGroupID() == groupID) {
+            temp.add(new PlaybackTrack(group.getGroupID(), group.getGroupName(), group.getTrack()));
+          }
+        }
+      }
+    }
+    
+    
+    get().list = temp;
     // todo: sort by sort order, shuffle, etc.
     get().initialized = true;
     callback.onComplete(true, "Initialized Playlist");
   }
   
   public static void moveHead(long trackID, Callback.moveHeadCB callback) {
-    List<Track> list = get().list;
-    for(int i = 0; i < list.size(); i++) {
-      Track track = list.get(i);
-      if(track.getId() == trackID) {
+    List<PlaybackTrack> list = get().list;
+    for (int i = 0; i < list.size(); i++) {
+      PlaybackTrack track = list.get(i);
+      if (track.getTrack().getId() == trackID) {
         get().index = i;
         callback.onComplete(true, "found");
         return;
@@ -80,13 +144,13 @@ public class PlaylistManager {
     }
   }
   
-  public static Track getNext() {
+  public static PlaybackTrack getNext() {
     get().index += 1;
     return getCurrent();
   }
   
-  public static Track getCurrent() {
-    List<Track> list = get().mediator.getValue();
+  public static PlaybackTrack getCurrent() {
+    List<PlaybackTrack> list = get().list;
     
     if (list != null) {
       if (get().index < 0) {
@@ -101,7 +165,7 @@ public class PlaylistManager {
     }
   }
   
-  public static Track getPrev() {
+  public static PlaybackTrack getPrev() {
     get().index -= 1;
     return getCurrent();
   }

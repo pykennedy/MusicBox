@@ -32,5 +32,7 @@ public class TrackViewModel extends AndroidViewModel {
   
   public LiveData<List<PlaybackGrouping>> getAllPlaybackGroupings(List<Long> groupIDs) { return repo.getAllPlaybackGroupings(groupIDs); }
   
+  public LiveData<List<Track>> getTracks(List<Long> trackIDs) { return repo.getTracks(trackIDs); }
+  
   public void insert(Track track)                              { repo.insert(track); }
 }
