@@ -45,6 +45,7 @@ public interface TrackDAO {
   @Query("SELECT 0 AS sortOrder " +
          ", tt.id AS entityID " +
          ", 'track' AS entityType " +
+         ", tt.name AS entityName " +
          "FROM track_table AS tt " +
          "LEFT JOIN group_track_table AS gtt " +
          "ON tt.id = gtt.trackID " +
@@ -53,9 +54,13 @@ public interface TrackDAO {
          "SELECT DISTINCT 0 AS sortOrder " +
          ", gtt.groupID AS entityID " +
          ", 'group' AS entityType " +
+         ", gt.name AS entityName " +
          "FROM track_table AS tt " +
          "INNER JOIN group_track_table AS gtt " +
-         "ON tt.id = gtt.trackID")
+         "ON tt.id = gtt.trackID " +
+         "INNER JOIN group_table AS gt " +
+         "ON gtt.groupID = gt.id " +
+         "ORDER BY entityName")
   LiveData<List<PlaybackEntity>> getAllPlaybackEntities();
   
   @Query("SELECT gtt.sortOrder AS sortOrder" +
