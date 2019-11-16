@@ -2,7 +2,6 @@ package pyk.musicbox.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +55,13 @@ public class PlaylistListItemAdapter
                            entity.getSortOrder());
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder
+  class ItemAdapterViewHolder extends RecyclerView.ViewHolder
       implements View.OnClickListener {
     TextView                         title;
     TextView                         up;
     TextView                         down;
     long                             entityID;
+    String entityType;
     long                             playlistID;
     int                              sortOrder;
     PlaylistListItemAdapterPresenter presenter;
@@ -91,6 +91,8 @@ public class PlaylistListItemAdapter
             presenter.updateSortOrder(playlistID, sortOrder, sortOrder + 1);
           }
           break;
+        case R.id.tv_title_playlistList:
+          fragment.swapTrack(entityID, entityType, title.getText().toString(), playlistID);
         default:
           break;
       }
@@ -100,6 +102,7 @@ public class PlaylistListItemAdapter
       String titleText = entity.getEntityName();
       this.title.setText(titleText);
       this.entityID = entity.getEntityID();
+      this.entityType = entity.getEntityType();
       this.playlistID = playlistID;
       this.sortOrder = entity.getSortOrder();
     }

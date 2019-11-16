@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
   private ImageButton               forward;
   private SeekBar                   seekBar;
   private String                    currentID;
+  private long playlistID = -1;
   private PlaylistManager           playlistManager;
   
   private MediaMetadataCompat currentMetadata;
@@ -214,10 +215,11 @@ public class MainActivity extends AppCompatActivity
     }
   }
   
-  @Override public void swapTrack(long id, String name) {
+  @Override public void swapTrack(long id, String name, long playlistID) {
+    this.playlistID = playlistID;
     title.setText(name);
     currentID = Long.toString(id);
-    playToggle(currentID);
+    playToggle(currentID, playlistID);
     // todo: set other details
   }
   
@@ -225,7 +227,7 @@ public class MainActivity extends AppCompatActivity
     setTitle(newTitle);
   }
   
-  @Override public void playToggle(final String id) {
+  @Override public void playToggle(final String id, long playlistID) {
     final int state =
         currentState == null
         ? PlaybackStateCompat.STATE_NONE
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity
             }
           });
         }
-      });
+      }, playlistID);
       
       
     } else {
@@ -278,7 +280,7 @@ public class MainActivity extends AppCompatActivity
                              .playFromMediaId(id, null);
         break;
       case R.id.ib_playpause_playback:
-        playToggle(currentID);
+        playToggle(currentID, playlistID);
         break;
       case R.id.ib_forward_playback:
         Log.e("asdf", "next");

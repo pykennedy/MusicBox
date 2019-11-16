@@ -63,6 +63,32 @@ public interface TrackDAO {
          "ORDER BY entityName")
   LiveData<List<PlaybackEntity>> getAllPlaybackEntities();
   
+  @Query("SELECT pgtt.sortOrder AS sortOrder " +
+         ", tt.id AS entityID " +
+         ", 'track' AS entityType " +
+         ", tt.name AS entityName " +
+         "FROM track_table AS tt " +
+         "INNER JOIN playlist_grouptrack_table AS pgtt " +
+         "ON tt.id = pgtt.entityID " +
+         "AND pgtt.entityType = 'track' " +
+         "AND pgtt.playlistID = :playlistID " +
+         "UNION ALL " +
+         "SELECT DISTINCT pgtt.sortOrder AS sortOrder " +
+         ", gtt.groupID AS entityID " +
+         ", 'group' AS entityType " +
+         ", gt.name AS entityName " +
+         "FROM track_table AS tt " +
+         "INNER JOIN group_track_table AS gtt " +
+         "ON tt.id = gtt.trackID " +
+         "INNER JOIN group_table AS gt " +
+         "ON gtt.groupID = gt.id " +
+         "INNER JOIN playlist_grouptrack_table AS pgtt " +
+         "ON gtt.groupID = pgtt.entityID " +
+         "AND pgtt.entityType = 'group' " +
+         "AND pgtt.playlistID = :playlistID " +
+         "ORDER BY sortOrder")
+  LiveData<List<PlaybackEntity>> getPlaybackEntitiesInPlaylist(long playlistID);
+  
   @Query("SELECT gtt.sortOrder AS sortOrder" +
          ", gt.id AS groupID " +
          ", gt.name AS groupName " +

@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import pyk.musicbox.model.entity.Group_Track;
+import pyk.musicbox.model.entity.Track;
 
 @Dao
 public interface Group_TrackDAO {
@@ -41,6 +42,14 @@ public interface Group_TrackDAO {
          "WHERE groupID = :groupID " +
          "AND trackID = :trackID")
   Group_Track getGroupTrackByIDs(long groupID, long trackID);
+  
+  @Query("SELECT tt.* " +
+         "FROM group_track_table AS gtt " +
+         "INNER JOIN track_table AS tt " +
+         "ON gtt.trackID = tt.id " +
+         "AND gtt.groupID = :groupID " +
+         "AND gtt.sortOrder = 1")
+  Track getFirstTrack(long groupID);
   
   @Query("SELECT * FROM group_track_table")
   LiveData<List<Group_Track>> getAllGroupTracks();

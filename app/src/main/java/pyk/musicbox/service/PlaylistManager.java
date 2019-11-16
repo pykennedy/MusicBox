@@ -33,7 +33,7 @@ public class PlaylistManager {
     get().context = context;
   }
   
-  public static void initPlaylist(final Callback.InitPlaylistCB callback) {
+  public static void initPlaylist(final Callback.InitPlaylistCB callback, long playlistID) {
     if (get().context == null) {
       callback.onComplete(false, "Failed. Try Again.");
       return;
@@ -59,7 +59,7 @@ public class PlaylistManager {
       @Override public void onChanged(@Nullable List<Track> groupings) {}
     });
     
-    mediatorEntities.addSource(tvm.getAllPlaybackEntities(), new Observer<List<PlaybackEntity>>() {
+    mediatorEntities.addSource(tvm.getAllPlaybackEntities(playlistID), new Observer<List<PlaybackEntity>>() {
       @Override public void onChanged(@Nullable List<PlaybackEntity> entities) {
         mediatorEntities.setValue(entities);
         final List<PlaybackEntity> pe = mediatorEntities.getValue();

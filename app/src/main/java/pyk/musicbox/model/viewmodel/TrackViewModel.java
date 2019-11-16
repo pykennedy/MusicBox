@@ -28,7 +28,13 @@ public class TrackViewModel extends AndroidViewModel {
   
   public LiveData<List<SortedTrack>> getTracksInAlbum(Long id) { return repo.getTracksInAlbum(id); }
   
-  public LiveData<List<PlaybackEntity>> getAllPlaybackEntities() { return repo.getAllPlaybackEntities(); }
+  public LiveData<List<PlaybackEntity>> getAllPlaybackEntities(long playlistID) {
+    if(playlistID >= 0) {
+      return repo.getPlaybackEntitiesInPlaylist(playlistID);
+    } else {
+      return repo.getAllPlaybackEntities();
+    }
+  }
   
   public LiveData<List<PlaybackGrouping>> getAllPlaybackGroupings(List<Long> groupIDs) { return repo.getAllPlaybackGroupings(groupIDs); }
   

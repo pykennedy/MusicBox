@@ -7,7 +7,7 @@ public interface MainActivityContract {
   interface MainActivityView {
     void showToast();
     void swapFragment(BaseFragment fragment, boolean replace);
-    void swapTrack(long id, String name);
+    void swapTrack(long id, String name, long playlistID);
   }
   
   

@@ -1,5 +1,6 @@
 package pyk.musicbox.view.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pyk.musicbox.R;
+import pyk.musicbox.contract.callback.Callback;
 import pyk.musicbox.contract.listener.Listener;
+import pyk.musicbox.model.entity.Track;
+import pyk.musicbox.model.viewmodel.Group_TrackViewModel;
 import pyk.musicbox.presenter.PlaylistFragmentPresenter;
 import pyk.musicbox.utility.PlaylistSwipeDeleteCallback;
 import pyk.musicbox.view.activity.MainActivity;
@@ -61,6 +65,23 @@ public class PlaylistFragment extends BaseFragment implements View.OnClickListen
     presenter.getEntitiesInPlaylist(adapter, id);
     
     return rootView;
+  }
+  
+  public void swapTrack(final long id, String entityType, final String name, final long playlistID) {
+    if(entityType.equals("group")) {
+      new Thread(new Runnable() {
+        public void run() {
+          Group_TrackViewModel gtvm = ViewModelProviders.of(getActivity()).get(Group_TrackViewModel.class);
+          gtvm.getFirstTrack(id, new Callback.FirstTrackCB() {
+            @Override public void onComplete(boolean succeeded, Track track) {
+              presenter.swapTrack((MainActivity) getActivity(), track.getId(), track.getName(), playlistID);
+            }
+          });
+        }
+      }).start();
+    } else {
+      presenter.swapTrack((MainActivity) getActivity(), id, name, playlistID);
+    }
   }
   
   @Override public void onClick(View view) {

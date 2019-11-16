@@ -6,6 +6,6 @@ public interface Listener {
   }
   
   public interface PlaybackControlListener {
-    void playToggle(String id);
+    void playToggle(String id, long playlistID);
   }
 }
