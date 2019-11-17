@@ -215,11 +215,11 @@ public class MainActivity extends AppCompatActivity
     }
   }
   
-  @Override public void swapTrack(long id, String name, long playlistID) {
+  @Override public void swapTrack(long id, String name, long playlistID, boolean inGroup) {
     this.playlistID = playlistID;
     title.setText(name);
     currentID = Long.toString(id);
-    playToggle(currentID, playlistID);
+    playToggle(currentID, playlistID, inGroup);
     // todo: set other details
   }
   
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity
     setTitle(newTitle);
   }
   
-  @Override public void playToggle(final String id, long playlistID) {
+  @Override public void playToggle(final String id, long playlistID, final boolean inGroup) {
     final int state =
         currentState == null
         ? PlaybackStateCompat.STATE_NONE
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity
       
       PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
         @Override public void onComplete(boolean succeeded, String msg) {
-          PlaylistManager.moveHead(Long.parseLong(id), new Callback.moveHeadCB() {
+          PlaylistManager.moveHead(Long.parseLong(id), inGroup, new Callback.moveHeadCB() {
             @Override public void onComplete(boolean succeeded, String msg) {
               playPause.setImageDrawable(
                   ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause_black_24dp));
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity
                              .playFromMediaId(id, null);
         break;
       case R.id.ib_playpause_playback:
-        playToggle(currentID, playlistID);
+        playToggle(currentID, playlistID, false);
         break;
       case R.id.ib_forward_playback:
         Log.e("asdf", "next");

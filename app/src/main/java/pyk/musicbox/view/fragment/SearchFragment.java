@@ -236,7 +236,7 @@ public class SearchFragment extends BaseFragment
   }
   
   public void swapTrack(long id, String name) {
-    searchFragmentPresenter.swapTrack((MainActivity) getActivity(), id, name, -1);
+    searchFragmentPresenter.swapTrack((MainActivity) getActivity(), id, name, -1, false);
   }
   
   @Override

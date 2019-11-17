@@ -125,18 +125,17 @@ public class PlaylistManager {
       }
     }
     
-    
     get().list = temp;
     // todo: sort by sort order, shuffle, etc.
     get().initialized = true;
     callback.onComplete(true, "Initialized Playlist");
   }
   
-  public static void moveHead(long trackID, Callback.moveHeadCB callback) {
+  public static void moveHead(long trackID, boolean inGroup, Callback.moveHeadCB callback) {
     List<PlaybackTrack> list = get().list;
     for (int i = 0; i < list.size(); i++) {
       PlaybackTrack track = list.get(i);
-      if (track.getTrack().getId() == trackID) {
+      if (track.getTrack().getId() == trackID && ((track.getGroupID() >= 0) == inGroup)) {
         get().index = i;
         callback.onComplete(true, "found");
         return;

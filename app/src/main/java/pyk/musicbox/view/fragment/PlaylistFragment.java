@@ -73,14 +73,18 @@ public class PlaylistFragment extends BaseFragment implements View.OnClickListen
         public void run() {
           Group_TrackViewModel gtvm = ViewModelProviders.of(getActivity()).get(Group_TrackViewModel.class);
           gtvm.getFirstTrack(id, new Callback.FirstTrackCB() {
-            @Override public void onComplete(boolean succeeded, Track track) {
-              presenter.swapTrack((MainActivity) getActivity(), track.getId(), track.getName(), playlistID);
+            @Override public void onComplete(boolean succeeded, final Track track) {
+              getActivity().runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    presenter.swapTrack((MainActivity) getActivity(), track.getId(), track.getName(), playlistID, true);
+                }
+              });
             }
           });
         }
       }).start();
     } else {
-      presenter.swapTrack((MainActivity) getActivity(), id, name, playlistID);
+      presenter.swapTrack((MainActivity) getActivity(), id, name, playlistID, false);
     }
   }
   

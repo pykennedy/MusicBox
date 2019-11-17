@@ -12,8 +12,8 @@ public class FragmentPresenter implements FragmentContract.FragmentPresenter {
   }
   
   @Override
-  public void swapTrack(MainActivityContract.MainActivityView mainActivityView, long id, String name, long playlistID) {
-    mainActivityView.swapTrack(id, name, playlistID);
+  public void swapTrack(MainActivityContract.MainActivityView mainActivityView, long id, String name, long playlistID, boolean inGroup) {
+    mainActivityView.swapTrack(id, name, playlistID, inGroup);
   }
 }
 

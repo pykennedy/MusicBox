@@ -76,7 +76,7 @@ public class TrackFragment extends Fragment implements View.OnClickListener {
   }
   
   @Override public void onClick(View view) {
-    playbackControlListener.playToggle(Long.toString(viewingID), -1);
+    playbackControlListener.playToggle(Long.toString(viewingID), -1, false);
   }
   
   public void setPlayPause(PlaybackStateCompat state) {
