@@ -6,18 +6,15 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -38,27 +35,25 @@ import pyk.musicbox.service.PlaybackManager;
 import pyk.musicbox.service.PlaybackService;
 import pyk.musicbox.service.PlaylistManager;
 import pyk.musicbox.view.fragment.BaseMenuFragment;
-import pyk.musicbox.view.fragment.TrackFragment;
+import pyk.musicbox.view.fragment.SearchFragment;
 import pyk.musicbox.view.fragment.base.BaseFragment;
 
 public class MainActivity extends AppCompatActivity
     implements MainActivityContract.MainActivityView, Listener.FragmentListener, Listener.PlaybackControlListener, View.OnClickListener {
   
-  private MainActivityPresenter     mainActivityPresenter;
-  private ViewPager                 pager;
-  private FragmentStatePagerAdapter pagerAdapter;
-  private TrackFragment             trackFragment;
-  private BaseFragment              menuFragment;
-  private Menu                      menu;
-  private ViewGroup                 playback;
-  private TextView                  title;
-  private TextView                  details;
-  private ImageButton               back;
-  private ImageButton               playPause;
-  private ImageButton               forward;
-  private SeekBar                   seekBar;
-  private String currentID;
-  private PlaylistManager playlistManager;
+  private MainActivityPresenter mainActivityPresenter;
+  private BaseMenuFragment      baseMenuFragment;
+  private BaseFragment          menuFragment;
+  private Menu                  menu;
+  private ViewGroup             playback;
+  private TextView              title;
+  private TextView              details;
+  private ImageButton           back;
+  private ImageButton           playPause;
+  private ImageButton           forward;
+  private SeekBar               seekBar;
+  private String                currentID;
+  private PlaylistManager       playlistManager;
   
   private MediaMetadataCompat currentMetadata;
   private PlaybackStateCompat currentState;
@@ -126,6 +121,13 @@ public class MainActivity extends AppCompatActivity
     mainActivityPresenter = new MainActivityPresenter(this);
     PlaylistManager.setContext(this);
     
+    baseMenuFragment = new BaseMenuFragment();
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.add(R.id.fl_mainActivity, baseMenuFragment);
+    transaction.commit();
+    
+    swapFragment(new SearchFragment(), true);
+    
     playback = findViewById(R.id.cl_playback_mainActivity);
     title = playback.findViewById(R.id.tv_title_playback);
     details = playback.findViewById(R.id.tv_secondaryDetails_playback);
@@ -136,29 +138,6 @@ public class MainActivity extends AppCompatActivity
     back.setOnClickListener(this);
     playPause.setOnClickListener(this);
     forward.setOnClickListener(this);
-    
-    
-    pager = findViewById(R.id.vp_mainActivity);
-    pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-    pager.setAdapter(pagerAdapter);
-    pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-      @Override
-      public void onPageSelected(int position) {
-        if (position == 1) {
-          updateTitle(trackFragment.getTitle());
-          menu.findItem(R.id.sv_menu).setVisible(false);
-        } else {
-          if (menuFragment == null) {
-            updateTitle("Music Box");
-          } else {
-            updateTitle(menuFragment.desiredTitle);
-          }
-          menu.findItem(R.id.sv_menu).setVisible(true);
-          ((SearchView) menu.findItem(R.id.sv_menu).getActionView()).setQuery("", false);
-          ((SearchView) menu.findItem(R.id.sv_menu).getActionView()).setIconified(true);
-        }
-      }
-    });
     
     getPerms();
     mainActivityPresenter.refreshTrackList(this);
@@ -206,15 +185,17 @@ public class MainActivity extends AppCompatActivity
   
   @Override public void swapFragment(BaseFragment fragment, boolean replace) {
     menuFragment = fragment;
-    if (replace) {
-      BaseMenuFragment baseMenuFragment = (BaseMenuFragment) pagerAdapter.getItem(0);
-      baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
-    } else {
-      pager.setCurrentItem(1);
-    }
+    baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
   }
   
   @Override public void swapTrack(long id, String name) {
+    ConstraintLayout cl = findViewById(R.id.cl_playback_mainActivity);
+    cl.setVisibility(View.VISIBLE);
+    cl.setAlpha(0.0f);
+    cl.animate()
+      .translationY(cl.getHeight())
+      .alpha(1.0f);
+    
     title.setText(name);
     currentID = Long.toString(id);
     playToggle(currentID);
@@ -238,7 +219,7 @@ public class MainActivity extends AppCompatActivity
         currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
       }
-  
+      
       PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
         @Override public void onComplete(boolean succeeded, String msg) {
           PlaylistManager.moveHead(Long.parseLong(id), new Callback.moveHeadCB() {
@@ -294,39 +275,6 @@ public class MainActivity extends AppCompatActivity
     }
   }
   
-  private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-    
-    ScreenSlidePagerAdapter(FragmentManager fm) {
-      super(fm);
-    }
-    
-    @Override
-    public Fragment getItem(int position) {
-      switch (position) {
-        case 0:
-          return new BaseMenuFragment();
-        case 1:
-          trackFragment = (trackFragment == null) ? new TrackFragment() : trackFragment;
-          return trackFragment;
-        default:
-          return new BaseMenuFragment();
-      }
-    }
-    
-    @Override
-    public int getCount() {
-      return 2;
-    }
-  }
-  
-  @Override public void onBackPressed() {
-    if (pager.getCurrentItem() == 1) {
-      pager.setCurrentItem(0);
-    } else {
-      super.onBackPressed();
-    }
-  }
-  
   private void updatePlaybackState(PlaybackStateCompat state) {
     currentState = state;
     if (state == null
@@ -342,7 +290,7 @@ public class MainActivity extends AppCompatActivity
   
   private void updateMetadata(MediaMetadataCompat metadata) {
     currentMetadata = metadata;
-    if(metadata != null) {
+    if (metadata != null) {
       title.setText(metadata.getString("name"));
       String detailsText = metadata.getString("artist") + " | "
                            + metadata.getString("album");

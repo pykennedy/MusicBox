@@ -25,9 +25,9 @@ public class MainActivityTest {
   @Test
   public void defaultFragmentsExist() {
     onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
-    onView(withId(R.id.vp_mainActivity)).perform(swipeLeft());
+    onView(withId(R.id.fl_mainActivity)).perform(swipeLeft());
     onView(withId(R.id.v_trackScroll_fragmentTrack)).check(matches(isDisplayed()));
-    onView(withId(R.id.vp_mainActivity)).perform(swipeRight());
+    onView(withId(R.id.fl_mainActivity)).perform(swipeRight());
     onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
   }
 }
