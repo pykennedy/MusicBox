@@ -1,7 +1,6 @@
 package pyk.musicbox.view.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -15,7 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import pyk.musicbox.R;
@@ -30,11 +29,11 @@ import pyk.musicbox.view.fragment.base.BaseFragment;
 public class SearchFragment extends BaseFragment
     implements View.OnClickListener, AddDialogFragment.AddDialogListener, SearchView.OnQueryTextListener {
   private String               searchText;
-  private TextView             artistSlicer;
-  private TextView             albumSlicer;
-  private TextView             trackSlicer;
-  private TextView             groupSlicer;
-  private TextView             playlistSlicer;
+  private ImageView            artistSlicer;
+  private ImageView            albumSlicer;
+  private ImageView            trackSlicer;
+  private ImageView            groupSlicer;
+  private ImageView            playlistSlicer;
   private FloatingActionButton fab;
   private Bundle               args;
   
@@ -73,15 +72,15 @@ public class SearchFragment extends BaseFragment
     //toolbar = rootView.findViewById(R.id.tb_fragmentSearch);
     //toolbar.inflateMenu(R.menu.menu_search);
     setHasOptionsMenu(true);
-    artistSlicer = rootView.findViewById(R.id.tv_artistSlicer_fragmentSearch);
+    artistSlicer = rootView.findViewById(R.id.iv_artistSlicer_fragmentSearch);
     artistSlicer.setOnClickListener(this);
-    albumSlicer = rootView.findViewById(R.id.tv_albumSlicer_fragmentSearch);
+    albumSlicer = rootView.findViewById(R.id.iv_albumSlicer_fragmentSearch);
     albumSlicer.setOnClickListener(this);
-    trackSlicer = rootView.findViewById(R.id.tv_trackSlicer_fragmentSearch);
+    trackSlicer = rootView.findViewById(R.id.iv_trackSlicer_fragmentSearch);
     trackSlicer.setOnClickListener(this);
-    groupSlicer = rootView.findViewById(R.id.tv_groupSlicer_fragmentSearch);
+    groupSlicer = rootView.findViewById(R.id.iv_groupSlicer_fragmentSearch);
     groupSlicer.setOnClickListener(this);
-    playlistSlicer = rootView.findViewById(R.id.tv_playlistSlicer_fragmentSearch);
+    playlistSlicer = rootView.findViewById(R.id.iv_playlistSlicer_fragmentSearch);
     playlistSlicer.setOnClickListener(this);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentSearch);
     fab.setOnClickListener(this);
@@ -128,19 +127,19 @@ public class SearchFragment extends BaseFragment
     boolean update = true;
     
     switch (view.getId()) {
-      case R.id.tv_artistSlicer_fragmentSearch:
+      case R.id.iv_artistSlicer_fragmentSearch:
         setSlicer(0);
         break;
-      case R.id.tv_albumSlicer_fragmentSearch:
+      case R.id.iv_albumSlicer_fragmentSearch:
         setSlicer(1);
         break;
-      case R.id.tv_trackSlicer_fragmentSearch:
+      case R.id.iv_trackSlicer_fragmentSearch:
         setSlicer(2);
         break;
-      case R.id.tv_groupSlicer_fragmentSearch:
+      case R.id.iv_groupSlicer_fragmentSearch:
         setSlicer(3);
         break;
-      case R.id.tv_playlistSlicer_fragmentSearch:
+      case R.id.iv_playlistSlicer_fragmentSearch:
         setSlicer(4);
         break;
       case R.id.fab_addButton_fragmentSearch:
@@ -159,21 +158,29 @@ public class SearchFragment extends BaseFragment
   private void setSlicerLight(int i) {
     switch (i) {
       case 0:
-        artistSlicer.setBackgroundColor(
-            Color.parseColor((slicerStatus[i]) ? "#ff0000" : "#ffffff"));
+        artistSlicer.setColorFilter(
+            (slicerStatus[i]) ? getResources().getColor(R.color.mcPrimary)
+                              : getResources().getColor(R.color.mcWhite87));
         break;
       case 1:
-        albumSlicer.setBackgroundColor(Color.parseColor((slicerStatus[i]) ? "#ff0000" : "#ffffff"));
+        albumSlicer.setColorFilter(
+            (slicerStatus[i]) ? getResources().getColor(R.color.mcPrimary)
+                              : getResources().getColor(R.color.mcWhite87));
         break;
       case 2:
-        trackSlicer.setBackgroundColor(Color.parseColor((slicerStatus[i]) ? "#ff0000" : "#ffffff"));
+        trackSlicer.setColorFilter(
+            (slicerStatus[i]) ? getResources().getColor(R.color.mcPrimary)
+                              : getResources().getColor(R.color.mcWhite87));
         break;
       case 3:
-        groupSlicer.setBackgroundColor(Color.parseColor((slicerStatus[i]) ? "#ff0000" : "#ffffff"));
+        groupSlicer.setColorFilter(
+            (slicerStatus[i]) ? getResources().getColor(R.color.mcPrimary)
+                              : getResources().getColor(R.color.mcWhite87));
         break;
       case 4:
-        playlistSlicer.setBackgroundColor(
-            Color.parseColor((slicerStatus[i]) ? "#ff0000" : "#ffffff"));
+        playlistSlicer.setColorFilter(
+            (slicerStatus[i]) ? getResources().getColor(R.color.mcPrimary)
+                              : getResources().getColor(R.color.mcWhite87));
         break;
       default:
         break;

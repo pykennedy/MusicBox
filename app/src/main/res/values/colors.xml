@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mcPrimary">#616161</color>
-    <color name="mcPrimaryLight">#8E8E8E</color>
-    <color name="mcPrimaryDark">#373737</color>
+    <color name="mcPrimary">@color/mcOrange500</color>
+    <color name="mcPrimaryLight">@color/mcOrange100</color>
+    <color name="mcPrimaryDark">@color/mcOrange900</color>
 
-    <color name="mcSecondary">#4DD0E1</color>
-    <color name="mcSecondaryLight">#88FFFF</color>
-    <color name="mcSecondayDark">#009FAF</color>
+    <color name="mcSecondary">@color/mcOrangeA200</color>
+    <color name="mcSecondaryLight">@color/mcOrangeA100</color>
+    <color name="mcSecondayDark">@color/mcOrangeA700</color>
 
     <color name="mcBlack87">#DE000000</color>
     <color name="mcBlack60">#99000000</color>
@@ -30,4 +30,19 @@
     <color name="mcGrey700">#616161</color>
     <color name="mcGrey800">#424242</color>
     <color name="mcGrey900">#212121</color>
+
+    <color name="mcOrange50">#FFF3E0</color>
+    <color name="mcOrange100">#FFE0B2</color>
+    <color name="mcOrange200">#FFCC80</color>
+    <color name="mcOrange300">#FFB74D</color>
+    <color name="mcOrange400">#FFA726</color>
+    <color name="mcOrange500">#FF9800</color>
+    <color name="mcOrange600">#FB8C00</color>
+    <color name="mcOrange700">#F57C00</color>
+    <color name="mcOrange800">#EF6C00</color>
+    <color name="mcOrange900">#E65100</color>
+    <color name="mcOrangeA100">#FFD180</color>
+    <color name="mcOrangeA200">#FFAB40</color>
+    <color name="mcOrangeA400">#FF9100</color>
+    <color name="mcOrangeA700">#FF6D00</color>
 </resources>

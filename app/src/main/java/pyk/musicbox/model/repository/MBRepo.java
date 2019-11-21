@@ -185,9 +185,9 @@ public class MBRepo {
         album_trackDAO.insert(new Album_Track(albumID, trackID));
         artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, albumID, "album"));
         artist_albumTrackDAO.insert(new Artist_AlbumTrack(artistID, trackID, "track"));
-        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track", trackSearchtext));
-        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album", albumSearchText));
-        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist", artistSearchText));
+        anyEntityDAO.insert(new AnyEntity(trackID, track.getName(), "track", track.getArtist(), track.getAlbum(), trackSearchtext));
+        anyEntityDAO.insert(new AnyEntity(albumID, album.getName(), "album", album.getArtist(), null, albumSearchText));
+        anyEntityDAO.insert(new AnyEntity(artistID, artist.getName(), "artist", null, null, artistSearchText));
       }
       
       return null;
@@ -211,7 +211,7 @@ public class MBRepo {
       long  id    = groupDAO.insert(group);
       
       if (id > -1) {
-        anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group", group.getName()));
+        anyEntityDAO.insert(new AnyEntity(id, group.getName(), "group", null, null, group.getName()));
       }
       
       return id;
@@ -312,7 +312,7 @@ public class MBRepo {
       long     id       = playlistDAO.insert(playlist);
       
       if (id > -1) {
-        anyEntityDAO.insert(new AnyEntity(id, playlist.getName(), "playlist", playlist.getName()));
+        anyEntityDAO.insert(new AnyEntity(id, playlist.getName(), "playlist", null, null, playlist.getName()));
       }
       
       return id;

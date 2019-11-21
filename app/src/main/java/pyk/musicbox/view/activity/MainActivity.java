@@ -130,7 +130,9 @@ public class MainActivity extends AppCompatActivity
     
     playback = findViewById(R.id.cl_playback_mainActivity);
     title = playback.findViewById(R.id.tv_title_playback);
+    title.setSelected(true);
     details = playback.findViewById(R.id.tv_secondaryDetails_playback);
+    details.setSelected(true);
     back = playback.findViewById(R.id.ib_back_playback);
     playPause = playback.findViewById(R.id.ib_playpause_playback);
     forward = playback.findViewById(R.id.ib_forward_playback);

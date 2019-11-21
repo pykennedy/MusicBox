@@ -1,12 +1,12 @@
 package pyk.musicbox.view.adapter;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
@@ -60,14 +60,21 @@ public class SearchListItemAdapter
   @Override public void search(boolean[] slicers, String text) { sliap.search(slicers, text); }
   
   class ItemAdapterViewHolder extends ViewHolder {
+    ImageView icon;
     TextView title;
+    TextView other1;
+    TextView other2;
     String   type;
     Long     id;
-    
+    View view;
     
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
+      view = itemView;
+      icon = itemView.findViewById(R.id.iv_icon_entityList);
       title = itemView.findViewById(R.id.tv_title_entityList);
+      other1 = itemView.findViewById(R.id.tv_other1_entityList);
+      other2 = itemView.findViewById(R.id.tv_other2_entityList);
       
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -112,14 +119,39 @@ public class SearchListItemAdapter
     
     void update(AnyEntity entity, int position) {
       String titleText = entity.getName();
+      String other1Text = entity.getOtherInfo1();
+      String other2Text = entity.getOtherInfo2();
+      
       title.setText(titleText);
+      other1.setText((other1Text == null) ? "" : other1Text);
+      other2.setText((other2Text == null) ? "" : other2Text);
       type = entity.getEntityType();
       id = entity.getEntityID();
       
+      switch (type) {
+        case "artist":
+          icon.setImageDrawable(searchFragment.getResources().getDrawable(R.drawable.ic_artist_black_24dp));
+          break;
+        case "album":
+          icon.setImageDrawable(searchFragment.getResources().getDrawable(R.drawable.ic_album_black_24dp));
+          break;
+        case "track":
+          icon.setImageDrawable(searchFragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
+          break;
+        case "group":
+          icon.setImageDrawable(searchFragment.getResources().getDrawable(R.drawable.ic_group_black_24dp));
+          break;
+        case "playlist":
+          icon.setImageDrawable(searchFragment.getResources().getDrawable(R.drawable.ic_playlist_black_24dp));
+          break;
+        default:
+          break;
+      }
+      
       if (isSelected(position)) {
-        title.setTextColor(Color.RED);
+        view.setBackgroundColor(searchFragment.getResources().getColor(R.color.mcOrange50));
       } else {
-        title.setTextColor(Color.BLACK);
+        view.setBackgroundColor(searchFragment.getResources().getColor(R.color.mcWhite87));
       }
     }
   }

@@ -26,14 +26,22 @@ public class AnyEntity {
   @NonNull
   @ColumnInfo(name = "entityType")
   private String entityType;
+
+  @ColumnInfo(name = "otherInfo1")
+  private String otherInfo1;
+
+  @ColumnInfo(name = "otherInfo2")
+  private String otherInfo2;
   
   @NonNull
   @ColumnInfo(name = "searchtext")
   private String searchText;
   
-  public AnyEntity(long entityID, @NonNull String name, @NonNull String entityType, @NonNull String searchText) {
+  public AnyEntity(long entityID, @NonNull String name, @NonNull String entityType, String otherInfo1, String otherInfo2, @NonNull String searchText) {
     this.entityID = entityID;
     this.name = name;
+    this.otherInfo1 = otherInfo1;
+    this.otherInfo2 = otherInfo2;
     this.entityType = entityType;
     this.searchText = searchText;
   }
@@ -58,11 +66,15 @@ public class AnyEntity {
     return searchText;
   }
   
-  public void setSearchText(@NonNull String searchText) {
-    this.searchText = searchText;
-  }
-  
   public void setId(long id) {
     this.id = id;
+  }
+  
+  public String getOtherInfo1() {
+    return otherInfo1;
+  }
+  
+  public String getOtherInfo2() {
+    return otherInfo2;
   }
 }

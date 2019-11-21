@@ -1,26 +1,66 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/mcPrimary</item>
         <item name="colorPrimaryDark">@color/mcPrimaryDark</item>
         <item name="colorAccent">@color/mcSecondary</item>
     </style>
 
-    <style name="ActionBar">
-        <item name="android:background">@color/mcPrimary</item>
-    </style>
-
-    <style name="Tile">
-        <item name="android:background">@color/mcGrey300</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+    <style name="slicer">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:tint">@color/mcBlack60</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:background">@color/mcWhite87</item>
     </style>
 
-    <style name="TileText1">
-        <item name="android:textColor">@color/mcBlack87</item>
+    <style name="floatingActionButton">
+        <item name="android:layout_margin">16dp</item>
     </style>
-    
+
+    <style name="playbackText">
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+
+    <style name="playbackTitle" parent="playbackText">
+        <item name="android:textColor">@color/mcBlack87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="playbackDetails" parent="playbackText">
+        <item name="android:textColor">@color/mcBlack60</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="itemText">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+
+    <style name="itemTitle" parent="itemText">
+        <item name="android:textColor">@color/mcBlack87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="itemOther" parent="itemText">
+        <item name="android:textColor">@color/mcBlack60</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="itemIcon">
+        <item name="android:tint">@color/mcPrimary</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+
 </resources>

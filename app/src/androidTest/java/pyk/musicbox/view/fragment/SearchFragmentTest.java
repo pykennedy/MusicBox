@@ -34,32 +34,32 @@ public class SearchFragmentTest {
   
   @Test
   public void allViewsExist() {
-    onView(withId(R.id.tv_artistSlicer_fragmentSearch)).check(matches(isDisplayed()));
-    onView(withId(R.id.tv_albumSlicer_fragmentSearch)).check(matches(isDisplayed()));
-    onView(withId(R.id.tv_trackSlicer_fragmentSearch)).check(matches(isDisplayed()));
-    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).check(matches(isDisplayed()));
-    onView(withId(R.id.tv_playlistSlicer_fragmentSearch)).check(matches(isDisplayed()));
+    onView(withId(R.id.iv_artistSlicer_fragmentSearch)).check(matches(isDisplayed()));
+    onView(withId(R.id.iv_albumSlicer_fragmentSearch)).check(matches(isDisplayed()));
+    onView(withId(R.id.iv_trackSlicer_fragmentSearch)).check(matches(isDisplayed()));
+    onView(withId(R.id.iv_groupSlicer_fragmentSearch)).check(matches(isDisplayed()));
+    onView(withId(R.id.iv_playlistSlicer_fragmentSearch)).check(matches(isDisplayed()));
     onView(withId(R.id.fab_addButton_fragmentSearch)).check(matches(isDisplayed()));
     onView(withId(R.id.rv_fragmentSearch)).check(matches(isDisplayed()));
   }
   
   @Test
   public void slicersRemainAfterOnBackPressed() {
-    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_groupSlicer_fragmentSearch)).perform(click());
     
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).perform(
         RecyclerViewActions.actionOnItem(hasDescendant(withText("aaa Empty Group")), click()));
     pressBack();
     
-    onView(withId(R.id.tv_artistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+    onView(withId(R.id.iv_artistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
         Color.parseColor("#FFFFFF"))));
-    onView(withId(R.id.tv_albumSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+    onView(withId(R.id.iv_albumSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
         Color.parseColor("#FFFFFF"))));
-    onView(withId(R.id.tv_trackSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+    onView(withId(R.id.iv_trackSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
         Color.parseColor("#FFFFFF"))));
-    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+    onView(withId(R.id.iv_groupSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
         Color.parseColor("#FF0000"))));
-    onView(withId(R.id.tv_playlistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
+    onView(withId(R.id.iv_playlistSlicer_fragmentSearch)).check(matches(new BackgroundColorMatcher(
         Color.parseColor("#FFFFFF"))));
   }
   
@@ -88,7 +88,7 @@ public class SearchFragmentTest {
   
   @Test
   public void sliceForGroupsShowsOnlyGroups() {
-    onView(withId(R.id.tv_groupSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_groupSlicer_fragmentSearch)).perform(click());
     
     // no artists shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
@@ -133,7 +133,7 @@ public class SearchFragmentTest {
   
   @Test
   public void sliceForPlaylistsShowsOnlyPlaylists() {
-    onView(withId(R.id.tv_playlistSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_playlistSlicer_fragmentSearch)).perform(click());
     
     // no artists shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
@@ -155,7 +155,7 @@ public class SearchFragmentTest {
   
   @Test
   public void sliceForTracksShowsOnlyTracks() {
-    onView(withId(R.id.tv_trackSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_trackSlicer_fragmentSearch)).perform(click());
     
     // no artists shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
@@ -179,7 +179,7 @@ public class SearchFragmentTest {
   
   @Test
   public void sliceForAlbumsShowsOnlyAlbums() {
-    onView(withId(R.id.tv_albumSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_albumSlicer_fragmentSearch)).perform(click());
     
     // no artists shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
@@ -201,7 +201,7 @@ public class SearchFragmentTest {
   
   @Test
   public void sliceForArtistsShowsOnlyArtists() {
-    onView(withId(R.id.tv_artistSlicer_fragmentSearch)).perform(click());
+    onView(withId(R.id.iv_artistSlicer_fragmentSearch)).perform(click());
     
     // no albums shown
     onView(allOf(withId(R.id.rv_fragmentSearch), isDisplayed())).check(
