@@ -58,11 +58,12 @@ public class PlaylistListItemAdapter
   
   class ItemAdapterViewHolder extends RecyclerView.ViewHolder
       implements View.OnClickListener {
-    ImageView icon;
+    ImageView                        icon;
     TextView                         title;
-    ImageView                         up;
-    ImageView                         down;
+    ImageView                        up;
+    ImageView                        down;
     long                             entityID;
+    String                           entityType;
     long                             playlistID;
     int                              sortOrder;
     PlaylistListItemAdapterPresenter presenter;
@@ -93,6 +94,8 @@ public class PlaylistListItemAdapter
             presenter.updateSortOrder(playlistID, sortOrder, sortOrder + 1);
           }
           break;
+        case R.id.tv_title_playlistList:
+          fragment.swapTrack(entityID, entityType, title.getText().toString(), playlistID);
         default:
           break;
       }
@@ -102,10 +105,11 @@ public class PlaylistListItemAdapter
       String titleText = entity.getEntityName();
       this.title.setText(titleText);
       this.entityID = entity.getEntityID();
+      this.entityType = entity.getEntityType();
       this.playlistID = playlistID;
       this.sortOrder = entity.getSortOrder();
       
-      if(entity.getEntityType().equals("group")) {
+      if (entity.getEntityType().equals("group")) {
         icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_group_black_24dp));
       } else {
         icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));

@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity
   private ImageButton           playPause;
   private ImageButton           forward;
   private SeekBar               seekBar;
-  private String                currentID;
-  private PlaylistManager       playlistManager;
+  private String                    currentID;
+  private long playlistID = -1;
+  private PlaylistManager           playlistManager;
   
   private MediaMetadataCompat currentMetadata;
   private PlaybackStateCompat currentState;
@@ -190,32 +191,35 @@ public class MainActivity extends AppCompatActivity
     baseMenuFragment.swapFragment(fragment, getSupportFragmentManager());
   }
   
-  @Override public void swapTrack(long id, String name) {
+  @Override public void swapTrack(long id, String name, long playlistID, boolean inGroup) {
+    this.playlistID = playlistID;
     ConstraintLayout cl = findViewById(R.id.cl_playback_mainActivity);
-    cl.setVisibility(View.VISIBLE);
-    cl.setAlpha(0.0f);
-    cl.animate()
-      .translationY(cl.getHeight())
-      .alpha(1.0f);
+    if(cl.getVisibility() != View.VISIBLE) {
+      cl.setVisibility(View.VISIBLE);
+      cl.setAlpha(0.0f);
+      cl.animate()
+        .translationY(cl.getHeight())
+        .alpha(1.0f);
+    }
     
     title.setText(name);
     currentID = Long.toString(id);
-    playToggle(currentID);
-    // todo: set other details
+    playToggle(currentID, playlistID, inGroup, true);
   }
   
   @Override public void updateTitle(String newTitle) {
     setTitle(newTitle);
   }
   
-  @Override public void playToggle(final String id) {
+  @Override public void playToggle(final String id, long playlistID, final boolean inGroup, boolean newTrack) {
     final int state =
         currentState == null
         ? PlaybackStateCompat.STATE_NONE
         : currentState.getState();
-    if (state == PlaybackStateCompat.STATE_PAUSED
+    if ((state == PlaybackStateCompat.STATE_PAUSED
         || state == PlaybackStateCompat.STATE_STOPPED
-        || state == PlaybackStateCompat.STATE_NONE) {
+        || state == PlaybackStateCompat.STATE_NONE)
+    || newTrack) {
       
       if (currentMetadata == null) {
         currentMetadata = PlaybackManager.toMetaData(this, id, null);
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity
       
       PlaylistManager.initPlaylist(new Callback.InitPlaylistCB() {
         @Override public void onComplete(boolean succeeded, String msg) {
-          PlaylistManager.moveHead(Long.parseLong(id), new Callback.moveHeadCB() {
+          PlaylistManager.moveHead(Long.parseLong(id), inGroup, new Callback.moveHeadCB() {
             @Override public void onComplete(boolean succeeded, String msg) {
               playPause.setImageDrawable(
                   ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause_black_24dp));
@@ -234,9 +238,7 @@ public class MainActivity extends AppCompatActivity
             }
           });
         }
-      });
-      
-      
+      }, playlistID);
     } else {
       playPause.setImageDrawable(
           ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
@@ -253,7 +255,7 @@ public class MainActivity extends AppCompatActivity
     switch (view.getId()) {
       case R.id.ib_back_playback:
         Log.e("asdf", "previous");
-        id = Long.toString(PlaylistManager.getPrev().getId());
+        id = Long.toString(PlaylistManager.getPrev().getTrack().getId());
         currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
         MediaControllerCompat.getMediaController(MainActivity.this)
@@ -261,11 +263,11 @@ public class MainActivity extends AppCompatActivity
                              .playFromMediaId(id, null);
         break;
       case R.id.ib_playpause_playback:
-        playToggle(currentID);
+        playToggle(currentID, playlistID, false, false);
         break;
       case R.id.ib_forward_playback:
         Log.e("asdf", "next");
-        id = Long.toString(PlaylistManager.getNext().getId());
+        id = Long.toString(PlaylistManager.getNext().getTrack().getId());
         currentMetadata = PlaybackManager.toMetaData(this, id, null);
         updateMetadata(currentMetadata);
         MediaControllerCompat.getMediaController(MainActivity.this)

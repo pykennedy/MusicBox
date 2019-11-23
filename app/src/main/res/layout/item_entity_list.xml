@@ -27,8 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_other1_entityList"
         style="@style/itemTitle"
-        android:text="default"
-        android:background="@drawable/selectable_item_background"/>
+        android:text="default"/>
 
     <TextView
         android:id="@+id/tv_other1_entityList"
@@ -39,8 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_other2_entityList"
         style="@style/itemOther"
-        android:text="default"
-        android:background="@drawable/selectable_item_background"/>
+        android:text="default"/>
 
     <TextView
         android:id="@+id/tv_other2_entityList"
@@ -52,7 +50,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="2dp"
         style="@style/itemOther"
-        android:text="default"
-        android:background="@drawable/selectable_item_background"/>
+        android:text="default"/>
 
 </android.support.constraint.ConstraintLayout>
