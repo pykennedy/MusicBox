@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.listener.Listener;
@@ -26,7 +26,7 @@ import pyk.musicbox.view.fragment.base.BaseFragment;
 public class AddToGroupFragment extends BaseFragment
     implements View.OnClickListener, SearchView.OnQueryTextListener {
   private long                        groupID;
-  private TextView                    trackSlicer;
+  private ImageView                   trackSlicer;
   private FloatingActionButton        fab;
   private AddToGroupListItemAdapter   adapter;
   private AddToGroupFragmentPresenter presenter;
@@ -59,7 +59,7 @@ public class AddToGroupFragment extends BaseFragment
     
     setHasOptionsMenu(true);
     
-    trackSlicer = rootView.findViewById(R.id.tv_trackSlicer_fragmentAddToGroup);
+    trackSlicer = rootView.findViewById(R.id.iv_trackSlicer_fragmentAddToGroup);
     trackSlicer.setOnClickListener(this);
     
     fab = rootView.findViewById(R.id.fab_addButton_fragmentAddToGroup);

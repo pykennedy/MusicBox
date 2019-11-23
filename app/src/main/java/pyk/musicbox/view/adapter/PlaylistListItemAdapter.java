@@ -2,10 +2,10 @@ package pyk.musicbox.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
@@ -56,11 +56,12 @@ public class PlaylistListItemAdapter
                            entity.getSortOrder());
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder
+  class ItemAdapterViewHolder extends RecyclerView.ViewHolder
       implements View.OnClickListener {
+    ImageView icon;
     TextView                         title;
-    TextView                         up;
-    TextView                         down;
+    ImageView                         up;
+    ImageView                         down;
     long                             entityID;
     long                             playlistID;
     int                              sortOrder;
@@ -68,9 +69,10 @@ public class PlaylistListItemAdapter
     
     public ItemAdapterViewHolder(View itemView, final PlaylistListItemAdapterPresenter presenter) {
       super(itemView);
+      icon = itemView.findViewById(R.id.iv_icon_playlistList);
       title = itemView.findViewById(R.id.tv_title_playlistList);
-      up = itemView.findViewById(R.id.tv_up_playlistList);
-      down = itemView.findViewById(R.id.tv_down_playlistList);
+      up = itemView.findViewById(R.id.iv_up_playlistList);
+      down = itemView.findViewById(R.id.iv_down_playlistList);
       title.setOnClickListener(this);
       up.setOnClickListener(this);
       down.setOnClickListener(this);
@@ -81,12 +83,12 @@ public class PlaylistListItemAdapter
     @Override
     public void onClick(View view) {
       switch (view.getId()) {
-        case R.id.tv_up_playlistList:
+        case R.id.iv_up_playlistList:
           if (sortOrder > 1 && sortOrder <= presenter.getItemCount()) {
             presenter.updateSortOrder(playlistID, sortOrder, sortOrder - 1);
           }
           break;
-        case R.id.tv_down_playlistList:
+        case R.id.iv_down_playlistList:
           if (sortOrder >= 1 && sortOrder < presenter.getItemCount()) {
             presenter.updateSortOrder(playlistID, sortOrder, sortOrder + 1);
           }
@@ -102,6 +104,12 @@ public class PlaylistListItemAdapter
       this.entityID = entity.getEntityID();
       this.playlistID = playlistID;
       this.sortOrder = entity.getSortOrder();
+      
+      if(entity.getEntityType().equals("group")) {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_group_black_24dp));
+      } else {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
+      }
     }
   }
 }

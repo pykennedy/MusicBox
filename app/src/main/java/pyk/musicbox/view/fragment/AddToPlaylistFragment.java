@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import pyk.musicbox.R;
 import pyk.musicbox.contract.listener.Listener;
@@ -26,8 +26,8 @@ import pyk.musicbox.view.fragment.base.BaseFragment;
 public class AddToPlaylistFragment extends BaseFragment
     implements View.OnClickListener, SearchView.OnQueryTextListener {
   private long                           playlistID;
-  private TextView                       trackSlicer;
-  private TextView                       groupSlicer;
+  private ImageView                      trackSlicer;
+  private ImageView                       groupSlicer;
   private FloatingActionButton           fab;
   private AddToPlaylistListItemAdapter   adapter;
   private AddToPlaylistFragmentPresenter presenter;
@@ -60,9 +60,9 @@ public class AddToPlaylistFragment extends BaseFragment
     
     setHasOptionsMenu(true);
     
-    trackSlicer = rootView.findViewById(R.id.tv_trackSlicer_fragmentAddToPlaylist);
+    trackSlicer = rootView.findViewById(R.id.iv_trackSlicer_fragmentAddToPlaylist);
     trackSlicer.setOnClickListener(this);
-    groupSlicer = rootView.findViewById(R.id.tv_playlistSlicer_fragmentAddToPlaylist);
+    groupSlicer = rootView.findViewById(R.id.iv_playlistSlicer_fragmentAddToPlaylist);
     groupSlicer.setOnClickListener(this);
     fab = rootView.findViewById(R.id.fab_addButton_fragmentAddToPlaylist);
     fab.setOnClickListener(this);

@@ -1,12 +1,12 @@
 package pyk.musicbox.view.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,13 +63,21 @@ public class AddToPlaylistListItemAdapter
   }
   
   class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+    View view;
+    ImageView icon;
     TextView title;
+    TextView other1;
+    TextView other2;
     String   type;
     long     key;
     
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
+      view = itemView;
       title = itemView.findViewById(R.id.tv_title_entityList);
+      icon = itemView.findViewById(R.id.iv_icon_entityList);
+      other1 = itemView.findViewById(R.id.tv_other1_entityList);
+      other2 = itemView.findViewById(R.id.tv_other2_entityList);
       
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -81,15 +89,25 @@ public class AddToPlaylistListItemAdapter
     
     void update(AnyEntity entity, int position) {
       String titleText = entity.getName();
+      String other1Text = entity.getOtherInfo1();
+      String other2Text = entity.getOtherInfo2();
       title.setText(titleText);
+      other1.setText((other1Text == null) ? "" : other1Text);
+      other2.setText((other2Text == null) ? "" : other2Text);
       type = entity.getEntityType();
       key = (type.equals("group")) ? entity.getEntityID() * -1 : entity.getEntityID();
-      
+  
+      if(entity.getEntityType().equals("group")) {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_group_black_24dp));
+      } else {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
+      }
+  
       if (isSelected(position)) {
-        title.setTextColor(Color.RED);
+        view.setBackgroundColor(fragment.getResources().getColor(R.color.mcOrange50));
         selectedEntities.append(key, entity);
       } else {
-        title.setTextColor(Color.BLACK);
+        view.setBackgroundColor(fragment.getResources().getColor(R.color.mcWhite87));
         selectedEntities.remove(key);
       }
     }

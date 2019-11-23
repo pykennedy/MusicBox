@@ -1,12 +1,12 @@
 package pyk.musicbox.view.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -68,13 +68,23 @@ public class AddToGroupListItemAdapter
   }
   
   class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+    View view;
+    ImageView icon;
     TextView title;
+    TextView other1;
+    TextView other2;
     String   type;
     Long     id;
     
     ItemAdapterViewHolder(View itemView) {
       super(itemView);
+      view = itemView;
       title = itemView.findViewById(R.id.tv_title_entityList);
+      icon = itemView.findViewById(R.id.iv_icon_entityList);
+      other1 = itemView.findViewById(R.id.tv_other1_entityList);
+      other2 = itemView.findViewById(R.id.tv_other2_entityList);
+  
+      icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
       
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -89,13 +99,13 @@ public class AddToGroupListItemAdapter
       title.setText(titleText);
       type = entity.getEntityType();
       id = entity.getEntityID();
-      
-      
+  
+  
       if (isSelected(position)) {
-        title.setTextColor(Color.RED);
+        view.setBackgroundColor(fragment.getResources().getColor(R.color.mcOrange50));
         selectedTracks.append(id, entity);
       } else {
-        title.setTextColor(Color.BLACK);
+        view.setBackgroundColor(fragment.getResources().getColor(R.color.mcWhite87));
         selectedTracks.remove(id);
       }
     }

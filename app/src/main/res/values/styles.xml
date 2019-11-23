@@ -58,6 +58,13 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="gpItemTitle" parent="itemText">
+        <item name="android:singleLine">false</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/mcBlack87</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="itemIcon">
         <item name="android:tint">@color/mcPrimary</item>
         <item name="android:layout_marginEnd">4dp</item>

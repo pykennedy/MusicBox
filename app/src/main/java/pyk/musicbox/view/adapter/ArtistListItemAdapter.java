@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
@@ -49,7 +50,8 @@ public class ArtistListItemAdapter
     presenter.getEntitiesInArist(id);
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+  class ItemAdapterViewHolder extends RecyclerView.ViewHolder {
+    ImageView icon;
     TextView title;
     long     entityID;
     long     artistID;
@@ -57,11 +59,18 @@ public class ArtistListItemAdapter
     public ItemAdapterViewHolder(View itemView) {
       super(itemView);
       title = itemView.findViewById(R.id.tv_title_artistList);
+      icon = itemView.findViewById(R.id.iv_icon_artistList);
     }
     
     public void update(long artistID, SortedEntity entity) {
       String titleText = entity.getEntityName();
       this.title.setText(titleText);
+      
+      if(entity.getEntityType().equals("album")) {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_album_black_24dp));
+      } else {
+        icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
+      }
     }
   }
 }

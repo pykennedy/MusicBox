@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pyk.musicbox.R;
@@ -55,23 +56,26 @@ public class GroupListItemAdapter
     presenter.removeTrack(currentGroupID, track.getTrack().getId(), track.getSortOrder());
   }
   
-  static class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    TextView title;
-    TextView up;
-    TextView down;
-    long     trackID;
-    long     groupID;
-    int      sortOrder;
+  class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    ImageView icon;
+    TextView                      title;
+    ImageView                     up;
+    ImageView                      down;
+    long                          trackID;
+    long                          groupID;
+    int                           sortOrder;
     GroupListItemAdapterPresenter presenter;
     
     public ItemAdapterViewHolder(View itemView, final GroupListItemAdapterPresenter presenter) {
       super(itemView);
-      title = itemView.findViewById(R.id.tv_title_entityList);
-      up = itemView.findViewById(R.id.tv_up_groupList);
-      down = itemView.findViewById(R.id.tv_down_groupList);
+      icon = itemView.findViewById(R.id.iv_icon_groupList);
+      title = itemView.findViewById(R.id.tv_title_groupList);
+      up = itemView.findViewById(R.id.iv_up_groupList);
+      down = itemView.findViewById(R.id.iv_down_groupList);
       title.setOnClickListener(this);
       up.setOnClickListener(this);
       down.setOnClickListener(this);
+      icon.setImageDrawable(fragment.getResources().getDrawable(R.drawable.ic_track_black_24dp));
       
       this.presenter = presenter;
     }
@@ -79,12 +83,12 @@ public class GroupListItemAdapter
     @Override
     public void onClick(View view) {
       switch (view.getId()) {
-        case R.id.tv_up_groupList:
+        case R.id.iv_up_groupList:
           if (sortOrder > 1 && sortOrder <= presenter.getItemCount()) {
             presenter.updateSortOrder(groupID, sortOrder, sortOrder - 1);
           }
           break;
-        case R.id.tv_down_groupList:
+        case R.id.iv_down_groupList:
           if (sortOrder >= 1 && sortOrder < presenter.getItemCount()) {
             presenter.updateSortOrder(groupID, sortOrder, sortOrder + 1);
           }
